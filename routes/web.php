@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Livewire\RoomBed\Index;
+use App\Http\Livewire\RoomBed\View;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,4 +26,15 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+
+
+Route::middleware([
+    'auth:sanctum', 'role:admin',
+    config('jetstream.auth_session'),
+    'verified',
+])->name('room.')->prefix('room')->group(function () {
+    Route::get('/index', Index::class)->name('index');
+    Route::get('/view/{id}', View::class)->name('view');
 });
