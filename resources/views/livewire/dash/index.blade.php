@@ -1,7 +1,6 @@
 <div class="mt-4">
     <div>
         <div class="grid grid-cols-4 gap-4 p-1 mx-3">
-
             <div class="flex flex-col h-screen p-2 bg-white rounded-lg"> <!--first container start-->
                 <div class="relative mt-2">
                     <div class="absolute top-0 join right-2">
@@ -12,9 +11,12 @@
                             </div>
                         </div>
                         <div class="indicator">
-                            <button class="btn join-item btn-secondary">Search</button>
+                            <button class="text-white bg-purple-700 btn join-item">Search</button>
                         </div>
                     </div>
+                </div>
+                <div wire:loading wire:target="search_patient" class="mt-16 mx-11">
+                    <span class="text-blue-400 loading loading-spinner loading-md"></span>
                 </div>
                 <div class="mx-2 mt-12">
                     <ul>
@@ -29,7 +31,6 @@
                                         {{ $patient->patmiddle }}
                                     @endif
                                 </li>
-
                             @empty
                             @endforelse
                         @endif
@@ -43,39 +44,55 @@
             </div> <!--first container end-->
 
             <div class="h-screen col-span-3 bg-white rounded-lg"> <!--second container start-->
-                <div class="flex flex-row p-3">
-                    <h3>Select Ward / Floor</h3>
-                    <div class="mx-4"><select class="w-64 text-sm select select-sm select-primary"
-                            wire:model='getWard'>
-                            <option disabled selected>Select</option>
-                            @foreach ($wards as $ward)
-                                <option value="{{ $ward->wardcode }}">{{ $ward->wardname }} </option>
-                            @endforeach
-
-                        </select></div>
+                <div class="flex flex-row p-2">
+                    <div class="join">
+                        <h3 class="mt-1 join-item">Select Ward / Floor</h3>
+                        <div class="mx-4 join-item"><select class="w-64 text-sm border-purple-700 select select-sm"
+                                wire:model='get_ward'>
+                                <option disabled selected>Select</option>
+                                @foreach ($wards as $ward)
+                                    <option value="{{ $ward->wardcode }}">{{ $ward->wardname }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-10 grid-rows-1 gap-0 m-12">
+                <div class="grid grid-cols-4 grid-rows-1 gap-8 m-12">
                     @if ($rooms)
                         @foreach ($rooms as $room)
-                            <label class="w-24 h-24 delay-500 border-2 border-blue-500 rounded-lg btn "
-                                wire:click="getRoomIdfn({{ $room->room_id }})">
+                            <div class="p-1 rounded-md shadow-md">
                                 {{ $room->room_name }}
-                            </label>
+                                <label class="w-[300px] h-[180px] border-0 btn bg-transparent hover:bg-transparent"
+                                    wire:click="getRoomIdfn({{ $room->room_id }})">
+                                    <img src="{{ URL('/images/room II.jpg') }}" class="w-[400px] h-[235px]">
+
+                                </label>
+                            </div>
                         @endforeach
                     @endif
                 </div>
 
                 <div class="grid grid-cols-3 grid-rows-2 gap-1">
                     @if ($beds)
-                        @foreach ($beds as $bed)
+                        @forelse ($beds as $bed)
                             <div id="{{ $bed->bed_id }}" ondrop="drop(event)" ondragover="allowDrop(event)"
-                                class="m-10 delay-500 border-2 border-blue-500 rounded-lg h-44 w-74 ">
+                                class="m-5 p-2 rounded-lg w-[450px] h-[200px] border-b-2 shadow-lg">
                                 {{ $bed->bed_name }}
                                 @if ($bed->patienRoomBed and $bed->patienRoomBed->status == 'admit')
-                                    {{ $bed->patienRoomBed->patientName->get_patient_name() }}
+                                    <div class="w-full join">
+                                        <h3 class="font-bold text-md join-item">
+                                            Patient Name: &nbsp;
+                                        </h3>
+                                        <p class="text-purple-500 underline join-item">
+                                            {{ $bed->patienRoomBed->patientName->get_patient_name() }}</p>
+
+                                    </div>
                                 @endif
+                                <div> <img src="{{ URL('/images/bed.png') }}" class="w-[180px] h-[100px]"></div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div>No beds available</div>
+                        @endforelse
                     @endif
                 </div>
 

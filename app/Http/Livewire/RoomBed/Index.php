@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\RoomBed;
 
+use App\Models\Bed;
+use App\Models\Room;
 use Livewire\Component;
 use App\Models\HospitalHward;
 use App\Models\PatientRoomBed;
-use App\Models\Room;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Index extends Component
@@ -14,16 +15,18 @@ class Index extends Component
 
     public $room_name;
 
-    public $ward_code;
+    public $ward_code = '1F';
 
+    public $beds;
+
+    public $getRoomId;
     public $getWards;
-    public $getWard;
 
     public function render()
     {
         $this->getWards = HospitalHward::select('wardcode', 'wardname')->get();
-        $rooms = Room::where('ward_code', $this->getWard)->get();
-        $patientRoomBed = PatientRoomBed::where('ward_code', $this->getWard)->first();
+        $rooms = Room::where('ward_code', $this->ward_code)->get();
+        $this->beds = Bed::where('room_id', $this->getRoomId)->get();
         return view('livewire.room-bed.index', [
             'wards' => $this->getWards,
             'rooms' => $rooms,
@@ -42,5 +45,10 @@ class Index extends Component
             'ward_code' => $this->ward_code,
         ]);
         $this->alert('success', 'Successfully Created!');
+    }
+
+    public function getRoomIdfn($getId)
+    {
+        $this->getRoomId = $getId;
     }
 }

@@ -13,19 +13,29 @@
                         class="text-blue-800 las la-plus-circle la-2x"></i></label>
             </div>
         </div>
-        <div class="mt-4">
-            <div class="grid grid-cols-3 grid-rows-2 gap-1">
-                @if ($beds)
-                    @foreach ($beds as $bed)
-                        <div class="m-10 border-2 border-blue-500 rounded-lg h-44 w-74">
-                            {{ $bed->bed_name }}
-                            @if ($bed->patienRoomBed)
-                                {{ $bed->patienRoomBed->patientName->get_patient_name() }}
-                            @endif
-                        </div>
-                    @endforeach
-                @endif
-            </div>
+        <div class="grid grid-cols-3 grid-rows-2 gap-1">
+            @if ($beds)
+                @forelse ($beds as $bed)
+                    <div id="{{ $bed->bed_id }}" ondrop="drop(event)" ondragover="allowDrop(event)"
+                        class="m-5 p-2 rounded-lg w-[450px] h-[200px] border-b-2 shadow-lg">
+                        {{ $bed->bed_name }}
+                        @if ($bed->patienRoomBed and $bed->patienRoomBed->status == 'admit')
+                            <div class="w-full join">
+                                <h3 class="font-bold text-md join-item">
+                                    Patient Name: &nbsp;
+
+                                </h3>
+                                <p class="text-purple-500 underline join-item">
+                                    {{ $bed->patienRoomBed->patientName->get_patient_name() }}</p>
+
+                            </div>
+                        @endif
+                        <div> <img src="{{ URL('/images/bed.png') }}" class="w-[180px] h-[100px]"></div>
+                    </div>
+                @empty
+                    {{-- <div>No beds available</div> --}}
+                @endforelse
+            @endif
         </div>
         <!-- Modals start-->
         <!-- The button to open modal -->

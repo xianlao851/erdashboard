@@ -22,18 +22,22 @@ class Index extends Component
     public $text = 'text';
 
     public $search_patient;
+    public $get_ward = '1F';
 
     public $selected_patient;
     public $selected_patient_bed;
 
+    public $beds;
+    public $rooms;
+
     protected $get_patients;
     protected $getWards;
-    public $getWard;
     public $getRoomId;
-
+    public $getBeds;
     public $start_date;
     public $end_date;
 
+    public $patient_list;
 
     public function  mount()
     {
@@ -42,7 +46,7 @@ class Index extends Component
     }
     public function render()
     {
-        if (strlen($this->search_patient) > 1) {
+        if (strlen($this->search_patient) > 2) {
             $columns = ['dbo.hperson.hpercode', 'dbo.hperson.patlast', 'dbo.hperson.patfirst', 'dbo.hperson.patmiddle'];
             $this->get_patients = DB::connection('hospital')->table('dbo.hperson')
                 ->join('dbo.herlog', 'dbo.hperson.hpercode', '=', 'dbo.herlog.hpercode')
@@ -56,23 +60,21 @@ class Index extends Component
                             ->where('dbo.hencdiag.primediag', 'Y')
                             ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59']);
                     }
-                })->paginate(10, ['*'], 'patient-list');
+                })->paginate(10, ['*'], 'patient_list');
         }
 
         $this->getWards = HospitalHward::select('wardcode', 'wardname')->get();
 
-        $rooms = Room::where('ward_code', $this->getWard)->get();
-        $beds = Bed::where('room_id', $this->getRoomId)->get();
+        $this->rooms = Room::where('ward_code', $this->get_ward)->get();
 
-        if ($this->getWard != $this->getWard) {
-            $beds = null;
-            $rooms = null;
+        if ($this->rooms) {
+            $this->beds = Bed::where('room_id', $this->getRoomId)->get();
         }
+
         return view('livewire.dash.index', [
-            'patients' => $this->get_patients,
+            'patients' => $this->get_patients ?? null,
             'wards' => $this->getWards,
-            'rooms' => $rooms,
-            'beds' => $beds,
+
         ]);
     }
 
@@ -90,15 +92,15 @@ class Index extends Component
     {
         $this->selected_patient_bed = $getID;
 
-
-
         $patient_id = $this->selected_patient;
         $room_id = $this->getRoomId;
         $bed_id =  $this->selected_patient_bed;
-        $ward_code = $this->getWard;
+        $ward_code = $this->get_ward;
+
         $bed = Bed::where('bed_id', $bed_id)->first();
+
         if ($bed->status == 'occupied') {
-            $this->alert('warning', 'Room Occupied');
+            $this->alert('warning', 'Bed Occupied!');
         } else {
             PatientRoomBed::create([
                 'patient_id' => $patient_id,
@@ -110,7 +112,7 @@ class Index extends Component
             $bed = Bed::where('bed_id', $bed_id)->first();
             $bed->status = 'occupied';
             $bed->save();
-            $this->alert('success', 'Room Assigned');
+            $this->alert('success', 'Bed Assigned');
         }
     }
 }
