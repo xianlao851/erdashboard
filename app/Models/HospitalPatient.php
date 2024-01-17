@@ -19,4 +19,9 @@ class HospitalPatient extends Model
             return $this->patlast . ', ' . $this->patfirst;
         }
     }
+
+    public function getPatientRoom()
+    {
+        return $this->belongsTo(HospitalHpatroom::class, 'hpercode', 'hpercode')->latest('hprdate')->where('patrmstat', 'A');
+    }
 }

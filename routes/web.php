@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\RoomBed\Index;
 use App\Http\Livewire\RoomBed\View;
+use App\Http\Livewire\Bed\BedIndex;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,7 +35,7 @@ Route::middleware([
     'auth:sanctum', 'role:admin',
     config('jetstream.auth_session'),
     'verified',
-])->name('room.')->prefix('room')->group(function () {
-    Route::get('/index', Index::class)->name('index');
-    Route::get('/view/{id}', View::class)->name('view');
+])->name('bed.')->prefix('bed')->group(function () {
+    Route::get('/bed_index', BedIndex::class)->name('bed_index');
+    //Route::get('/view/{id}', View::class)->name('view');
 });

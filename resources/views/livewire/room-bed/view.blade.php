@@ -1,5 +1,5 @@
 <div class="mt-4">
-    <div class="mx-auto bg-white rounded-lg max-w-7xl">
+    <div class="mx-auto bg-white rounded-lg max-w-screen-2xl">
         <div class="relative p-2">
             <div class="join">
                 <h3 class="font-bold text-black text-md join-item">
@@ -13,29 +13,42 @@
                         class="text-blue-800 las la-plus-circle la-2x"></i></label>
             </div>
         </div>
-        <div class="grid grid-cols-3 grid-rows-2 gap-1">
-            @if ($beds)
-                @forelse ($beds as $bed)
-                    <div id="{{ $bed->bed_id }}" ondrop="drop(event)" ondragover="allowDrop(event)"
-                        class="m-5 p-2 rounded-lg w-[450px] h-[200px] border-b-2 shadow-lg">
-                        {{ $bed->bed_name }}
-                        @if ($bed->patienRoomBed and $bed->patienRoomBed->status == 'admit')
-                            <div class="w-full join">
-                                <h3 class="font-bold text-md join-item">
-                                    Patient Name: &nbsp;
-
-                                </h3>
-                                <p class="text-purple-500 underline join-item">
-                                    {{ $bed->patienRoomBed->patientName->get_patient_name() }}</p>
-
+        <div class="w-full p-2 mt-2">
+            <div class="grid grid-cols-4 grid-rows-1 gap-1">
+                @if ($beds)
+                    @forelse ($beds as $bed)
+                        <div @if (is_null($bed->patienRoomBed)) id="{{ $bed->bed_id }}"  ondrop="drop(event)" ondragover="allowDrop(event)" @endif
+                            class="p-3 m-5 bg-gray-300 rounded-lg shadow-lg">
+                            <div class="flex items-center mt-0">
+                                <img src="{{ URL('/images/bed III.png') }}" class="w-[35px] h-[35px]">
+                                <div class="mt-4 ml-2 text-sm text-black underline uppercase">
+                                    {{ $bed->bed_name }}
+                                </div>
                             </div>
-                        @endif
-                        <div> <img src="{{ URL('/images/bed.png') }}" class="w-[180px] h-[100px]"></div>
-                    </div>
-                @empty
-                    {{-- <div>No beds available</div> --}}
-                @endforelse
-            @endif
+                            <div class="w-full mt-2 join">
+                                <h3 class="font-bold join-item">
+                                    @if ($bed->patienRoomBed)
+                                        @if ($bed->patienRoomBed->patientRoom->patientInfo->patsex == 'M')
+                                            <img src="{{ URL('/images/man III.PNG') }}" class="w-[30px] h-[30px]">
+                                        @endif
+                                        @if ($bed->patienRoomBed and $bed->patienRoomBed->patientRoom->patientInfo->patsex == 'F')
+                                            <img src="{{ URL('/images/women.PNG') }}" class="w-[30px] h-[30px]">
+                                        @endif
+                                    @endif
+                                </h3>
+                                @if ($bed->patienRoomBed and $bed->patienRoomBed->patientRoom)
+                                    <p class="mt-3 ml-3 text-sm text-black underline join-item">
+                                        {{ $bed->patienRoomBed->patientRoom->patientInfo->get_patient_name() }}
+                                    </p>
+                                @else
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div>No beds available</div>
+                    @endforelse
+                @endif
+            </div>
         </div>
         <!-- Modals start-->
         <!-- The button to open modal -->

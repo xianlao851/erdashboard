@@ -851,7 +851,7 @@
             </div>
         @endif
 
-        @livewire('dash.index')
+        {{-- @livewire('dash.index') --}}
     </div>
 </body>
 

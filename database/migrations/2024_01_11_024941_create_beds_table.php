@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('beds', function (Blueprint $table) {
             $table->id('bed_id');
             $table->string('bed_name', 10)->nullable();
-            $table->foreignId('room_id');
-            $table->string('status', 30);
             $table->timestamps();
         });
     }

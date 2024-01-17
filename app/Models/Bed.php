@@ -12,12 +12,10 @@ class Bed extends Model
     protected $primaryKey = "bed_id";
     protected $fillable = [
         'bed_name',
-        'room_id',
-        'status'
     ];
 
-    public function patienRoomBed()
+    public function patientBed()
     {
-        return $this->belongsTo(PatientRoomBed::class, 'bed_id', 'bed_id');
+        return $this->belongsTo(PatientBed::class, 'bed_id', 'bed_id');
     }
 }

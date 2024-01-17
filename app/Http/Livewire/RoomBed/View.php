@@ -39,7 +39,6 @@ class View extends Component
         Bed::create([
             'bed_name' => $this->bed_name,
             'room_id' => $this->getRoomId,
-            'status' => 'available'
         ]);
         $this->alert('success', 'Successfully Created!');
     }

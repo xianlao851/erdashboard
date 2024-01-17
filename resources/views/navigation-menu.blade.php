@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-gray-100 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -18,8 +18,8 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('room.index') }}" :active="request()->routeIs('room.index')">
-                        {{ __('Rooms') }}
+                    <x-nav-link href="{{ route('bed.bed_index') }}" :active="request()->routeIs('bed.bed_index')">
+                        {{ __('Beds') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-gray-100 border border-transparent rounded-md hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-100">
                                         {{ Auth::user()->name }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"

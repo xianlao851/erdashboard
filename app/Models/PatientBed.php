@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\HospitalPatient;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PatientRoomBed extends Model
+class PatientBed extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
-    protected $primaryKey = "patient_room_bed_id";
+    protected $primaryKey = "patient_bed_id";
+    protected $foreignKey = 'hpercode';
     protected $fillable = [
         'patient_id',
-        'room_id',
         'bed_id',
         'ward_code',
-        'status'
+        'enccode'
     ];
-    public function patientName()
+
+    public function patientInfo()
     {
         return $this->belongsTo(HospitalPatient::class, 'patient_id', 'hpercode');
     }

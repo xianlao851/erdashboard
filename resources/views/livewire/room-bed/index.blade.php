@@ -16,19 +16,29 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 grid-rows-1 gap-8 m-12">
-                @if ($rooms)
-                    @foreach ($rooms as $room)
-                        <div class="p-1 rounded-md shadow-md">
-                            {{ $room->room_name }}
-                            <label class="w-[300px] h-[180px] border-0 btn bg-transparent hover:bg-transparent">
-                                <a href="{{ route('room.view', ['id' => $room->room_id]) }}">
-                                    <img src="{{ URL('/images/room II.jpg') }}" class="w-[400px] h-[235px]" />
-                                </a>
-                            </label>
-                        </div>
-                    @endforeach
-                @endif
+            <div class="mt-2 p-2">
+                <h4 class="border-b-2 border-blue-500">ROOMS</h4>
+                <div class="grid grid-cols-5 grid-rows-1 gap-4 m-12">
+                    @if ($rooms)
+                        @foreach ($rooms as $room)
+                            <a href="{{ route('room.view', ['id' => $room->room_id]) }}">
+                                <div class="p-1 rounded-md shadow-lg flex border-0 btn bg-gray-200 hover:bg-gray-100 relative"
+                                    wire:click="getRoomIdfn({{ $room->room_id }})">
+                                    <div class="flex absolute left-4 top-1">
+                                        <img src="{{ URL('/images/room III.png') }}" class="w-[40px] h-[40px]">
+                                        <span class="text-blue-700 mt-4">{{ $room->room_name }}</span>
+                                    </div>
+
+                                    {{-- <label class="border-0 btn bg-transparent hover:bg-transparent"
+                                    wire:click="getRoomIdfn({{ $room->room_id }})">
+                                    {{-- <img src="{{ URL('/images/room II.jpg') }}" class="w-[200px] h-[100px]">
+
+                                </label> --}}
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
             </div>
 
             <!--Modals start-->
