@@ -9,4 +9,9 @@ class HospitalHward extends Model
 {
     use HasFactory;
     protected $connection = 'hospital', $table = 'dbo.hward', $primaryKey = 'wardcode', $keyType = 'string', $foreignKey = 'wclcode';
+
+    public function getPatientRoom()
+    {
+        return $this->hasMany(HospitalHpatroom::class, 'wardcode', 'wardcode')->where('patrmstat', 'A');
+    }
 }

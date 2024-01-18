@@ -16,6 +16,6 @@ class Bed extends Model
 
     public function patientBed()
     {
-        return $this->belongsTo(PatientBed::class, 'bed_id', 'bed_id');
+        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
     }
 }

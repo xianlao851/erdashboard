@@ -55,8 +55,8 @@ class BedIndex extends Component
 
     public function  mount()
     {
-        $this->start_date = date('Y-m-d', strtotime('2023-08-02'));
-        $this->end_date = date('Y-m-d', strtotime('2023-08-03'));
+        $this->start_date = date('Y-m-d', strtotime('2023-01-01'));
+        $this->end_date = date('Y-m-d', strtotime('2023-11-01'));
     }
 
     public function render()
@@ -64,12 +64,26 @@ class BedIndex extends Component
         $this->get_patients = DB::connection('hospital')->table('dbo.herlog')
             ->join('dbo.hencdiag', 'dbo.herlog.enccode', '=', 'dbo.hencdiag.enccode')
             ->join('dbo.hperson', 'dbo.herlog.hpercode', '=', 'dbo.hperson.hpercode')
-            ->select('dbo.hperson.patlast', 'dbo.hperson.patfirst', 'dbo.hperson.patmiddle', 'dbo.hperson.hpercode', 'dbo.herlog.erdate', 'dbo.herlog.enccode')
+            //->join('dbo.dbo.haddr', 'dbo.herlog.hpercode', '=', 'dbo.herlog.hpercode')
+            ->select(
+                'dbo.hperson.patlast',
+                'dbo.hperson.patfirst',
+                'dbo.hperson.patmiddle',
+                'dbo.hperson.patsex',
+                'dbo.hperson.hpercode',
+                'dbo.herlog.erdate',
+                'dbo.herlog.enccode',
+                'dbo.herlog.patage',
+                'dbo.hencdiag.diagtext',
+
+            )
             ->whereNotNull('dbo.herlog.tscode')
-            ->where('dbo.herlog.erstat', 'I')
+            ->where('dbo.herlog.erstat', 'A')
             ->whereNotNull('dbo.hencdiag.diagtext')
             ->where('dbo.hencdiag.primediag', 'Y')
-            ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->paginate(18, ['*'], 'patient_list');
+            ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])
+            ->orderBy('dbo.hperson.patlast', 'asc')->paginate(18, ['*'], 'patient_list');
+
 
         $beds = Bed::all();
         return view('livewire.bed.bed-index', [
@@ -92,7 +106,7 @@ class BedIndex extends Component
     {
 
         $getPatientLog = HospitalHerlog::where('hpercode', $this->selected_patient)
-            ->where('erstat', 'I')
+            ->where('erstat', 'A')
             ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
 
         $this->selected_patient_bed = $getID;
@@ -100,19 +114,19 @@ class BedIndex extends Component
         $bed_id =  $this->selected_patient_bed;
         $enccode = $getPatientLog->enccode;
 
-        // $this->validate([
-        //     'patient_id' => 'required',
-        //     'bed_id' => 'required',
-        //     'enccode' => 'required'
-        // ]);
+        $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first();
 
-        PatientBed::create([
-            'patient_id' => $patient_id,
-            'bed_id' => $bed_id,
-            'ward_code' => 'eroom',
-            'enccode' => $enccode,
-        ]);
-        $this->alert('success', 'Patient assign to bed');
+        if ($checkenccode) {
+            $this->alert('warning', 'Patient already assigned to a bed');
+        } else {
+            PatientBed::create([
+                'patient_id' => $patient_id,
+                'bed_id' => $bed_id,
+                'ward_code' => 'EROOM',
+                'enccode' => $enccode,
+            ]);
+            $this->alert('success', 'Patient assign');
+        }
     }
 
     public function saveBed()

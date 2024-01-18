@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-2">
+    <div class="">
         @livewire('dash.index')
     </div>
 </x-app-layout>

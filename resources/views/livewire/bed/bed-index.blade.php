@@ -1,19 +1,23 @@
+<x-slot name="header">
+    <h3 class="text-lg font-normal leading-tight text-gray-800">
+        BED ASSIGNMENT
+</x-slot>
 <div class="p-4">
-    <div class="flex flex-col w-full h-screen p-2 bg-gray-100 rounded-lg">
+    <div class="flex flex-col w-full h-screen p-2 bg-gray-200">
         <div class="relative">
             <div>
-                <h3 class="">BEDS ASSIGN</h3>
+                {{-- <h3 class="">BEDS ASSIGN</h3> --}}
             </div>
             <div class="absolute top-0 right-0">
                 <div class="join">
-                    <label id="add_room" class="bg-amber-600 btn btn-sm hover:bg-gray-400 join-item" for="add_bed">
+                    <label id="add_room" class="bg-blue-600 btn btn-sm hover:bg-gray-400 join-item" for="add_bed">
                         <i class="text-white las la-plus-circle la-2x"></i></label>
                 </div>
             </div>
 
         </div>
 
-        <div class="flex mt-2">
+        <div class="flex mt-6">
             <!--First conatainer-->
             <div class="w-1/3">
                 <h3 class="ml-2">Patient's</h3>
@@ -22,13 +26,30 @@
                         @if ($patients)
                             @forelse ($patients as $patient)
                                 <li drag-item draggable="true"
-                                    class="h-24 p-2 text-xs antialiased rounded-lg shadow-lg cursor-pointer hover:bg-amber-400 bg-amber-500"
+                                    class="h-24 p-2 text-[12px] antialiased bg-white rounded-lg shadow-lg cursor-pointer hover:bg-gray-50"
                                     id="{{ $patient->hpercode }}" wire:key='$patient-{{ $patient->hpercode }}'
                                     ondragstart="drag(event)">
-                                    {{ $patient->patlast }}, {{ $patient->patfirst }}
-                                    @if ($patient->patmiddle != null or $patient->patmiddle == '')
-                                        {{ $patient->patmiddle }}
-                                    @endif
+                                    <div class="flex p-1">
+                                        <div class="">
+                                            @if ($patient->patsex == 'M')
+                                                <img src="{{ URL('/images/man III.PNG') }}" class="w-[30px] h-[30px]">
+                                            @endif
+                                            @if ($patient->patsex == 'F')
+                                                <img src="{{ URL('/images/women II.PNG') }}" class="w-[30px] h-[30px]">
+                                            @endif
+                                        </div>
+                                        <div class="mt-0">{{ $patient->patlast }}, {{ $patient->patfirst }}
+                                            @if ($patient->patmiddle != null or $patient->patmiddle == '')
+                                                {{ $patient->patmiddle }}
+                                            @endif
+                                            {{ $patient->hpercode }}
+                                        </div>
+                                    </div>
+                                    <div class="text-[8px]">
+                                        <div>
+
+                                        </div>
+                                    </div>
                                 </li>
                             @empty
                             @endforelse
@@ -45,40 +66,52 @@
             <div class="w-3/4">
                 <h3 class="ml-2">Bed's</h3>
                 <div class="h-[655px] mx-4">
-                    <div class="grid grid-cols-4 grid-rows-1 gap-1 mt-1">
+                    <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-1">
                         @if ($beds)
                             {{-- ondrop="dropOccupied(event)" --}}
                             @forelse ($beds as $bed)
-                                <div @if ($bed->patientBed) ondrop="dropOccupied(event)" ondragover="allowDrop(event)"
-                                @else
-                                ondragover="allowDrop(event)" ondrop="drop(event)" ondragover="allowDrop(event)" @endif
-                                    id="{{ $bed->bed_id }}" class="p-2 bg-gray-300 rounded-lg shadow-lg">
+                                <div ondragover="allowDrop(event)" ondragover="allowDrop(event)" ondrop="drop(event)"
+                                    ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
+                                    class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
                                     <div class="flex items-center mt-0">
-                                        <img src="{{ URL('/images/bed III.png') }}" class="w-[35px] h-[35px]">
-                                        <div class="mt-4 ml-2 text-sm text-black underline uppercase">
+                                        <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
+                                        <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
                                             {{ $bed->bed_name }}
                                         </div>
                                     </div>
                                     <div class="w-full mt-2 join">
-                                        <h3 class="font-bold join-item">
-                                            @if ($bed->patientBed and $bed->patientBed->patientInfo)
-                                                @if ($bed->patientBed->patientInfo->patsex == 'M')
-                                                    <img src="{{ URL('/images/man III.PNG') }}"
-                                                        class="w-[30px] h-[30px]">
-                                                @endif
-                                                @if ($bed->patientBed->patientInfo->patsex == 'F')
-                                                    <img src="{{ URL('/images/women.PNG') }}"
-                                                        class="w-[30px] h-[30px]">
-                                                @endif
-                                            @endif
-                                        </h3>
+                                        @foreach ($bed->patientBed as $patient)
+                                            @foreach ($patient->patientHerlog as $erlogpatient)
+                                                <h3 class="font-bold join-item">
+                                                    @if ($erlogpatient->patientInfo)
+                                                        @if ($erlogpatient->patientInfo->patsex == 'M')
+                                                            <img src="{{ URL('/images/man III.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                        @if ($erlogpatient->patientInfo->patsex == 'F')
+                                                            <img src="{{ URL('/images/women II.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                    @endif
+                                                </h3>
+                                                @if ($erlogpatient->patientInfo)
+                                                    <div class="mt-3 ml-3 text-[12px] text-black underline flex">
 
-                                        <p class="mt-3 ml-3 text-sm text-black underline join-item">
-                                            @if ($bed->patientBed)
-                                                {{ $bed->patientBed->patientInfo->get_patient_name() }}
-                                            @endif
-
-                                        </p>
+                                                        <p>{{ $erlogpatient->patientInfo->get_patient_name() }}</p>
+                                                    </div>
+                                                @else
+                                                    <div class="flex">
+                                                        <p class="">
+                                                            <img src="{{ URL('/images/available.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        </p>
+                                                        <p class="mt-[6px] ml-2 text-[12px] text-blue-600 ">
+                                                            AVAILABLE
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
 
                                     </div>
                                 </div>
@@ -154,7 +187,7 @@
                 title: "Not Available!",
                 text: "Bed occupied!",
                 icon: "warning",
-                confirmButtonColor: '#0549f5'
+                confirmButtonColor: '#3b6df5'
             });
         }
 

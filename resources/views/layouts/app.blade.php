@@ -22,7 +22,7 @@
 <body class="font-sans antialiased">
     <x-banner />
 
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen bg-gray-200">
         @livewire('navigation-menu')
 
         <!-- Page Heading -->
@@ -44,6 +44,7 @@
 
     @livewireScripts
     <x-livewire-alert::scripts />
+    @livewireChartsScripts
 </body>
 
 </html>

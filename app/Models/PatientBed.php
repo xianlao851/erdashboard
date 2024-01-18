@@ -11,7 +11,7 @@ class PatientBed extends Model
     use HasFactory;
     protected $connection = 'mysql';
     protected $primaryKey = "patient_bed_id";
-    protected $foreignKey = 'hpercode';
+    protected $foreignKey = 'enccode';
     protected $fillable = [
         'patient_id',
         'bed_id',
@@ -19,8 +19,24 @@ class PatientBed extends Model
         'enccode'
     ];
 
-    public function patientInfo()
+
+    public function patientHerlog()
     {
-        return $this->belongsTo(HospitalPatient::class, 'patient_id', 'hpercode');
+        return $this->hasMany(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
+    }
+
+    public function bedInfo()
+    {
+        return $this->belongsTo(Bed::class, 'bed_id', 'bed_id');
+    }
+
+    public function patientRoom()
+    {
+        return $this->hasMany(HospitalHadmlog::class, 'enccode', 'enccode');
+    }
+
+    public function patientErHerlog()
+    {
+        return $this->hasMany(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
     }
 }
