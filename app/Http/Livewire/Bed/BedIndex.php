@@ -75,7 +75,6 @@ class BedIndex extends Component
                 'dbo.herlog.enccode',
                 'dbo.herlog.patage',
                 'dbo.hencdiag.diagtext',
-
             )
             ->whereNotNull('dbo.herlog.tscode')
             ->where('dbo.herlog.erstat', 'A')
@@ -86,6 +85,13 @@ class BedIndex extends Component
 
 
         $beds = Bed::all();
+
+        // $beds = DB::connection('mysql')->table('beds')('hospital')->table('dbo.herlog')
+        //     ->join('mysql.beds', 'mysql.beds.bed_id', '=', 'mysql.patient_beds.bed_id')
+        //     ->join('dbo.herlog', 'dbo.herlog.enccode', '=', 'mysql.beds.enccode')
+        //     ->where('dbo.herlog.erstat', 'A')->get();
+        // dd($beds);
+
         return view('livewire.bed.bed-index', [
             'patients' => $this->get_patients,
             'beds' => $beds
@@ -119,12 +125,14 @@ class BedIndex extends Component
         if ($checkenccode) {
             $this->alert('warning', 'Patient already assigned to a bed');
         } else {
+
             PatientBed::create([
                 'patient_id' => $patient_id,
                 'bed_id' => $bed_id,
                 'ward_code' => 'EROOM',
                 'enccode' => $enccode,
             ]);
+
             $this->alert('success', 'Patient assign');
         }
     }

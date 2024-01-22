@@ -21,4 +21,9 @@ class HospitalHpatroom extends Model
     {
         return $this->hasMany(HospitalHadmlog::class, 'enccode', 'enccode');
     }
+
+    public function admittedLogs()
+    {
+        return $this->hasMany(HospitalHadmlog::class, 'enccode', 'enccode')->where('admstat', 'A');
+    }
 }

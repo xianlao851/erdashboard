@@ -42,7 +42,7 @@
                                             @if ($patient->patmiddle != null or $patient->patmiddle == '')
                                                 {{ $patient->patmiddle }}
                                             @endif
-                                            {{ $patient->hpercode }}
+                                            {{-- {{ $patient->hpercode }} --}}
                                         </div>
                                     </div>
                                     <div class="text-[8px]">
@@ -61,59 +61,61 @@
                         {{ $patients->links() }}
                     @endif
                 </div>
-            </div> <!--First conatainer end-->
-            <!--Second conatainer-->
+            </div> <!--First conatainer end, for patient list in the erlogs-->
+            <!--Second conatainer for beds and patient admitted-->
             <div class="w-3/4">
                 <h3 class="ml-2">Bed's</h3>
                 <div class="h-[655px] mx-4">
                     <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-1">
                         @if ($beds)
-                            {{-- ondrop="dropOccupied(event)" --}}
+                            {{-- ondragover="allowDrop(event)"
+                                    ondrop="dropOccupied(event)" --}}
                             @forelse ($beds as $bed)
-                                <div ondragover="allowDrop(event)" ondragover="allowDrop(event)" ondrop="drop(event)"
-                                    ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
+                                <!-- div for the entire bed and the div for droping the patient's information-->
+                                <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
                                     class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
                                     <div class="flex items-center mt-0">
                                         <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
                                         <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
                                             {{ $bed->bed_name }}
                                         </div>
-                                    </div>
+                                    </div> <!-- for bed info and bed image-->
+                                    <!-- for patient info and male and female image and availability of the bed-->
                                     <div class="w-full mt-2 join">
-                                        @foreach ($bed->patientBed as $patient)
-                                            @foreach ($patient->patientHerlog as $erlogpatient)
-                                                <h3 class="font-bold join-item">
-                                                    @if ($erlogpatient->patientInfo)
-                                                        @if ($erlogpatient->patientInfo->patsex == 'M')
-                                                            <img src="{{ URL('/images/man III.PNG') }}"
-                                                                class="w-[30px] h-[30px]">
-                                                        @endif
-                                                        @if ($erlogpatient->patientInfo->patsex == 'F')
-                                                            <img src="{{ URL('/images/women II.PNG') }}"
-                                                                class="w-[30px] h-[30px]">
-                                                        @endif
+                                        @forelse($bed->patientBed as $patient)
+                                            <h3 class="font-bold join-item">
+                                                @if ($patient->patientHerlog)
+                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'M')
+                                                        <img src="{{ URL('/images/man III.PNG') }}"
+                                                            class="w-[30px] h-[30px]">
                                                     @endif
-                                                </h3>
-                                                @if ($erlogpatient->patientInfo)
-                                                    <div class="mt-3 ml-3 text-[12px] text-black underline flex">
-
-                                                        <p>{{ $erlogpatient->patientInfo->get_patient_name() }}</p>
-                                                    </div>
-                                                @else
-                                                    <div class="flex">
-                                                        <p class="">
-                                                            <img src="{{ URL('/images/available.PNG') }}"
-                                                                class="w-[30px] h-[30px]">
-                                                        </p>
-                                                        <p class="mt-[6px] ml-2 text-[12px] text-blue-600 ">
-                                                            AVAILABLE
-                                                        </p>
-                                                    </div>
+                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'F')
+                                                        <img src="{{ URL('/images/women II.PNG') }}"
+                                                            class="w-[30px] h-[30px]">
+                                                    @endif
                                                 @endif
-                                            @endforeach
-                                        @endforeach
+                                            </h3>
+                                            @if ($patient->patientHerlog)
+                                                <div class="mt-3 ml-3 text-[12px] text-black underline flex">
+                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
+                                                    {{-- {{ $patient->patientHerlog->enccode }} --}}
+                                                </div>
+                                            @else
+                                            @endif
+                                        @empty
+                                            <div class="flex w-[30px] h-[30px]">
+                                                {{-- <p class="">
+                                                    <img src="{{ URL('/images/available.PNG') }}"
+                                                        class="w-[30px] h-[30px]">
+                                                </p>
+                                                <p class="mt-[6px] ml-2 text-[12px] text-blue-600 ">
+                                                    AVAILABLE
+                                                </p> --}}
+                                            </div>
+                                        @endforelse
 
                                     </div>
+                                    <!-- for patient info and male and female image and availability of the bed end tag-->
                                 </div>
                             @empty
                                 <div>No beds available</div>
@@ -124,11 +126,12 @@
                 </div>
             </div>
             <!--Second conatainer end-->
+
+            <!--inputs for fetching th patient id and bed id -->
             <input wire:model="selected_patient" id="patient" hidden />
             <input wire:model="selected_patient_bed" id="bed" hidden />
-            <div id="patient"></div>
+            <!--inputs for fetching th patient id and bed id end-->
         </div>
-
         <!-- Modals--->
         <input type="checkbox" id="add_bed" class="modal-toggle" />
         <div class="modal" role="dialog">
@@ -149,7 +152,8 @@
             </div>
         </div>
         <!-- Modals--->
-    </div>
+    </div> <!--main div end-->
+    <!--scripts-->
     <script>
         function allowDrop(ev) {
             ev.preventDefault();

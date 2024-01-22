@@ -22,7 +22,7 @@ class PatientBed extends Model
 
     public function patientHerlog()
     {
-        return $this->hasMany(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
     }
 
     public function bedInfo()
@@ -37,6 +37,6 @@ class PatientBed extends Model
 
     public function patientErHerlog()
     {
-        return $this->hasMany(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
     }
 }

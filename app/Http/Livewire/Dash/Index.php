@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dash;
 
+use Carbon\Carbon;
 use App\Models\Ward;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,14 +13,18 @@ use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
-use Asantibanez\LivewireCharts\Models\ColumnChartModel;
-use Asantibanez\LivewireCharts\Facades\LivewireAreaChart;
-use Carbon\Carbon;
 
 class Index extends Component
 {
     use LivewireAlert;
     use WithPagination;
+
+    public $ward2FICU;
+    public $ward3FMIC;
+    public $ward3FMN;
+
+    public $ward2FICUAvailable;
+    public $ward3FMICAvailable;
 
     public $months = [];
     public $monthCount = [];
@@ -31,6 +36,12 @@ class Index extends Component
     public $date_filter;
     public $i = 0;
     public $k = 0;
+    public $j = 0;
+
+    public $wards = [];
+    public $wardsCount = [];
+
+    public $getWard2FICU;
     public $colors = [
         // 'Pediatrics Department' => '#7210e3',
         // 'Surgery Department' => '#fc8181',
@@ -53,29 +64,62 @@ class Index extends Component
         'ENT' => '#28756c',
         'Anesthesiology Department' => '#e6f51b',
         'blue' => '#7210e3',
-        // 'Surgery' => '#66DA26',
         'OB' => '#91147d',
         'NB' => '#143559',
-        // 'pedia' => '#7210e3',
-        // 'Orthopedics' => '#a3281f',
-        // 'Pediatrics' => '#1d5227',
-        // 'Obstetrics' => '#266e65'
+        '2FICU' => 'e6f51b',
+        '3FMIC' => '#7210e3',
+        '3FMN' => '#7210e3',
+        '3FMP' => '#fc8181',
+        '3FNIC' => '#90cdf4',
+        'CBNS' => '#66DA26',
+        'CBPA' => '#e3106b',
+        'CBPN' => '#2170a3',
+        'SDICU' => '#c42163',
+        'SICU' => '#28756c',
 
+    ];
+
+    public $wardsColor = [
+        '2FICU' => 'e6f51b',
+        '3FMIC' => '#7210e3',
+        '3FMN' => '#1328eb',
+        '3FMP' => '#fc8181',
+        '3FNIC' => '#90cdf4',
+        'CBNS' => '#66DA26',
+        'CBPA' => '#fcf003',
+        'CBPN' => '#f28322',
+        'SDICU' => '#c42163',
+        'SICU' => '#28756c',
+        '' => '#e3106b',
+    ];
+    public $selectedWards = [
+        '2FICU',
+        '3FMIC',
+        '3FMN',
+        '3FMP',
+        '3FNIC',
+        'CBNS',
+        'CBPA',
+        'CBPN',
+        'SDICU',
+        'SICU',
     ];
 
     public function mount()
     {
         //$this->get_date = Carbon::createFromFormat('Y', DB::raw('CONVERT(date, erdate)'));
 
-        $this->date_filter = 'last_year';
+        $this->date_filter = 'this_year';
     }
     public function render()
     {
         $this->i = 0;
+        //$this->j = 0;
         $this->months = null;
         $this->monthCount = null;
         $this->days = null;
         $this->dayCount = null;
+
         $this->dateFilter = $this->date_filter;
 
         if ($this->date_filter == 'today') {
@@ -153,15 +197,209 @@ class Index extends Component
             }
         } // End lineChartmodel for filter this_week, last_week, yesterday, last_month, this_month and today
 
-        $wards = Ward::all();
 
         $admittedlogs = HospitalHadmlog::select('admstat', 'wardcode')->where('admstat', 'A')->with('patRoom')->get();
-        //$admittedlogs = HospitalHpatroom::where('patrmstat', 'A')->where('wardcode', '3FMIC')->count();
-        //dd($admittedlogs);
+
+        $admlogs = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+            ->where('patrmstat', 'A')->with('admittedLogs')
+            ->whereIn('wardcode', $this->selectedWards)
+            ->get()->groupBy(function ($data) {
+                return $data->wardcode;
+            });
+        //dd($admlogs);
+
+        $pieChartModelallWards = (new PieChartModel())
+            ->setTitle('')
+            //->withDataLabels()
+            ->withDataLabels()
+            ->setAnimated(true);
+
+        foreach ($admlogs as $log => $values) {
+            $this->wards[] = $log;
+            $this->wardsCount[] = count($values);
+            $pieChartModelallWards->addSlice($this->wards[$this->j], $this->wardsCount[$this->j], $this->wardsColor[$this->wards[$this->j]]);
+            $this->j++;
+        }
+        //----
+        $this->ward2FICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($this->ward2FICU) {
+            $ward2FICUSlot = 25;
+            $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
+        } else {
+            $ward2FICUSlot = 25;
+            $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
+        }
+
+        //----
+        $this->ward3FMIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMIC')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($this->ward3FMIC) {
+            $ward3FMICSlot = 25;
+            $this->ward3FMICAvailable = $ward3FMICSlot - $this->ward3FMIC;
+        } else {
+            $ward3FMICSlot = 25;
+            $this->ward3FMICAvailable = $ward3FMICSlot - $this->ward3FMIC;
+        }
+        $pieChartModelallWard3FMIC = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('3FMIC')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $this->ward3FMIC, '#0317fc')
+            ->addSlice('Available', $this->ward3FMICAvailable, '#046e40');
+        //----
+        $this->ward3FMN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMN')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($this->ward3FMN) {
+            $ward3FMNSlot = 25;
+            $ward3FMNAvailable = $ward3FMNSlot - $this->ward3FMN;
+        } else {
+            $ward3FMNSlot = 25;
+            $ward3FMNAvailable = $ward3FMNSlot - $this->ward3FMN;
+        }
+
+        $pieChartModelallWard3FMN = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('3FMN')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $this->ward3FMN, '#0317fc')
+            ->addSlice('Available', $ward3FMNAvailable, '#046e40');
+        //----
+        $ward3FMP = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMP')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($ward3FMP) {
+            $ward3FMPSlot = 25;
+            $ward3FMPAvailable = $ward3FMPSlot - $ward3FMP;
+        } else {
+            $ward3FMPSlot = 25;
+            $ward3FMPAvailable = $ward3FMPSlot - $ward3FMP;
+        }
+        $pieChartModelallWard3FMP = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('3FMP')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $ward3FMP, '#0317fc')
+            ->addSlice('Available', $ward3FMPAvailable, '#046e40');
+        //----
+        $ward3FNIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FNIC')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($ward3FNIC) {
+            $ward3FNICSlot = 25;
+            $ward3FNICAvailable = $ward3FNICSlot - $ward3FNIC;
+        } else {
+            $ward33FNICSlot = 25;
+            $ward3FNICAvailable = $ward33FNICSlot - $ward3FNIC;
+        }
+        $pieChartModelallWard3FNIC = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('3FNIC')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $ward3FNIC, '#0317fc')
+            ->addSlice('Available', $ward3FNICAvailable, '#046e40');
+        //----
+        $wardCBNS = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBNS')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($wardCBNS) {
+            $wardCBNSSlot = 25;
+            $wardCBNSAvailable = $wardCBNSSlot - $wardCBNS;
+        } else {
+            $ward3CBNSSlot = 25;
+            $wardCBNSAvailable = $ward3CBNSSlot - $wardCBNS;
+        }
+        $pieChartModelallWardCBNS = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('CBNS')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $wardCBNS, '#0317fc')
+            ->addSlice('Available', $wardCBNSAvailable, '#046e40');
+        //----
+        $wardCBPA = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPA')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($wardCBPA) {
+            $wardCBPASlot = 25;
+            $wardCBPAAvailable = $wardCBPASlot - $wardCBPA;
+        } else {
+            $ward3CBPASlot = 25;
+            $wardCBPAAvailable = $ward3CBPASlot - $wardCBPA;
+        }
+        $pieChartModelallWardCBPA = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('CBPA')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $wardCBPA, '#0317fc')
+            ->addSlice('Available', $wardCBPAAvailable, '#046e40');
+        //----
+        $wardCBPN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPN')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($wardCBPN) {
+            $wardCBPNSlot = 25;
+            $wardCBPNAvailable = $wardCBPNSlot - $wardCBPN;
+        } else {
+            $ward3CBPNSlot = 25;
+            $wardCBPNAvailable = $ward3CBPNSlot - $wardCBPN;
+        }
+        $pieChartModelallWardCBPN = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('CBPN')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $wardCBPN, '#0317fc')
+            ->addSlice('Available', $wardCBPNAvailable, '#046e40');
+        //----
+        $wardSDICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SDICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($wardSDICU) {
+            $wardSDICUSlot = 25;
+            $wardSDICUAvailable = $wardSDICUSlot - $wardSDICU;
+        } else {
+            $ward3SDICUSlot = 25;
+            $wardSDICUAvailable = $ward3SDICUSlot - $wardSDICU;
+        }
+        $pieChartModelallWardSDICU = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('SDICU')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $wardSDICU, '#0317fc')
+            ->addSlice('Available', $wardSDICUAvailable, '#046e40');
+        //----
+        $wardSICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        if ($wardSICU) {
+            $wardSICUSlot = 25;
+            $wardSICUAvailable = $wardSICUSlot - $wardSICU;
+        } else {
+            $ward3SICUSlot = 25;
+            $wardSICUAvailable = $ward3SICUSlot - $wardSICU;
+        }
+        $pieChartModelallWardSICU = (new PieChartModel())
+            ->setType('donut')
+            ->setTitle('SICU')
+            ->withDataLabels()
+            ->setAnimated(true)
+            ->addSlice('Ocuppied', $wardSICU, '#0317fc')
+            ->addSlice('Available', $wardSICUAvailable, '#046e40');
+        // '2FICU',
+        // '3FMIC',
+        // '3FMN',
+        // '3FMP',
+        // '3FNIC',
+        // 'CBNS',
+        // 'CBPA',
+        // 'CBPN',
+        // 'SDICU',
+        // 'SICU',
         return view('livewire.dash.index', [
-            'wards' => $wards,
+            'admlogs' => $admlogs,
             'admittedlogs' => $admittedlogs,
-            'lineChartModel' => $lineChartModel ?? null,
+            'lineChartModel' => $lineChartModel,
+            'pieChartModelallWards' => $pieChartModelallWards,
+            'pieChartModelallWard3FMIC' => $pieChartModelallWard3FMIC,
+            'pieChartModelallWard3FMN' => $pieChartModelallWard3FMN,
+            'pieChartModelallWard3FMP' => $pieChartModelallWard3FMP,
+            'pieChartModelallWard3FNIC' => $pieChartModelallWard3FNIC,
+            'pieChartModelallWardCBNS' => $pieChartModelallWardCBNS,
+            'pieChartModelallWardCBPA' => $pieChartModelallWardCBPA,
+            'pieChartModelallWardCBPN' => $pieChartModelallWardCBPN,
+            'pieChartModelallWardSDICU' => $pieChartModelallWardSDICU,
+            'pieChartModelallWardSICU' => $pieChartModelallWardSICU,
+            //'ward2FICU' => $ward2FICU
         ]);
     }
 }
