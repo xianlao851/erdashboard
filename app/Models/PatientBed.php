@@ -35,7 +35,7 @@ class PatientBed extends Model
         return $this->hasMany(HospitalHadmlog::class, 'enccode', 'enccode');
     }
 
-    public function patientErHerlog()
+    public function patientErLog()
     {
         return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
     }
