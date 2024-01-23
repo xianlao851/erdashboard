@@ -5,9 +5,7 @@
 
             <div class="w-1/3 h-full p-2 bg-white rounded-lg join-item">
                 <div class="w-full h-full">
-                    @foreach ($erlogs as $erlog)
-                        {{ $erlog->patientErLog->count() }}
-                    @endforeach
+                    <div id="erAdmittedCount"></div>
                 </div>
             </div>
             <div class="bg-white rounded-lg">
@@ -123,7 +121,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -182,7 +180,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -242,7 +240,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -302,7 +300,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -362,7 +360,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -422,7 +420,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -482,7 +480,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -542,7 +540,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -602,7 +600,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -662,7 +660,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#0eebca", "#2a4bf5"],
+            colors: ["#03a155", "#2a4bf5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -676,5 +674,66 @@
         var chartwardSICU = new ApexCharts(document.querySelector("#wardSICU"), wardSICU);
         chartwardSICU.render();
         //---wardSICU
+
+        var erAdmittedCount = {
+            series: [@json($erAdmittedCount), @json($erSlotAvailable)],
+            chart: {
+                height: 480,
+                type: 'donut',
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        //background: '#030a91',
+                        labels: {
+                            show: true,
+                            color: '#FFFFFF',
+                            total: {
+                                show: true,
+                                fontSize: 30,
+                                fontFamily: 'fontFamily',
+                            }
+                        }
+                    }
+                }
+            },
+            labels: ['Ocuppied', 'Available', ],
+            legend: {
+                position: 'bottom',
+                fontSize: '12px',
+                fontWeight: 600,
+                fontFamily: 'sans',
+            },
+            title: {
+                text: 'ER',
+                align: 'center',
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    fontFamily: 'sans',
+                    // color: '#263238'
+                },
+            },
+            dataLabels: {
+                // enabled: true
+                formatter: (val, {
+                    seriesIndex,
+                    w
+                }) => w.config.series[seriesIndex]
+            },
+            colors: ["#03a155", "#2a4bf5"],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                }
+            }]
+        };
+
+        var charterAdmittedCount = new ApexCharts(document.querySelector("#erAdmittedCount"), erAdmittedCount);
+        charterAdmittedCount.render();
+        //---erAdmittedCount
     </script>
 </div>

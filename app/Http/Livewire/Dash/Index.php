@@ -43,6 +43,9 @@ class Index extends Component
     public $wardSDICUAvailable;
     public $wardSICUAvailable;
 
+    public $erAdmittedCount = 0;
+    public $erSlotAvailable;
+
     public $months = [];
     public $monthCount = [];
     public $days = [];
@@ -57,6 +60,7 @@ class Index extends Component
 
     public $wards = [];
     public $wardsCount = [];
+
 
     public $getWard2FICU;
     public $colors = [
@@ -132,6 +136,7 @@ class Index extends Component
     {
         $this->i = 0;
         //$this->j = 0;
+        $this->erAdmittedCount = 0;
         $this->months = null;
         $this->monthCount = null;
         $this->days = null;
@@ -224,24 +229,18 @@ class Index extends Component
                 return $data->wardcode;
             });
 
-        //dd($admlogs);
-
-        // $pieChartModelallWards = (new PieChartModel())
-        //     ->setTitle('')
-        //     //->withDataLabels()
-        //     ->withDataLabels()
-        //     ->setAnimated(true);
-
-        // foreach ($admlogs as $log => $values) {
-        //     $this->wards[] = $log;
-        //     $this->wardsCount[] = count($values);
-        //     $pieChartModelallWards->addSlice($this->wards[$this->j], $this->wardsCount[$this->j], $this->wardsColor[$this->wards[$this->j]]);
-        //     $this->j++;
-        // }
-
 
         $this->erlogs = PatientBed::select('enccode', 'patient_id')->get();
-        //dd($this->erlogs);
+        foreach ($this->erlogs as $logcount) {
+            if ($logcount->patientErLog) {
+                $this->erAdmittedCount++;
+                //dd('here');
+            }
+        }
+        if ($this->erAdmittedCount) {
+            $erslot = 50;
+            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
+        }
         //----
         $this->ward2FICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
         if ($this->ward2FICU) {
