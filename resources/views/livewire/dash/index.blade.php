@@ -1,7 +1,7 @@
 <div class="">
     <div class="p-2 mx-4 ">
 
-        <div class="flex p-4 space-x-4 h-[700px]">
+        <div class="flex p-4 space-x-4 h-[650px]">
 
             <div class="w-1/3 h-full p-2 bg-white rounded-lg join-item">
                 <div class="w-full h-full">
@@ -10,7 +10,7 @@
             </div>
             <div class="bg-white rounded-lg">
                 {{-- <h3 class="justify-center p-2 text-3xl font-bold">ICU'S</h3> --}}
-                <div class="grid w-full grid-cols-5 grid-rows-2 gap-4 p-2">
+                <div class="grid w-full h-full grid-cols-5 grid-rows-2 gap-4 p-2">
                     <div id="ward2FICU"></div>
                     <div id="ward3FMIC"></div>
                     <div id="ward3FMN"></div>
@@ -80,10 +80,12 @@
             series: [@json($ward2FICU), @json($ward2FICUAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
                 pie: {
+                    //size: 480,
                     donut: {
                         labels: {
                             show: true,
@@ -123,7 +125,7 @@
             },
             colors: ["#03a155", "#2a4bf5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 270,
                 options: {
                     chart: {
                         width: 200
@@ -139,6 +141,7 @@
             series: [@json($ward3FMIC), @json($ward3FMICAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -199,6 +202,7 @@
             series: [@json($ward3FMN), @json($ward3FMNAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -259,6 +263,7 @@
             series: [@json($ward3FMP), @json($ward3FMPAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -319,6 +324,7 @@
             series: [@json($ward3FNIC), @json($ward3FNICAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -379,6 +385,7 @@
             series: [@json($wardCBNS), @json($wardCBNSAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -439,6 +446,7 @@
             series: [@json($wardCBPA), @json($wardCBPAAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -499,6 +507,7 @@
             series: [@json($wardCBPN), @json($wardCBPNAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -559,6 +568,7 @@
             series: [@json($wardSDICU), @json($wardSDICUAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -619,6 +629,7 @@
             series: [@json($wardSICU), @json($wardSICUAvailable)],
             chart: {
                 height: 480,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {
@@ -678,7 +689,8 @@
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
             chart: {
-                height: 480,
+                height: 550,
+                //height: 270,
                 type: 'donut',
             },
             plotOptions: {

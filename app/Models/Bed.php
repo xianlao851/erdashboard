@@ -18,4 +18,14 @@ class Bed extends Model
     {
         return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
     }
+
+    public function findPatientBed()
+    {
+        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
+    }
+
+    // public function bedAvailability()
+    // {
+    //     return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
+    // }
 }

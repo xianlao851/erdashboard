@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PatientBed;
 
 class HospitalPatient extends Model
 {
@@ -23,5 +24,10 @@ class HospitalPatient extends Model
     public function getPatientRoom()
     {
         return $this->belongsTo(HospitalHpatroom::class, 'hpercode', 'hpercode')->latest('hprdate')->where('patrmstat', 'A');
+    }
+
+    public function checkPatientBedAssinged()
+    {
+        return $this->hasMany(PatientBed::class, 'patient_id', 'hpercode');
     }
 }

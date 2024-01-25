@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Bed;
 
 use App\Models\Bed;
 use App\Models\HospitalHerlog;
+use App\Models\HospitalPatient;
 use App\Models\PatientBed;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -27,11 +28,12 @@ class BedIndex extends Component
     public $selected_patient;
     public $selected_patient_bed;
 
-    //public $beds;
+    public $beds;
     public $rooms;
 
     protected $get_patients;
     protected $getWards;
+    protected $patient_list_results;
     public $getRoomId;
     public $getBeds;
 
@@ -39,6 +41,8 @@ class BedIndex extends Component
     public $end_date;
     public $patient_list;
 
+    public $status = false;
+    public $bedStatus = false;
     public $wards = [
         '2FICU',
         '3FMIC',
@@ -52,11 +56,20 @@ class BedIndex extends Component
         'SDICU',
         'SICU'
     ];
+    // public function updatedSearchPatient()
+    // {
+    //     $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
 
+    //     $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
+    //         foreach ($columns as $column) {
+    //             $query->orWhere($column, 'LIKE', '%' . $this->search_patient . '%');
+    //         }
+    //     })->get();
+    // }
     public function  mount()
     {
-        $this->start_date = date('Y-m-d', strtotime('2023-01-01'));
-        $this->end_date = date('Y-m-d', strtotime('2023-11-01'));
+        $this->start_date = date('Y-m-d', strtotime('2023-11-01'));
+        $this->end_date = date('Y-m-d', strtotime('2023-11-15'));
     }
 
     public function render()
@@ -81,20 +94,24 @@ class BedIndex extends Component
             ->whereNotNull('dbo.hencdiag.diagtext')
             ->where('dbo.hencdiag.primediag', 'Y')
             ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])
-            ->orderBy('dbo.hperson.patlast', 'asc')->paginate(18, ['*'], 'patient_list');
+            ->orderBy('dbo.hperson.patlast', 'asc')->paginate(15, ['*'], 'patient_list');
 
+        if (strlen($this->search_patient) > 3) {
+            $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
 
-        $beds = Bed::all();
-
-        // $beds = DB::connection('mysql')->table('beds')('hospital')->table('dbo.herlog')
-        //     ->join('mysql.beds', 'mysql.beds.bed_id', '=', 'mysql.patient_beds.bed_id')
-        //     ->join('dbo.herlog', 'dbo.herlog.enccode', '=', 'mysql.beds.enccode')
-        //     ->where('dbo.herlog.erstat', 'A')->get();
-        // dd($beds);
+            $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
+                foreach ($columns as $column) {
+                    $query->orWhere($column, 'LIKE', '%' . $this->search_patient . '%');
+                }
+            })->get();
+        } else {
+            $this->beds = Bed::all();
+        }
 
         return view('livewire.bed.bed-index', [
-            'patients' => $this->get_patients,
-            'beds' => $beds
+            'patients' => $this->get_patients ?? null,
+            'patient_results' => $this->patient_list_results
+            //'beds' => $beds
         ]);
     }
 
@@ -110,31 +127,46 @@ class BedIndex extends Component
 
     public function getPatientBed($getID)
     {
+        $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
 
-        $getPatientLog = HospitalHerlog::where('hpercode', $this->selected_patient)
-            ->where('erstat', 'A')
-            ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
-
-        $this->selected_patient_bed = $getID;
-        $patient_id = $this->selected_patient;
-        $bed_id =  $this->selected_patient_bed;
-        $enccode = $getPatientLog->enccode;
-
-        $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first();
-
-        if ($checkenccode) {
-            $this->alert('warning', 'Patient already assigned to a bed');
-        } else {
-
-            PatientBed::create([
-                'patient_id' => $patient_id,
-                'bed_id' => $bed_id,
-                'ward_code' => 'EROOM',
-                'enccode' => $enccode,
-            ]);
-
-            $this->alert('success', 'Patient assign');
+        foreach ($bedAvailability as $beds) {
+            foreach ($beds->findPatientBed as $patienBed) {
+                if ($patienBed->confirmPatientErlogStatus) {
+                    $this->dispatchBrowserEvent('occupied');
+                    $this->status = true;
+                }
+            }
         }
+
+        if ($this->status == false) {
+            $getPatientLog = HospitalHerlog::where('hpercode', $this->selected_patient)
+                ->where('erstat', 'A')
+                ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
+
+            $this->selected_patient_bed = $getID;
+            $patient_id = $this->selected_patient;
+            $bed_id =  $this->selected_patient_bed;
+            $enccode = $getPatientLog->enccode;
+
+            $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first();
+
+            if ($checkenccode) {
+                $this->dispatchBrowserEvent('notAvailable');
+            } else {
+
+                PatientBed::create([
+                    'patient_id' => $patient_id,
+                    'bed_id' => $bed_id,
+                    'ward_code' => 'EROOM',
+                    'enccode' => $enccode,
+                ]);
+
+                $this->dispatchBrowserEvent('patientAssigned');
+            }
+        }
+
+        $this->status = false;
+        $this->reset('selected_patient', 'selected_patient_bed');
     }
 
     public function saveBed()
@@ -147,5 +179,11 @@ class BedIndex extends Component
             'bed_name' => $this->bed_name,
         ]);
         $this->alert('success', 'Bed Added');
+        $this->reset('beds');
+    }
+
+    public function  clearSearcPatient()
+    {
+        $this->search_patient = '';
     }
 }

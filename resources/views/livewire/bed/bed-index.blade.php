@@ -4,24 +4,39 @@
 </x-slot>
 <div class="p-4">
     <div class="flex flex-col w-full h-screen p-2 bg-gray-200">
-        <div class="relative">
-            <div>
-                {{-- <h3 class="">BEDS ASSIGN</h3> --}}
-            </div>
-            <div class="absolute top-0 right-0">
-                <div class="join">
-                    <label id="add_room" class="bg-blue-600 btn btn-sm hover:bg-gray-400 join-item" for="add_bed">
-                        <i class="text-white las la-plus-circle la-2x"></i></label>
-                </div>
-            </div>
 
+        <div class="relative">
+            <div class="absolute top-0 flex flex-row space-x-4 right-4">
+
+
+                <div class="w-full max-w-xs form-control">
+                    {{-- <label class="label">
+                        <span class="text-black label-text">Add bed </span>
+                    </label> --}}
+                    <div class="indicator">
+                        {{-- <label id="add_bed" class="bg-blue-600 btn btn-md hover:bg-gray-400 " for="add_bed">
+                            <i class="text-white las la-plus-circle la-2x"></i></label> --}}
+                    </div>
+                </div>
+
+
+                <!--Search Patient start--->
+                <div class="">
+                    <div class="join">
+                        <input class="input input-md input-bordered join-item" wire:model.lazy='search_patient'
+                            placeholder="Search" />
+                        <button class="text-white bg-blue-600 rounded-r-full btn btn-md join-item">Search</button>
+                    </div>
+                </div>
+                <!--Search Patient--->
+            </div>
         </div>
 
         <div class="flex mt-6">
             <!--First conatainer-->
             <div class="w-1/3">
                 <h3 class="ml-2">Patient's</h3>
-                <div class="">
+                <div class="mt-2">
                     <ul class="grid grid-cols-3 gap-2 p-1 rounded-lg">
                         @if ($patients)
                             @forelse ($patients as $patient)
@@ -62,66 +77,77 @@
                     @endif
                 </div>
             </div> <!--First conatainer end, for patient list in the erlogs-->
-            <!--Second conatainer for beds and patient admitted-->
-            <div class="w-3/4">
-                <h3 class="ml-2">Bed's</h3>
-                <div class="h-[655px] mx-4">
-                    <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-1">
-                        @if ($beds)
-                            {{-- ondragover="allowDrop(event)"
-                                    ondrop="dropOccupied(event)" --}}
-                            @forelse ($beds as $bed)
-                                <!-- div for the entire bed and the div for droping the patient's information-->
-                                <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                    class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
-                                    <div class="flex items-center mt-0">
-                                        <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
-                                        <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
-                                            {{ $bed->bed_name }}
-                                        </div>
-                                    </div> <!-- for bed info and bed image-->
-                                    <!-- for patient info and male and female image and availability of the bed-->
-                                    <div class="w-full mt-2 join">
-                                        @forelse($bed->patientBed as $patient)
-                                            <h3 class="font-bold join-item">
-                                                @if ($patient->patientHerlog)
-                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'M')
-                                                        <img src="{{ URL('/images/man III.PNG') }}"
-                                                            class="w-[30px] h-[30px]">
-                                                    @endif
-                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'F')
-                                                        <img src="{{ URL('/images/women II.PNG') }}"
-                                                            class="w-[30px] h-[30px]">
-                                                    @endif
-                                                @endif
-                                            </h3>
-                                            @if ($patient->patientHerlog)
-                                                <div class="mt-3 ml-3 text-[12px] text-black underline flex">
-                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
-                                                    {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                </div>
-                                            @else
-                                            @endif
-                                        @empty
-                                            <div class="flex w-[30px] h-[30px]">
-                                                {{-- <p class="">
-                                                    <img src="{{ URL('/images/available.PNG') }}"
-                                                        class="w-[30px] h-[30px]">
-                                                </p>
-                                                <p class="mt-[6px] ml-2 text-[12px] text-blue-600 ">
-                                                    AVAILABLE
-                                                </p> --}}
-                                            </div>
-                                        @endforelse
 
-                                    </div>
-                                    <!-- for patient info and male and female image and availability of the bed end tag-->
-                                </div>
-                            @empty
-                                <div>No beds available</div>
-                            @endforelse
+            <!--Second conatainer for beds and patient admitted-->
+            <div class="w-3/4 mt-4">
+                <div class="h-[655px] mx-4">
+                    <!--patient list start--->
+                    <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-4">
+                        @if ($patient_results)
+                            <div class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
+                                @foreach ($patient_results as $patient_result)
+                                    @foreach ($patient_result->checkPatientBedAssinged as $PatientBedAssinged)
+                                        <div class="flex items-center mt-0">
+                                            <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
+                                            <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
+                                                {{ $PatientBedAssinged->getBedInfo->bed_name }}
+                                            </div>
+                                        </div>
+                                        <div class="w-full mt-2 join">
+                                            @if ($PatientBedAssinged->getPatientInfo->patsex == 'M')
+                                                <img src="{{ URL('/images/man III.PNG') }}" class="w-[30px] h-[30px]">
+                                            @endif
+                                            @if ($PatientBedAssinged->getPatientInfo->patsex == 'F')
+                                                <img src="{{ URL('/images/women II.PNG') }}" class="w-[30px] h-[30px]">
+                                            @endif
+                                            <div class="mt-3 ml-3 text-[12px] text-black underline flex">
+                                                {{ $PatientBedAssinged->getPatientInfo->get_patient_name() }}
+                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
                         @endif
+
                     </div>
+                    <div class="">
+                        <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-1">
+                            @if ($beds and $search_patient == '')
+                                @foreach ($beds as $bed)
+                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
+                                        class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
+                                        <div class="flex items-center mt-0">
+                                            <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
+                                            <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
+                                                {{ $bed->bed_name }}
+                                            </div>
+                                        </div> <!-- for bed info and bed image-->
+                                        <div class="w-full mt-2 join">
+                                            @foreach ($bed->patientBed as $patient)
+                                                @if ($patient->patientHerlog)
+                                                    <div>
+                                                        @if ($patient->patientHerlog->patientInfo->patsex == 'M')
+                                                            <img src="{{ URL('/images/man III.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                        @if ($patient->patientHerlog->patientInfo->patsex == 'F')
+                                                            <img src="{{ URL('/images/women II.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                    </div>
+                                                    <div class="mt-3 ml-3 text-[12px] text-black  flex">
+                                                        {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
+                                                        {{-- {{ $patient->patientHerlog->enccode }} --}}
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div> <!-- bed div container--->
+                                @endforeach
+                            @endif
+                        </div>
+                    </div><!--patient list end--->
 
                 </div>
             </div>
@@ -210,5 +236,48 @@
                 }
             });
         }
+
+        function togglediv(id) {
+            document.querySelectorAll(".TableBody").forEach(function(div) {
+                if (div.id == id) {
+                    // Toggle specified DIV
+                    div.style.display = div.style.display == "none" ? "block" : "none";
+                } else {
+                    // Hide other DIVs
+                    div.style.display = "none";
+                }
+            });
+        }
+
+        window.addEventListener('occupied', function() {
+            Swal.fire({
+                title: "Invalid",
+                text: "Bed is already occupied",
+                icon: "warning",
+                confirmButtonColor: "#1737d4",
+            });
+        });
+
+        window.addEventListener('notAvailable', function() {
+            Swal.fire({
+                title: "Invalid",
+                text: "Patient is already assigned to a bed",
+                icon: "warning",
+                confirmButtonColor: "#1737d4",
+            });
+        });
+
+        window.addEventListener('patientAssigned', function() {
+            Swal.fire({
+                title: "Success",
+                text: "Successfully assigned",
+                icon: "success",
+                confirmButtonColor: "#1737d4",
+            });
+        });
+
+        $("#toggle").on("click", function() {
+            $(".isToggable").toggle();
+        });
     </script>
 </div>

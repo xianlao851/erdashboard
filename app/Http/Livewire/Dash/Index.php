@@ -240,6 +240,9 @@ class Index extends Component
         if ($this->erAdmittedCount) {
             $erslot = 50;
             $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
+        } else {
+            $erslot = 50;
+            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
         }
         //----
         $this->ward2FICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
