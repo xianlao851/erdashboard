@@ -54,6 +54,11 @@ class PatientBed extends Model
     {
         return $this->belongsTo(Bed::class, 'bed_id', 'bed_id');
     }
+
+    public function bedInfoForTransferBed()
+    {
+        return $this->belongsTo(Bed::class, 'bed_id', 'bed_id');
+    }
     // public function checkLogsForBedAvailability()
     // {
     //     return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');

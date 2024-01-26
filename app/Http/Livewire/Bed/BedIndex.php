@@ -16,7 +16,7 @@ class BedIndex extends Component
     use LivewireAlert;
     use WithPagination;
 
-    protected $listeners = ['getPatientID', 'getPatientBed', 'dischargePatient'];
+    protected $listeners = ['getPatientID', 'getPatientBed', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode'];
 
     public $bed_name;
 
@@ -25,9 +25,12 @@ class BedIndex extends Component
     public $search_patient;
     public $get_ward = '1F';
 
-    public $selected_patient;
+    public $selected_patient_enccode;
     public $selected_patient_bed;
+    public $selected_transfer_patient;
 
+    // public $transfer_patient_code;
+    // public $transfer_patient_bed_code;
     public $beds;
     public $rooms;
 
@@ -43,6 +46,11 @@ class BedIndex extends Component
 
     public $status = false;
     public $bedStatus = false;
+    public $transferBedStatus = false;
+
+    public $recentBedId;
+    public $recentPatientBedId;
+
     public $wards = [
         '2FICU',
         '3FMIC',
@@ -68,12 +76,13 @@ class BedIndex extends Component
     // }
     public function  mount()
     {
-        $this->start_date = date('Y-m-d', strtotime('2023-11-01'));
-        $this->end_date = date('Y-m-d', strtotime('2023-11-15'));
     }
 
     public function render()
     {
+        $this->start_date = date('Y-m-d', strtotime('2023-11-01'));
+        $this->end_date = date('Y-m-d', strtotime('2023-11-31'));
+
         $this->get_patients = DB::connection('hospital')->table('dbo.herlog')
             ->join('dbo.hencdiag', 'dbo.herlog.enccode', '=', 'dbo.hencdiag.enccode')
             ->join('dbo.hperson', 'dbo.herlog.hpercode', '=', 'dbo.hperson.hpercode')
@@ -96,12 +105,18 @@ class BedIndex extends Component
             ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])
             ->orderBy('dbo.hperson.patlast', 'asc')->paginate(15, ['*'], 'patient_list');
 
+
+        // $query = DB::connection('hospital', 'mysql')->table('hospital.dbo.hperson as patient_info')->leftjoin('hospital.dbo.herlog as patientLog', 'patientLog.hpercode', '=', 'patient_info.hpercode')
+        //     ->leftjoin('patient_beds as patienBeds', 'patienBeds.patient_id', '=', 'patientLog.hpercode');
+        // $output = $query->select(['patient_info.*', 'patientLog.*', 'patienBeds.*'])->where('patient_info.hpercode', '1016166')->get();
+        // dd($output);
+
         if (strlen($this->search_patient) > 3) {
             $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
-
             $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
                 foreach ($columns as $column) {
                     $query->orWhere($column, 'LIKE', '%' . $this->search_patient . '%');
+                    //$query->orWhere($column, $this->search_patient);
                 }
             })->get();
         } else {
@@ -110,7 +125,7 @@ class BedIndex extends Component
 
         return view('livewire.bed.bed-index', [
             'patients' => $this->get_patients ?? null,
-            'patient_results' => $this->patient_list_results
+            'patient_results' => $this->patient_list_results ?? null,
             //'beds' => $beds
         ]);
     }
@@ -122,51 +137,78 @@ class BedIndex extends Component
 
     public function getPatientID($getId)
     {
-        $this->selected_patient = $getId;
+        $this->selected_patient_enccode = $getId;
     }
 
     public function getPatientBed($getID)
     {
-        $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
 
-        foreach ($bedAvailability as $beds) {
-            foreach ($beds->findPatientBed as $patienBed) {
-                if ($patienBed->confirmPatientErlogStatus) {
-                    $this->dispatchBrowserEvent('occupied');
-                    $this->status = true;
+        // $this->recentPatientBedId = $getPatienBedId;
+        // $this->recentBedId = $getBedId;
+        if ($this->transferBedStatus == true) {
+
+            $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
+
+            foreach ($bedAvailability as $beds) { // checks if the bed is occupied
+                foreach ($beds->findPatientBed as $patienBed) {
+                    if ($patienBed->confirmPatientErlogStatus) {
+                        $this->dispatchBrowserEvent('occupied');
+                        $this->status = true;
+                    }
+                }
+            }
+            if ($this->status == false) {
+                $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
+                $patientBed->bed_id = $getID;
+                $patientBed->save();
+                $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
+                $this->reset('patient_list_results');
+
+                $this->dispatchBrowserEvent('transferedBed');
+            }
+        } else {
+            $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
+
+            foreach ($bedAvailability as $beds) { // checks if the bed is occupied
+                foreach ($beds->findPatientBed as $patienBed) {
+                    if ($patienBed->confirmPatientErlogStatus) {
+                        $this->dispatchBrowserEvent('occupied');
+                        $this->status = true;
+                    }
+                }
+            }
+
+            if ($this->status == false) {
+                $getPatientLog = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $this->selected_patient_enccode)
+                    ->where('erstat', 'A')->first();
+                //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
+
+                $this->selected_patient_bed = $getID;
+                $patient_id = $getPatientLog->hpercode;
+                $bed_id =  $this->selected_patient_bed;
+                $enccode = $this->selected_patient_enccode;
+
+                $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first(); //check iuf the patient is assigned to a bed already
+
+                if ($checkenccode) {
+                    $this->dispatchBrowserEvent('notAvailable');
+                } else {
+
+                    PatientBed::create([
+                        'patient_id' => $patient_id,
+                        'bed_id' => $bed_id,
+                        'ward_code' => 'EROOM',
+                        'enccode' => $enccode,
+                    ]);
+
+                    $this->dispatchBrowserEvent('patientAssigned');
                 }
             }
         }
 
-        if ($this->status == false) {
-            $getPatientLog = HospitalHerlog::where('hpercode', $this->selected_patient)
-                ->where('erstat', 'A')
-                ->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
-
-            $this->selected_patient_bed = $getID;
-            $patient_id = $this->selected_patient;
-            $bed_id =  $this->selected_patient_bed;
-            $enccode = $getPatientLog->enccode;
-
-            $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first();
-
-            if ($checkenccode) {
-                $this->dispatchBrowserEvent('notAvailable');
-            } else {
-
-                PatientBed::create([
-                    'patient_id' => $patient_id,
-                    'bed_id' => $bed_id,
-                    'ward_code' => 'EROOM',
-                    'enccode' => $enccode,
-                ]);
-
-                $this->dispatchBrowserEvent('patientAssigned');
-            }
-        }
-
         $this->status = false;
-        $this->reset('selected_patient', 'selected_patient_bed');
+        $this->reset('selected_patient_enccode', 'selected_patient_bed');
+        //dd('in');
     }
 
     public function saveBed()
@@ -186,4 +228,37 @@ class BedIndex extends Component
     {
         $this->search_patient = '';
     }
+
+    public function transferBed($getId, $getPatienBedId, $getBedId)
+    {
+
+
+        $this->recentPatientBedId = $getPatienBedId;
+        $this->recentBedId = $getBedId;
+        //dd($this->recentBedId);
+        $this->selected_transfer_patient = HospitalHerlog::where('enccode', $getId)->first();
+        $this->transferBedStatus = true;
+        $this->reset('get_patients');
+    }
+
+    public function resetVar()
+    {
+        $this->reset('selected_transfer_patient');
+        $this->transferBedStatus = false;
+    }
+
+    // public function getTransferBedenccode($getId)
+    // {
+
+    //     $this->transfer_patient_code = $getId;
+    //     //dd($this->transfer_patient_code = $getId);
+    //     $this->resetExcept('selected_transfer_patient');
+    // }
+
+    // public function getTransferBedCode($getId)
+    // {
+    //     $this->transfer_patient_bed_code = $getId;
+    //     //dd($this->transfer_patient_code);
+    //     $this->resetExcept('selected_transfer_patient');
+    // }
 }

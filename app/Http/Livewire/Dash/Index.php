@@ -220,14 +220,14 @@ class Index extends Component
         } // End lineChartmodel for filter this_week, last_week, yesterday, last_month, this_month and today
 
 
-        $admittedlogs = HospitalHadmlog::select('admstat', 'wardcode')->where('admstat', 'A')->with('patRoom')->get();
+        //$admittedlogs = HospitalHadmlog::select('admstat', 'wardcode')->where('admstat', 'A')->with('patRoom')->get();
 
-        $admlogs = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
-            ->whereIn('wardcode', $this->selectedWards)
-            ->where('patrmstat', 'A')->with('admittedLogs')
-            ->get()->groupBy(function ($data) {
-                return $data->wardcode;
-            });
+        // $admlogs = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+        //     ->whereIn('wardcode', $this->selectedWards)
+        //     ->where('patrmstat', 'A')->with('admittedLogs')
+        //     ->get()->groupBy(function ($data) {
+        //         return $data->wardcode;
+        //     });
 
 
         $this->erlogs = PatientBed::select('enccode', 'patient_id')->get();
@@ -245,7 +245,7 @@ class Index extends Component
             $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
         }
         //----
-        $this->ward2FICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
+        $this->ward2FICU = HospitalHpatroom::with('admittedLogs')->select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->count();
         if ($this->ward2FICU) {
             $ward2FICUSlot = 25;
             $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
@@ -335,7 +335,7 @@ class Index extends Component
             $ward3SICUSlot = 25;
             $this->wardSICUAvailable = $ward3SICUSlot - $this->wardSICU;
         }
-        //dd($this->wardSICU);
+
         // '2FICU',
         // '3FMIC',
         // '3FMN',
@@ -348,8 +348,8 @@ class Index extends Component
         // 'SICU',
 
         return view('livewire.dash.index', [
-            'admlogs' => $admlogs,
-            'admittedlogs' => $admittedlogs,
+            //'admlogs' => $admlogs,
+            //'admittedlogs' => $admittedlogs,
             'lineChartModel' => $lineChartModel,
             //'pieChartModelallWards' => $pieChartModelallWards
         ]);

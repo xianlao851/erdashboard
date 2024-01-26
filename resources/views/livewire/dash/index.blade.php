@@ -689,7 +689,7 @@
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
             chart: {
-                height: 550,
+                height: 650,
                 //height: 270,
                 type: 'donut',
             },
