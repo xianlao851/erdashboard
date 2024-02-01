@@ -6,6 +6,6 @@
     </x-slot>
 
     <div class="">
-        @livewire('dash.index')
+        @livewire('bed.bed-index')
     </div>
 </x-app-layout>

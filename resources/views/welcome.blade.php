@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Styles -->
     <style>
         /* ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com */
@@ -828,31 +828,930 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="antialiased">
-    <div
-        class="relative min-h-screen bg-gray-100 bg-center sm:flex sm:justify-center sm:items-center bg-dots-darker selection:bg-red-500 selection:text-white">
-        @if (Route::has('login'))
-            <div class="z-10 p-6 text-right sm:fixed sm:top-0 sm:right-0">
-                @auth
-                    <a href="{{ url('/dashboard') }}"
-                        class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
-                        in</a>
+    <div class="relative ">
+        <div class="">
+            @if (Route::has('login'))
+                <div class="z-10 p-6 text-right sm:fixed sm:top-0 sm:right-0">
+                    @auth
+                        <a href="{{ url('/dashboard') }}"
+                            class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
+                            in</a>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}"
-                            class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                    @endif
-                @endauth
+                        {{-- @if (Route::has('register'))
+                            <a href="{{ route('register') }}"
+                                class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+                        @endif --}}
+                    @endauth
+                </div>
+            @endif
+        </div>
+        <div class="mt-20 bg-gray-200">
+            <div class="flex p-4 space-x-4 h-[500px] w-full">
+
+                <div class="w-1/4 h-full p-2 bg-white rounded-lg join-item">
+                    <div class="w-full h-full">
+                        <div id="erAdmittedCount"></div>
+                    </div>
+                </div>
+                <div class="w-2/4 h-full bg-white rounded-lg">
+                    {{-- <h3 class="justify-center p-2 text-3xl font-bold">ICU'S</h3> --}}
+                    <div class="grid w-full h-full grid-cols-5 grid-rows-2 gap-2 p-2">
+                        <div id="ward2FICU"></div>
+                        <div id="ward3FMIC"></div>
+                        <div id="ward3FMN"></div>
+                        <div id="ward3FMP"></div>
+                        <div id="ward3FNIC"></div>
+                        <div id="wardCBNS"></div>
+                        <div id="wardCBPA"></div>
+                        <div id="wardCBPN"></div>
+                        <div id="wardSDICU"></div>
+                        <div id="wardSICU"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col w-1/4 h-full bg-gray-200">
+                    @php
+                        $beds = App\Models\Bed::paginate(8, ['*'], 'bed_list');
+                    @endphp
+                    <div class="grid grid-cols-2 grid-rows-1 gap-2">
+                        {{-- @if ($beds)
+                            @foreach ($beds as $bed)
+                                <div class="h-24 p-1 bg-white rounded-lg shadow-lg hover:bg-gray-50">
+                                    <div class="flex items-center mt-0">
+                                        <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
+                                        <div class="mt-3 ml-2 text-[12px] text-black underline uppercase">
+                                            {{ $bed->bed_name }}
+                                        </div>
+                                    </div> <!-- for bed info and bed image-->
+                                    <div>
+                                        @foreach ($bed->patientBed as $patient)
+                                            @if ($patient->patientHerlog)
+                                                <div class="flex w-full gap-1 mt-2">
+                                                    <div>
+                                                        @if ($patient->patientHerlog->patientInfo->patsex == 'M')
+                                                            <img src="{{ URL('/images/man III.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                        @if ($patient->patientHerlog->patientInfo->patsex == 'F')
+                                                            <img src="{{ URL('/images/women II.PNG') }}"
+                                                                class="w-[30px] h-[30px]">
+                                                        @endif
+                                                    </div>
+                                                    <div class="mt-0 ml-0 text-[12px] text-black ">
+                                                        {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
+                                                        {{-- {{ $patient->patientHerlog->enccode }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div> <!-- bed div container--->
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="mt-2">
+                        @if ($beds)
+                            {{ $beds->links() }}
+                        @endif
+                    </div> --}}
+                    </div>
+                </div>
+                <div>
+                    @php
+                        $erAdmittedCount = 0;
+                        $erlogs = App\Models\PatientBed::select('enccode', 'patient_id')->get();
+                        foreach ($erlogs as $logcount) {
+                            if ($logcount->patientErLog) {
+                                $erAdmittedCount++;
+                                //dd('here');
+                            }
+                        }
+                        if ($erAdmittedCount) {
+                            $erslot = 50;
+                            $erSlotAvailable = $erslot - $erAdmittedCount;
+                        } else {
+                            $erslot = 50;
+                            $erSlotAvailable = $erslot - $erAdmittedCount;
+                        }
+                        //----
+                        $ward2FICU = App\Models\HospitalHpatroom::with('admittedLogs')
+                            ->select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', '2FICU')
+                            ->where('patrmstat', 'A')
+                            ->count();
+                        if ($ward2FICU) {
+                            $ward2FICUSlot = 25;
+                            $ward2FICUAvailable = $ward2FICUSlot - $ward2FICU;
+                        } else {
+                            $ward2FICUSlot = 25;
+                            $ward2FICUAvailable = $ward2FICUSlot - $ward2FICU;
+                        }
+                        //--ward2FICU
+                        $ward3FMIC = App\Models\HospitalHpatroom::with('admittedLogs')
+                            ->select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', '3FMIC')
+                            ->where('patrmstat', 'A')
+                            ->count();
+                        if ($ward3FMIC) {
+                            $ward3FMICSlot = 25;
+                            $ward3FMICAvailable = $ward3FMICSlot - $ward3FMIC;
+                        } else {
+                            $ward3FMICSlot = 25;
+                            $ward3FMICAvailable = $ward3FMICSlot - $ward3FMIC;
+                        }
+                        //----
+                        $ward3FMN = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', '3FMN')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($ward3FMN) {
+                            $ward3FMNSlot = 25;
+                            $ward3FMNAvailable = $ward3FMNSlot - $ward3FMN;
+                        } else {
+                            $ward3FMNSlot = 25;
+                            $ward3FMNAvailable = $ward3FMNSlot - $ward3FMN;
+                        }
+                        //----
+                        $ward3FMP = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', '3FMP')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($ward3FMP) {
+                            $ward3FMPSlot = 25;
+                            $ward3FMPAvailable = $ward3FMPSlot - $ward3FMP;
+                        } else {
+                            $ward3FMPSlot = 25;
+                            $ward3FMPAvailable = $ward3FMPSlot - $ward3FMP;
+                        }
+                        //----
+                        $ward3FNIC = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', '3FNIC')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($ward3FNIC) {
+                            $ward3FNICSlot = 25;
+                            $ward3FNICAvailable = $ward3FNICSlot - $ward3FNIC;
+                        } else {
+                            $ward33FNICSlot = 25;
+                            $ward3FNICAvailable = $ward33FNICSlot - $ward3FNIC;
+                        }
+                        //----
+                        $wardCBNS = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', 'CBNS')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($wardCBNS) {
+                            $wardCBNSSlot = 25;
+                            $wardCBNSAvailable = $wardCBNSSlot - $wardCBNS;
+                        } else {
+                            $ward3CBNSSlot = 25;
+                            $wardCBNSAvailable = $ward3CBNSSlot - $wardCBNS;
+                        }
+                        //----
+                        $wardCBPA = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', 'CBPA')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($wardCBPA) {
+                            $wardCBPASlot = 25;
+                            $wardCBPAAvailable = $wardCBPASlot - $wardCBPA;
+                        } else {
+                            $ward3CBPASlot = 25;
+                            $wardCBPAAvailable = $ward3CBPASlot - $wardCBPA;
+                        }
+                        //----
+                        $wardCBPN = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', 'CBPN')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($wardCBPN) {
+                            $wardCBPNSlot = 25;
+                            $wardCBPNAvailable = $wardCBPNSlot - $wardCBPN;
+                        } else {
+                            $ward3CBPNSlot = 25;
+                            $wardCBPNAvailable = $ward3CBPNSlot - $wardCBPN;
+                        }
+                        //----
+                        $wardSDICU = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', 'SDICU')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($wardSDICU) {
+                            $wardSDICUSlot = 25;
+                            $wardSDICUAvailable = $wardSDICUSlot - $wardSDICU;
+                        } else {
+                            $ward3SDICUSlot = 25;
+                            $wardSDICUAvailable = $ward3SDICUSlot - $wardSDICU;
+                        }
+                        //----
+                        $wardSICU = App\Models\HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')
+                            ->where('wardcode', 'SICU')
+                            ->where('patrmstat', 'A')
+                            ->with('admittedLogs')
+                            ->count();
+                        if ($wardSICU) {
+                            $wardSICUSlot = 25;
+                            $wardSICUAvailable = $wardSICUSlot - $wardSICU;
+                        } else {
+                            $ward3SICUSlot = 25;
+                            $wardSICUAvailable = $ward3SICUSlot - $wardSICU;
+                        }
+                    @endphp
+                </div>
+
             </div>
-        @endif
 
-        {{-- @livewire('welcome') --}}
-    </div>
+            <script>
+                var ward2FICU = {
+                    series: [@json($ward2FICU), @json($ward2FICUAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            //size: 480,
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'sans',
+                                        // color: '#089629',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: '*SICU',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        //enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartward2FICU = new ApexCharts(document.querySelector("#ward2FICU"), ward2FICU);
+                chartward2FICU.render();
+                //--- ward2FICU
+                var ward3FMIC = {
+                    series: [@json($ward3FMIC), @json($ward3FMICAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'sans',
+                                        // color: '#263238'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'OPD 3rd Floor (MICU B)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartward3FMIC = new ApexCharts(document.querySelector("#ward3FMIC"), ward3FMIC);
+                chartward3FMIC.render();
+                //---ward3FMIC
+
+                var ward3FMN = {
+                    series: [@json($ward3FMN), @json($ward3FMNAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'sans',
+                                        // color: '#263238'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'Main 3rd Floor  (NICU A)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartward3FMN = new ApexCharts(document.querySelector("#ward3FMN"), ward3FMN);
+                chartward3FMN.render();
+                //---ward3FMN
+
+                var ward3FMP = {
+                    series: [@json($ward3FMP), @json($ward3FMPAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'sans',
+                                        // color: '#263238'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'OPD 3rd Floor (MICU A)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartward3FMP = new ApexCharts(document.querySelector("#ward3FMP"), ward3FMP);
+                chartward3FMP.render();
+                //---ward3FMP
+
+                var ward3FNIC = {
+                    series: [@json($ward3FNIC), @json($ward3FNICAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'sans',
+                                        // color: '#263238'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: '3rd Floor(NICU)*',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartward3FNIC = new ApexCharts(document.querySelector("#ward3FNIC"), ward3FNIC);
+                chartward3FNIC.render();
+                //---ward3FMP
+
+                var wardCBNS = {
+                    series: [@json($wardCBNS), @json($wardCBNSAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        //fontWeight: 'bold',
+                                        fontFamily: 'sans',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'Main 3rd Floor (NICU B)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartwardCBNS = new ApexCharts(document.querySelector("#wardCBNS"), wardCBNS);
+                chartwardCBNS.render();
+                //---wardCBNS
+
+                var wardCBPA = {
+                    series: [@json($wardCBPA), @json($wardCBPAAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        //fontWeight: 'bold',
+                                        fontFamily: 'sans',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'Annex 2nd Floor (Pedia A & PICU A)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartwardCBPA = new ApexCharts(document.querySelector("#wardCBPA"), wardCBPA);
+                chartwardCBPA.render();
+                //---wardCBPA
+
+                var wardCBPN = {
+                    series: [@json($wardCBPN), @json($wardCBPNAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        //fontWeight: 'bold',
+                                        fontFamily: 'sans',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'Annex 2nd Floor (PICU B)',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartwardCBPN = new ApexCharts(document.querySelector("#wardCBPN"), wardCBPN);
+                chartwardCBPN.render();
+                //---wardCBPN
+
+                var wardSDICU = {
+                    series: [@json($wardSDICU), @json($wardSDICUAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        //fontWeight: 'bold',
+                                        fontFamily: 'sans',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'Stepdown',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartwardSDICU = new ApexCharts(document.querySelector("#wardSDICU"), wardSDICU);
+                chartwardSDICU.render();
+                //---wardSDICU
+
+                var wardSICU = {
+                    series: [@json($wardSICU), @json($wardSICUAvailable)],
+                    chart: {
+                        //height: 480,
+                        height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        //fontWeight: 'bold',
+                                        fontFamily: 'sans',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'SICU',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 230,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var chartwardSICU = new ApexCharts(document.querySelector("#wardSICU"), wardSICU);
+                chartwardSICU.render();
+                //---wardSICU
+
+                var erAdmittedCount = {
+                    series: [@json($erAdmittedCount), @json($erSlotAvailable)],
+                    chart: {
+                        height: 450,
+                        //height: 270,
+                        type: 'donut',
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                //background: '#030a91',
+                                labels: {
+                                    show: true,
+                                    color: '#FFFFFF',
+                                    total: {
+                                        show: true,
+                                        fontSize: 20,
+                                        fontFamily: 'fontFamily',
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    labels: ['Ocuppied', 'Available', ],
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        fontFamily: 'sans',
+                    },
+                    title: {
+                        text: 'ER',
+                        align: 'center',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans',
+                            // color: '#263238'
+                        },
+                    },
+                    dataLabels: {
+                        // enabled: true
+                        formatter: (val, {
+                            seriesIndex,
+                            w
+                        }) => w.config.series[seriesIndex]
+                    },
+                    colors: ["#03a155", "#2a4bf5"],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                        }
+                    }]
+                };
+
+                var charterAdmittedCount = new ApexCharts(document.querySelector("#erAdmittedCount"), erAdmittedCount);
+                charterAdmittedCount.render();
+                //---erAdmittedCount
+            </script>
+        </div>
+
+
+
 </body>
 
 </html>

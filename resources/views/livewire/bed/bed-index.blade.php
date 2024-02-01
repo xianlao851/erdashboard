@@ -14,8 +14,8 @@
                         <span class="text-black label-text">Add bed </span>
                     </label> --}}
                     <div class="indicator">
-                        {{-- <label id="add_bed" class="bg-blue-600 btn btn-md hover:bg-gray-400 " for="add_bed">
-                            <i class="text-white las la-plus-circle la-2x"></i></label> --}}
+                        <label for="add_bed" class="bg-green-600 btn btn-md hover:bg-gray-400 ">
+                            <i class="text-white las la-plus-circle la-2x"></i></label>
                     </div>
                 </div>
 
@@ -25,7 +25,7 @@
                     <div class="join">
                         <input class="input input-md input-bordered join-item" wire:model.lazy='search_patient'
                             placeholder="Search" />
-                        <button class="text-white bg-blue-600 rounded-r-full btn btn-md join-item">Search</button>
+                        <button class="text-white bg-green-600 rounded-r-full btn btn-md join-item">Search</button>
                     </div>
                 </div>
                 <!--Search Patient--->
@@ -86,34 +86,42 @@
                         @if ($patient_results)
                             <div class="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
                                 @foreach ($patient_results as $patient_result)
+                                    {{-- @foreach ($patient_result->checkPatientBedAssinged as $chkPatientErlog)
+                                        {{ $chkPatientErlog->confirmHerlog->patientInfo->get_patient_name() }}
+                                    @endforeach --}}
                                     @foreach ($patient_result->checkPatientBedAssinged as $PatientBedAssinged)
-                                        <div class="flex items-center mt-0">
-                                            <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
-                                            <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
-                                                {{ $PatientBedAssinged->getBedInfo->bed_name }}
+                                        @if ($PatientBedAssinged->confirmHerlog)
+                                            <div class="flex items-center mt-0">
+                                                <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
+                                                <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
+                                                    {{ $PatientBedAssinged->getBedInfo->bed_name }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="w-full mt-2 join">
-                                            @if ($PatientBedAssinged->getPatientInfo->patsex == 'M')
-                                                <img src="{{ URL('/images/man III.PNG') }}" class="w-[30px] h-[30px]">
+                                            <div class="w-full mt-2 join">
+                                                @if ($PatientBedAssinged->confirmHerlog->PatientInfo->patsex == 'M')
+                                                    <img src="{{ URL('/images/man III.PNG') }}"
+                                                        class="w-[30px] h-[30px]">
+                                                @endif
+                                                @if ($PatientBedAssinged->confirmHerlog->PatientInfo->patsex == 'F')
+                                                    <img src="{{ URL('/images/women II.PNG') }}"
+                                                        class="w-[30px] h-[30px]">
+                                                @endif
+                                                <div class="mt-3 ml-1 text-[12px] text-black underline flex">
+                                                    {{ $PatientBedAssinged->confirmHerlog->PatientInfo->get_patient_name() }}
+                                                    {{-- {{ $patient->patientHerlog->enccode --}}
+                                                </div>
+                                                <div>
+                                                    <label for="transferPatientBed"
+                                                        class="mt-2 ml-0 bg-white btn btn-xs"
+                                                        wire:click="transferBed('{{ $PatientBedAssinged->enccode }}','{{ $PatientBedAssinged->patient_bed_id }}','{{ $PatientBedAssinged->bed_id }}')"><img
+                                                            src="{{ URL('/images/transfer.PNG') }}"
+                                                            class="w-[20px] h-[20px]">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @if (is_null($PatientBedAssinged))
+                                                <div>No records</div>
                                             @endif
-                                            @if ($PatientBedAssinged->getPatientInfo->patsex == 'F')
-                                                <img src="{{ URL('/images/women II.PNG') }}" class="w-[30px] h-[30px]">
-                                            @endif
-                                            <div class="mt-3 ml-1 text-[12px] text-black underline flex">
-                                                {{ $PatientBedAssinged->getPatientInfo->get_patient_name() }}
-                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                            </div>
-                                            <div>
-                                                <label for="transferPatientBed" class="mt-2 ml-0 bg-white btn btn-xs"
-                                                    wire:click="transferBed('{{ $PatientBedAssinged->enccode }}','{{ $PatientBedAssinged->patient_bed_id }}','{{ $PatientBedAssinged->bed_id }}')"><img
-                                                        src="{{ URL('/images/transfer.PNG') }}"
-                                                        class="w-[20px] h-[20px]">
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @if (is_null($PatientBedAssinged))
-                                            <div>No records</div>
                                         @endif
                                     @endforeach
                                 @endforeach
@@ -177,30 +185,9 @@
             <!--inputs for fetching th patient id and bed id -->
             <input wire:model="selected_patient_enccode" id="patient" hidden />
             <input wire:model="selected_patient_bed" id="bed" hidden />
-
             <!--inputs for fetching th patient id and bed id end-->
         </div>
-        <!-- Modals--->
-        <input type="checkbox" id="add_bed" class="modal-toggle" />
-        <div class="modal" role="dialog">
-            <div class="modal-box">
-                <h3 class="text-lg font-bold">Add beds</h3>
-                <div class="py-2">
-                    <label for="bed_name" class="block mb-2 text-sm font-medium text-gray-900 dark:gray-600">Bed
-                        name</label>
-                    <input wire:model="bed_name" id="bed_name" required
-                        class="block w-full text-sm text-gray-900 border border-blue-600 rounded-md bg-gray-50 focus:border-blue-700 focus:ring-blue-700"
-                        placeholder="Bed name">
-                    </input>
-                </div>
-                <div class="modal-action">
-                    <label for="add_bed" class="btn btn-sm btn-success" wire:click='saveBed'>Save</label>
-                    <label for="add_bed" class="btn btn-sm">Close!</label>
-                </div>
-            </div>
-        </div>
 
-        <!-- Modals--->
 
         <!--Transfer patient bed start-->
         <input type="checkbox" id="transferPatientBed" class="modal-toggle" />
@@ -213,8 +200,7 @@
                     @if ($selected_transfer_patient)
                         <h3 class="text-lg font-bold">Transfer Bed</h3>
                         <div drag-item draggable="true" ondrag="drag(event)"
-                            class="p-2 bg-gray-200 rounded-lg w-72 h-22"
-                            id="{{ $selected_transfer_patient->enccode }}"
+                            class="p-2 bg-gray-200 rounded-lg w-72 h-22" id="{{ $selected_transfer_patient->enccode }}"
                             wire:key='$selected_transfer_patient-{{ $selected_transfer_patient->enccode }}'>
                             <div class="flex items-center mt-0">
                                 <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
@@ -277,15 +263,34 @@
                             @endif
                         </div>
                     @endif
-                    {{-- <input wire:model="transfer_patient_code" id="patient_transfer" />
-                    <input wire:model="transfer_patient_bed_code" id="bed_transfer" /> --}}
-
                 </div>
                 <div class="mt-4 modal-action">
                     <label for="transferPatientBed" class="btn btn-sm" wire:click='resetVar'>Close!</label>
                 </div>
             </div>
         </div> <!--Transfer patient bed end-->
+
+        <!-- Modals--->
+        <input type="checkbox" id="add_bed" class="modal-toggle" />
+        <div class="modal" role="dialog">
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Add beds</h3>
+                <div class="py-2">
+                    <label for="bed_name" class="block mb-2 text-sm font-medium text-gray-900 dark:gray-600">Bed
+                        name</label>
+                    <input wire:model="bed_name" id="bed_name" required
+                        class="block w-full text-sm text-gray-900 border border-blue-600 rounded-md bg-gray-50 focus:border-blue-700 focus:ring-blue-700"
+                        placeholder="Bed name">
+                    </input>
+                </div>
+                <div class="modal-action">
+                    <label for="add_bed" class="btn btn-sm btn-success" wire:click='saveBed'>Save</label>
+                    <label for="add_bed" class="btn btn-sm">Close!</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals--->
         <!-- Modals--->
     </div> <!--main div end-->
     <!--scripts-->

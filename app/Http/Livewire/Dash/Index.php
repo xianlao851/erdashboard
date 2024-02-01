@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
+use App\Models\Bed;
 
 class Index extends Component
 {
@@ -61,8 +62,9 @@ class Index extends Component
     public $wards = [];
     public $wardsCount = [];
 
-
+    protected $get_beds;
     public $getWard2FICU;
+    public $patient_list;
     public $colors = [
         // 'Pediatrics Department' => '#7210e3',
         // 'Surgery Department' => '#fc8181',
@@ -346,9 +348,11 @@ class Index extends Component
         // 'CBPN',
         // 'SDICU',
         // 'SICU',
+        $this->get_beds = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list');
 
         return view('livewire.dash.index', [
             //'admlogs' => $admlogs,
+            'beds' => $this->get_beds,
             //'admittedlogs' => $admittedlogs,
             'lineChartModel' => $lineChartModel,
             //'pieChartModelallWards' => $pieChartModelallWards

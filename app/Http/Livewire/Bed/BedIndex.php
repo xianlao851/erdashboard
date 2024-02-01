@@ -86,7 +86,6 @@ class BedIndex extends Component
         $this->get_patients = DB::connection('hospital')->table('dbo.herlog')
             ->join('dbo.hencdiag', 'dbo.herlog.enccode', '=', 'dbo.hencdiag.enccode')
             ->join('dbo.hperson', 'dbo.herlog.hpercode', '=', 'dbo.hperson.hpercode')
-            //->join('dbo.dbo.haddr', 'dbo.herlog.hpercode', '=', 'dbo.herlog.hpercode')
             ->select(
                 'dbo.hperson.patlast',
                 'dbo.hperson.patfirst',
@@ -120,7 +119,7 @@ class BedIndex extends Component
                 }
             })->get();
         } else {
-            $this->beds = Bed::all();
+            $this->beds = Bed::select('bed_id', 'bed_name')->get();
         }
 
         return view('livewire.bed.bed-index', [
@@ -162,8 +161,8 @@ class BedIndex extends Component
                 $patientBed->bed_id = $getID;
                 $patientBed->save();
                 $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
-                $this->reset('patient_list_results');
-
+                $this->reset('patient_list_results', 'get_patients', 'beds');
+                $this->beds = Bed::select('bed_id', 'bed_name')->get();
                 $this->dispatchBrowserEvent('transferedBed');
             }
         } else {
@@ -235,9 +234,10 @@ class BedIndex extends Component
 
         $this->recentPatientBedId = $getPatienBedId;
         $this->recentBedId = $getBedId;
-        //dd($this->recentBedId);
+        //dd($getId);
         $this->selected_transfer_patient = HospitalHerlog::where('enccode', $getId)->first();
         $this->transferBedStatus = true;
+        $this->patient_list_results = null;
         $this->reset('get_patients');
     }
 
