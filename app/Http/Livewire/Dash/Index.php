@@ -348,8 +348,7 @@ class Index extends Component
         // 'CBPN',
         // 'SDICU',
         // 'SICU',
-        $this->get_beds = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list');
-
+        $this->get_beds = Bed::select('bed_id', 'bed_name')->paginate(8, ['*'], 'patient_list');
         return view('livewire.dash.index', [
             //'admlogs' => $admlogs,
             'beds' => $this->get_beds,

@@ -4,34 +4,77 @@
     </h2>
 </x-slot>
 <div class="flex w-full">
-    <div class="w-full p-2 mx-4">
-
-        <div class="flex p-2 space-x-3 h-[460px] w-full">
-
-            <div class="h-full p-2 bg-white rounded-lg w-2/8" wire:ignore>
-                <div class="w-full h-full">
-                    <div id="erAdmittedCount"></div>
+    <div class="w-full p-2 mx-auto">
+        <div class="flex w-full gap-3 p-1 mx-4 mt-4">
+            <div class="w-2/8" wire:ignore>
+                <div class="w-full bg-white rounded-lg h-[435px]">
+                    <div class="flex justify-center p-2 mx-auto font-semibold text-md">ER
+                    </div>
+                    <div class="" id="erAdmittedCount"></div>
                 </div>
             </div>
-            <div class="w-2/4 bg-white rounded-lg" wire:ignore>
-                <div class="grid w-full grid-cols-5 grid-rows-2 gap-2 p-6">
-                    <div id="ward2FICU"></div>
-                    <div id="ward3FMIC"></div>
-                    <div id="ward3FMN"></div>
-                    <div id="ward3FMP"></div>
-                    <div id="ward3FNIC"></div>
-                    <div id="wardCBNS"></div>
-                    <div id="wardCBPA"></div>
-                    <div id="wardCBPN"></div>
-                    <div id="wardSDICU"></div>
-                    <div id="wardSICU"></div>
+            <div class="w-2/4" wire:ignore>
+                <div class="grid w-full grid-cols-5 grid-rows-2 gap-3">
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">*SICU
+                        </div>
+                        <div id="ward2FICU"> </div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU B)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMIC"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU A)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMN"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU A)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMP"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">3rd Floor(NICU)*
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FNIC"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU B)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="wardCBNS"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center mx-auto text-[11px] mt-2 font-semibold text-nowrap">Annex 2nd
+                            Floor
+                            Pedia A &
+                            PICU A
+                        </div>
+                        <div class="mt-2" id="wardCBPA"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Annex 2nd Floor (PICU B)
+                        </div>
+                        <div id="wardCBPN"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
+                        </div>
+                        <div id="wardSDICU"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU
+                        </div>
+                        <div id="wardSICU"></div>
+                    </div>
                 </div>
             </div>
             <div class="w-2/8">
-                <div class="grid grid-cols-3 grid-rows-1 gap-2 mt-0">
+                <div class="grid w-full grid-cols-2 grid-rows-1 gap-2 mt-0">
                     @if ($beds)
                         @foreach ($beds as $bed)
-                            <div class="w-[195px] h-24 p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
+                            <div class="h-24 p-2 bg-white rounded-lg shadow-lg w-[272px] hover:bg-gray-50">
                                 <div class="flex items-center mt-0">
                                     <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
                                     <div class="mt-4 ml-2 text-[12px] text-black underline uppercase">
@@ -52,11 +95,14 @@
                                                             class="w-[30px] h-[30px]">
                                                     @endif
                                                 </div>
-                                                <div class="mt-1 ml-0 text-[12px] text-black  flex">
+                                                <div class="mt-1 ml-0 text-[12px] text-black flex w-full">
                                                     {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
                                                     {{-- {{ $patient->patientHerlog->enccode }} --}}
                                                 </div>
                                             </div>
+                                        @endif
+                                        @if (is_null($patient->patientHerlog))
+                                            <div>Available</div>
                                         @endif
                                     @endforeach
                                 </div>
@@ -113,7 +159,7 @@
             </div>
         </div>
 
-        <div class="h-64 mx-4 mt-16 bg-white rounded-lg">
+        <div class="h-64 mx-4 mt-16 bg-white rounded-lg" wire:target='date_filter'>
             <livewire:livewire-line-chart key="{{ $lineChartModel->reactiveKey() }}" :line-chart-model="$lineChartModel" />
         </div>
         <!--MODALS HERE-->
@@ -126,6 +172,7 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
                 type: 'donut',
             },
             plotOptions: {
@@ -148,19 +195,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: '*SICU',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: '*SICU',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -168,12 +215,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
-                breakpoint: 230,
+                breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -182,11 +229,14 @@
         var chartward2FICU = new ApexCharts(document.querySelector("#ward2FICU"), ward2FICU);
         chartward2FICU.render();
         //--- ward2FICU
+
         var ward3FMIC = {
             series: [@json($ward3FMIC), @json($ward3FMICAvailable)],
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -208,19 +258,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'OPD 3rd Floor (MICU B)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'OPD 3rd Floor (MICU B)',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -228,12 +278,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -248,6 +298,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -269,19 +321,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'Main 3rd Floor  (NICU A)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'Main 3rd Floor  (NICU A)',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -289,12 +341,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -309,6 +361,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -330,19 +384,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'OPD 3rd Floor (MICU A)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'OPD 3rd Floor (MICU A)',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -350,12 +404,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -370,6 +424,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -391,19 +447,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: '3rd Floor(NICU)*',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: '3rd Floor(NICU)*',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -411,12 +467,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -431,6 +487,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -452,19 +510,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'Main 3rd Floor (NICU B)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'Main 3rd Floor (NICU B)',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -472,12 +530,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -492,6 +550,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -513,19 +573,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'Annex 2nd Floor (Pedia A & PICU A)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'Annex 2nd Floor Pedia A & PICU A',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -533,12 +593,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -553,6 +613,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -574,19 +636,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'Annex 2nd Floor (PICU B)',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'Annex 2nd Floor (PICU B)',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -594,12 +656,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -614,6 +676,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -635,19 +699,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'Stepdown',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'Stepdown',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -655,12 +719,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -675,6 +739,8 @@
             chart: {
                 //height: 480,
                 height: 230,
+                width: 170,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -696,19 +762,19 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'SICU',
-                align: 'center',
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'SICU',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -716,12 +782,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]
@@ -730,12 +796,12 @@
         var chartwardSICU = new ApexCharts(document.querySelector("#wardSICU"), wardSICU);
         chartwardSICU.render();
         //---wardSICU
-
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
             chart: {
-                height: 600,
-                //height: 230,
+                height: 400,
+                width: 330,
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -756,21 +822,22 @@
             },
             labels: ['Ocuppied', 'Available', ],
             legend: {
+                //color: '#4d4c4a',
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
-            title: {
-                text: 'ER',
-                align: 'center',
-                style: {
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    fontFamily: 'sans',
-                    // color: '#263238'
-                },
-            },
+            // title: {
+            //     text: 'ER',
+            //     align: 'center',
+            //     style: {
+            //         fontSize: '16px',
+            //         fontWeight: 'bold',
+            //         fontFamily: 'sans',
+            //         // color: '#263238'
+            //     },
+            // },
             dataLabels: {
                 // enabled: true
                 formatter: (val, {
@@ -778,12 +845,12 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#03a155", "#2a4bf5"],
+            colors: ["#04bd55", "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 50
                     },
                 }
             }]

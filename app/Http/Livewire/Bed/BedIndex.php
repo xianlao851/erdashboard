@@ -15,7 +15,7 @@ class BedIndex extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
+    //protected $paginationTheme = 'bootstrap';
     protected $listeners = ['getPatientID', 'getPatientBed', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode'];
 
     public $bed_name;
@@ -31,7 +31,8 @@ class BedIndex extends Component
 
     // public $transfer_patient_code;
     // public $transfer_patient_bed_code;
-    public $beds;
+    protected $get_beds;
+    protected $get_beds_transfer;
     public $rooms;
 
     protected $get_patients;
@@ -43,6 +44,8 @@ class BedIndex extends Component
     public $start_date;
     public $end_date;
     public $patient_list;
+    public $patient_list_transfer;
+    public $patient_bed_list;
 
     public $status = false;
     public $bedStatus = false;
@@ -105,11 +108,6 @@ class BedIndex extends Component
             ->orderBy('dbo.hperson.patlast', 'asc')->paginate(15, ['*'], 'patient_list');
 
 
-        // $query = DB::connection('hospital', 'mysql')->table('hospital.dbo.hperson as patient_info')->leftjoin('hospital.dbo.herlog as patientLog', 'patientLog.hpercode', '=', 'patient_info.hpercode')
-        //     ->leftjoin('patient_beds as patienBeds', 'patienBeds.patient_id', '=', 'patientLog.hpercode');
-        // $output = $query->select(['patient_info.*', 'patientLog.*', 'patienBeds.*'])->where('patient_info.hpercode', '1016166')->get();
-        // dd($output);
-
         if (strlen($this->search_patient) > 3) {
             $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
             $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
@@ -119,13 +117,17 @@ class BedIndex extends Component
                 }
             })->get();
         } else {
-            $this->beds = Bed::select('bed_id', 'bed_name')->get();
+            $this->get_beds = Bed::select('bed_id', 'bed_name')->paginate(20, ['*'], 'patient_bed_list');
+        }
+        if ($this->transferBedStatus == true) {
+            $this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list_transfer');
         }
 
         return view('livewire.bed.bed-index', [
             'patients' => $this->get_patients ?? null,
             'patient_results' => $this->patient_list_results ?? null,
-            //'beds' => $beds
+            'beds' => $this->get_beds,
+            'bedsTransfer' => $this->get_beds_transfer,
         ]);
     }
 
@@ -161,8 +163,8 @@ class BedIndex extends Component
                 $patientBed->bed_id = $getID;
                 $patientBed->save();
                 $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
-                $this->reset('patient_list_results', 'get_patients', 'beds');
-                $this->beds = Bed::select('bed_id', 'bed_name')->get();
+                $this->reset('patient_list_results', 'get_patients');
+                //$this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list_transfer');
                 $this->dispatchBrowserEvent('transferedBed');
             }
         } else {
@@ -220,7 +222,7 @@ class BedIndex extends Component
             'bed_name' => $this->bed_name,
         ]);
         $this->alert('success', 'Bed Added');
-        $this->reset('beds');
+        $this->reset('get_beds', 'bed_name');
     }
 
     public function  clearSearcPatient()
@@ -231,20 +233,20 @@ class BedIndex extends Component
     public function transferBed($getId, $getPatienBedId, $getBedId)
     {
 
-
+        //$this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list');
+        $this->transferBedStatus = true;
         $this->recentPatientBedId = $getPatienBedId;
         $this->recentBedId = $getBedId;
-        //dd($getId);
         $this->selected_transfer_patient = HospitalHerlog::where('enccode', $getId)->first();
-        $this->transferBedStatus = true;
         $this->patient_list_results = null;
         $this->reset('get_patients');
     }
 
     public function resetVar()
     {
-        $this->reset('selected_transfer_patient');
+        $this->reset('selected_transfer_patient', 'get_beds_transfer', 'patient_list_transfer');
         $this->transferBedStatus = false;
+        $this->resetPage('patient_list_transfer');
     }
 
     // public function getTransferBedenccode($getId)
