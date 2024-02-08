@@ -22,16 +22,16 @@ class Index extends Component
     use WithPagination;
 
     public $erlogs;
-    public $ward2FICU;
-    public $ward3FMIC;
-    public $ward3FMN;
-    public $ward3FMP;
-    public $ward3FNIC;
-    public $wardCBNS;
-    public $wardCBPA;
-    public $wardCBPN;
-    public $wardSDICU;
-    public $wardSICU;
+    public $ward2FICU = 0;
+    public $ward3FMIC = 0;
+    public $ward3FMN = 0;
+    public $ward3FMP = 0;
+    public $ward3FNIC = 0;
+    public $wardCBNS = 0;
+    public $wardCBPA = 0;
+    public $wardCBPN = 0;
+    public $wardSDICU = 0;
+    public $wardSICU = 0;
 
     public $ward2FICUAvailable;
     public $ward3FMICAvailable;
@@ -132,7 +132,7 @@ class Index extends Component
     {
         //$this->get_date = Carbon::createFromFormat('Y', DB::raw('CONVERT(date, erdate)'));
 
-        $this->date_filter = 'this_year';
+        $this->date_filter = 'this_month';
     }
     public function render()
     {
@@ -246,91 +246,140 @@ class Index extends Component
             $erslot = 50;
             $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
         }
-        //----
-        $this->ward2FICU = HospitalHpatroom::with('admittedLogs')->select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->count();
-        if ($this->ward2FICU) {
+        //---- 1
+        $getward2FICU = HospitalHpatroom::with('admittedLogs')->select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->get();
+        if ($getward2FICU) {
+            foreach ($getward2FICU as $getCountward2FICU) {
+                if ($getCountward2FICU->getAdlog) {
+                    $this->ward2FICU++;
+                }
+            }
             $ward2FICUSlot = 25;
             $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
         } else {
             $ward2FICUSlot = 25;
             $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
         }
-        //----
-        $this->ward3FMIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMIC')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->ward3FMIC) {
+        //---- 2
+        $getward3FMIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMIC')->where('patrmstat', 'A')->get();
+        if ($getward3FMIC) {
+            foreach ($getward3FMIC as $getCountward3FMIC) {
+                if ($getCountward3FMIC->getAdlog) {
+                    $this->ward3FMIC++;
+                }
+            }
             $ward3FMICSlot = 25;
             $this->ward3FMICAvailable = $ward3FMICSlot - $this->ward3FMIC;
         } else {
             $ward3FMICSlot = 25;
             $this->ward3FMICAvailable = $ward3FMICSlot - $this->ward3FMIC;
         }
-
-        //----
-        $this->ward3FMN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMN')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->ward3FMN) {
+        //---- 3
+        $getward3FMN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMN')->where('patrmstat', 'A')->get();
+        if ($getward3FMN) {
+            foreach ($getward3FMN as $getCountward3FMN) {
+                if ($getCountward3FMN->getAdlog) {
+                    $this->ward3FMN++;
+                }
+            }
             $ward3FMNSlot = 25;
             $this->ward3FMNAvailable = $ward3FMNSlot - $this->ward3FMN;
         } else {
             $ward3FMNSlot = 25;
             $this->ward3FMNAvailable = $ward3FMNSlot - $this->ward3FMN;
         }
-        //----
-        $this->ward3FMP = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMP')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->ward3FMP) {
+        //---- 4
+        $getward3FMP = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMP')->where('patrmstat', 'A')->get();
+        if ($getward3FMP) {
+            foreach ($getward3FMP as $getCountward3FMP) {
+                if ($getCountward3FMP->getAdlog) {
+                    $this->ward3FMP++;
+                }
+            }
             $ward3FMPSlot = 25;
             $this->ward3FMPAvailable = $ward3FMPSlot - $this->ward3FMP;
         } else {
             $ward3FMPSlot = 25;
             $this->ward3FMPAvailable = $ward3FMPSlot - $this->ward3FMP;
         }
-        //----
-        $this->ward3FNIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FNIC')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->ward3FNIC) {
+        //---- 5
+        $getward3FNIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FNIC')->where('patrmstat', 'A')->get();
+        if ($getward3FNIC) {
+            foreach ($getward3FNIC as $getCountward3FNIC) {
+                if ($getCountward3FNIC->getAdlog) {
+                    $this->ward3FNIC++;
+                }
+            }
             $ward3FNICSlot = 25;
             $this->ward3FNICAvailable = $ward3FNICSlot - $this->ward3FNIC;
         } else {
             $ward33FNICSlot = 25;
             $this->ward3FNICAvailable = $ward33FNICSlot - $this->ward3FNIC;
         }
-        //----
-        $this->wardCBNS = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBNS')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->wardCBNS) {
+        //---- 6
+        $getwardCBNS = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBNS')->where('patrmstat', 'A')->get();
+        if ($getwardCBNS) {
+            foreach ($getwardCBNS as $getCoutwardCBNS) {
+                if ($getCoutwardCBNS->getAdlog) {
+                    $this->wardCBNS++;
+                }
+            }
             $wardCBNSSlot = 25;
             $this->wardCBNSAvailable = $wardCBNSSlot - $this->wardCBNS;
         } else {
             $ward3CBNSSlot = 25;
             $this->wardCBNSAvailable = $ward3CBNSSlot - $this->wardCBNS;
         }
-        //----
-        $this->wardCBPA = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPA')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->wardCBPA) {
+        //---- 7
+        $getwardCBPA = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPA')->where('patrmstat', 'A')->get();
+        if ($getwardCBPA) {
+            foreach ($getwardCBPA as $getCountwardCBPA) {
+                if ($getCountwardCBPA->getAdlog) {
+                    $this->wardCBPA++;
+                }
+            }
             $wardCBPASlot = 25;
             $this->wardCBPAAvailable = $wardCBPASlot - $this->wardCBPA;
         } else {
             $ward3CBPASlot = 25;
             $this->wardCBPAAvailable = $ward3CBPASlot - $this->wardCBPA;
         }
-        //----
-        $this->wardCBPN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPN')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->wardCBPN) {
+        //---- 8
+        $getwardCBPN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPN')->where('patrmstat', 'A')->get();
+        if ($getwardCBPN) {
+            foreach ($getwardCBPN as $getCountwardCBPN) {
+                if ($getCountwardCBPN->getAdlog) {
+                    $this->wardCBPN++;
+                }
+            }
             $wardCBPNSlot = 25;
             $this->wardCBPNAvailable = $wardCBPNSlot - $this->wardCBPN;
         } else {
             $ward3CBPNSlot = 25;
             $this->wardCBPNAvailable = $ward3CBPNSlot - $this->wardCBPN;
         }
-        //----
-        $this->wardSDICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SDICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->wardSDICU) {
+        //---- 9
+        $getwardSDICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SDICU')->where('patrmstat', 'A')->get();
+        if ($getwardSDICU) {
+            foreach ($getwardSDICU as $getCountwardSDICU) {
+                if ($getCountwardSDICU->getAdlog) {
+                    $this->wardSDICU++;
+                }
+            }
             $wardSDICUSlot = 25;
             $this->wardSDICUAvailable = $wardSDICUSlot - $this->wardSDICU;
         } else {
             $ward3SDICUSlot = 25;
             $this->wardSDICUAvailable = $ward3SDICUSlot - $this->wardSDICU;
         }
-        //----
-        $this->wardSICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SICU')->where('patrmstat', 'A')->with('admittedLogs')->count();
-        if ($this->wardSICU) {
+        //---- 10
+        $getwardSICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SICU')->where('patrmstat', 'A')->get();
+        if ($getwardSICU) {
+            foreach ($getwardSICU as $getCountwardSICU) {
+                if ($getCountwardSICU->getAdlog) {
+                    $this->wardSICU++;
+                }
+            }
             $wardSICUSlot = 25;
             $this->wardSICUAvailable = $wardSICUSlot - $this->wardSICU;
         } else {

@@ -101,9 +101,9 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if (is_null($patient->patientHerlog))
+                                        {{-- @if (is_null($patient->patientHerlog))
                                             <div>Available</div>
-                                        @endif
+                                        @endif --}}
                                     @endforeach
                                 </div>
                             </div> <!-- bed div container--->

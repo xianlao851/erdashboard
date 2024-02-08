@@ -19,7 +19,7 @@ class HospitalHpatroom extends Model
 
     public function getAdlog()
     {
-        return $this->hasMany(HospitalHadmlog::class, 'enccode', 'enccode');
+        return $this->belongsTo(HospitalHadmlog::class, 'enccode', 'enccode')->where('admstat', 'A');
     }
 
     public function admittedLogs()

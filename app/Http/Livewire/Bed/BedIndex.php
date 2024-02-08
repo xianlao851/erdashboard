@@ -16,7 +16,7 @@ class BedIndex extends Component
     use LivewireAlert;
     use WithPagination;
     //protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['getPatientID', 'getPatientBed', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode'];
+    protected $listeners = ['onDrag', 'onDrop', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode', 'reset_page'];
 
     public $bed_name;
 
@@ -83,8 +83,8 @@ class BedIndex extends Component
 
     public function render()
     {
-        $this->start_date = date('Y-m-d', strtotime('2023-11-01'));
-        $this->end_date = date('Y-m-d', strtotime('2023-11-31'));
+        $this->start_date = date('Y-m-d', strtotime('2024-02-06'));
+        $this->end_date = date('Y-m-d', strtotime('2024-02-08'));
 
         $this->get_patients = DB::connection('hospital')->table('dbo.herlog')
             ->join('dbo.hencdiag', 'dbo.herlog.enccode', '=', 'dbo.hencdiag.enccode')
@@ -136,23 +136,27 @@ class BedIndex extends Component
         $this->getRoomId = $getId;
     }
 
-    public function getPatientID($getId)
+    public function onDrag($getId)
     {
         $this->selected_patient_enccode = $getId;
     }
 
-    public function getPatientBed($getID)
+    public function onDrop($getID, $getenccode)
     {
 
         // $this->recentPatientBedId = $getPatienBedId;
         // $this->recentBedId = $getBedId;
+        $this->selected_patient_bed = $getID;
+        $this->selected_patient_enccode = $getenccode;
+
         if ($this->transferBedStatus == true) {
 
-            $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
+            $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
 
             foreach ($bedAvailability as $beds) { // checks if the bed is occupied
                 foreach ($beds->findPatientBed as $patienBed) {
                     if ($patienBed->confirmPatientErlogStatus) {
+
                         $this->dispatchBrowserEvent('occupied');
                         $this->status = true;
                     }
@@ -168,7 +172,7 @@ class BedIndex extends Component
                 $this->dispatchBrowserEvent('transferedBed');
             }
         } else {
-            $bedAvailability = Bed::select('bed_id')->where('bed_id', $getID)->get();
+            $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
 
             foreach ($bedAvailability as $beds) { // checks if the bed is occupied
                 foreach ($beds->findPatientBed as $patienBed) {
@@ -209,7 +213,6 @@ class BedIndex extends Component
 
         $this->status = false;
         $this->reset('selected_patient_enccode', 'selected_patient_bed');
-        //dd('in');
     }
 
     public function saveBed()
@@ -244,9 +247,14 @@ class BedIndex extends Component
 
     public function resetVar()
     {
-        $this->reset('selected_transfer_patient', 'get_beds_transfer', 'patient_list_transfer');
+        $this->reset('selected_transfer_patient');
         $this->transferBedStatus = false;
-        $this->resetPage('patient_list_transfer');
+        $this->resetPage('patient_list_transfer', 'get_beds_transfer');
+    }
+
+    public function reset_page()
+    {
+        $this->resetPage('patient_bed_list');
     }
 
     // public function getTransferBedenccode($getId)

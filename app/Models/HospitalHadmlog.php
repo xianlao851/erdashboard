@@ -19,4 +19,10 @@ class HospitalHadmlog extends Model
     {
         return $this->hasMany(HospitalHpatroom::class, 'enccode', 'enccode');
     }
+
+    public function chkPatRoom()
+    {
+        //dd($getCode);
+        return $this->belongsTo(HospitalHpatroom::class, 'enccode', 'enccode');
+    }
 }

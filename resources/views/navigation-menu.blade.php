@@ -143,7 +143,7 @@
                         </x-dropdown>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="font-semibold text-white ">Log
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-white ">Log
                         in</a>
                 @endif
             </div>

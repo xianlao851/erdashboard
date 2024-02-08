@@ -1,10 +1,15 @@
 <x-slot name="header">
     <h3 class="text-lg font-normal leading-tight text-gray-800">
-        BED ASSIGNMENT
+        BED ASSIGNMENT </h3>
 </x-slot>
-<div class="p-4">
-    <div class="flex flex-col w-full h-screen p-2 bg-gray-200">
 
+<div class="w-full">
+    <div class="w-full" wire:loading>
+        <div class="absolute flex items-center justify-center mt-0 ml-0 bg-black z-[9999] w-full h-full opacity-75">
+            <span class="text-green-400 loading loading-spinner loading-lg"></span>
+        </div>
+    </div>
+    <div class="flex flex-col w-full h-screen p-6 bg-gray-200">
         <div class="relative">
             <div class="absolute top-0 flex flex-row space-x-4 right-4">
 
@@ -59,7 +64,7 @@
                                             @if ($patient->patmiddle != null or $patient->patmiddle == '')
                                                 {{ $patient->patmiddle }}
                                             @endif
-                                            {{-- {{ $patient->hpercode }} --}}
+                                            {{-- {{ $patient->diagtext }} --}}
                                         </div>
                                     </div>
                                     <div class="text-[8px]">
@@ -197,25 +202,24 @@
             <!--Second conatainer end-->
 
             <!--inputs for fetching th patient id and bed id -->
-            <input wire:model="selected_patient_enccode" id="patient" hidden />
-            <input wire:model="selected_patient_bed" id="bed" hidden />
+            {{-- <input wire:model="selected_patient_enccode" id="patient" hidden />
+            <input wire:model="selected_patient_bed" id="bed" hidden /> --}}
             <!--inputs for fetching th patient id and bed id end-->
         </div>
 
 
         <!--Transfer patient bed start-->
         <input type="checkbox" id="transferPatientBed" class="modal-toggle" />
-        <div class="modal" role="dialog">
+        <div class="modal" role="dialog" wire:loading.remove>
             <div class="max-w-7xl modal-box">
-                <div wire:loading wire:target="transferBed" class="mt-2 mx-44">
+                {{-- <div wire:loading wire:target="transferBed" class="mt-2 mx-44">
                     <span class="text-green-400 loading loading-lg loading-spinner "></span>
-                </div>
+                </div> --}}
                 <div class="w-full">
                     @if ($selected_transfer_patient)
                         <h3 class="text-lg font-bold">Transfer Bed</h3>
                         <div drag-item draggable="true" ondrag="drag(event)"
-                            class="p-2 bg-gray-200 rounded-lg w-72 h-22"
-                            id="{{ $selected_transfer_patient->enccode }}"
+                            class="p-2 bg-gray-200 rounded-lg w-72 h-22" id="{{ $selected_transfer_patient->enccode }}"
                             wire:key='$selected_transfer_patient-{{ $selected_transfer_patient->enccode }}'>
                             <div class="flex items-center mt-0">
                                 <img draggable="false" src="{{ URL('/images/bed III.png') }}"
@@ -305,7 +309,7 @@
                 <div class="py-2">
                     <label for="bed_name" class="block mb-2 text-sm font-medium text-gray-900 dark:gray-600">Bed
                         name</label>
-                    <input wire:model="bed_name" id="bed_name" required
+                    <input wire:model.defer="bed_name" id="bed_name" required
                         class="block w-full text-sm text-gray-900 border border-blue-600 rounded-md bg-gray-50 focus:border-blue-700 focus:ring-blue-700"
                         placeholder="Bed name">
                     </input>
@@ -322,23 +326,24 @@
     </div> <!--main div end-->
     <!--scripts-->
     <script>
+        window.onload = function() {
+            Livewire.emit('reset_page');
+        }
+
         function allowDrop(ev) {
             ev.preventDefault();
         }
 
-        // function dragPatient(ev) {
-        //     ev.dataTransfer.setData("text", ev.target.id);
-        //     var patientid = ev.currentTarget.id;
-        //     document.getElementById('getpatient').innerHTML = patientid;
-        // }
+        var getcode = {};
 
         function drag(ev) {
+
             ev.dataTransfer.setData("text", ev.target.id);
+            var enccode = ev.currentTarget.id;
+            //document.getElementById('patient').innerHTML = enccode;
 
-            var id = ev.currentTarget.id;
-            document.getElementById('patient').innerHTML = id;
-
-            Livewire.emit('getPatientID', id); //candidate
+            getcode.code = enccode; // get the enccode
+            //Livewire.emit('onDrag', id);
         }
 
         function drop(ev) {
@@ -346,33 +351,14 @@
             var data = ev.dataTransfer.getData("text");
             //ev.target.appendChild(document.getElementById(data));
 
-            var id = ev.currentTarget.id;
-            document.getElementById('bed').innerHTML = id;
+            var getenccode = getcode.code; // get the enccode
+            var bedid = ev.currentTarget.id;
 
-            Livewire.emit('getPatientBed', id); // candidate
+            //document.getElementById('bed').innerHTML = bedid;
+            Livewire.emit('onDrop', bedid, getenccode);
 
         }
 
-        // function dragTransfer(ev) {
-        //     ev.dataTransfer.setData("text", ev.target.id);
-
-        //     var id = ev.currentTarget.id;
-        //     document.getElementById('patient_transfer').innerHTML = id;
-
-        //     Livewire.emit('getTransferBedenccode', id); //candidate
-        // }
-
-        // function dropTransfer(ev) {
-        //     ev.preventDefault();
-        //     var data = ev.dataTransfer.getData("text");
-        //     ev.target.appendChild(document.getElementById(data));
-
-        //     var id = ev.currentTarget.id;
-        //     document.getElementById('bed_transfer').innerHTML = id;
-
-        //     Livewire.emit('getTransferBedCode', id); // candidate
-
-        // }
 
         function dischargePatient(id) {
             Swal.fire({
@@ -386,18 +372,6 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('dischargePatient', id);
-                }
-            });
-        }
-
-        function togglediv(id) {
-            document.querySelectorAll(".TableBody").forEach(function(div) {
-                if (div.id == id) {
-                    // Toggle specified DIV
-                    div.style.display = div.style.display == "none" ? "block" : "none";
-                } else {
-                    // Hide other DIVs
-                    div.style.display = "none";
                 }
             });
         }
@@ -441,5 +415,18 @@
         $("#toggle").on("click", function() {
             $(".isToggable").toggle();
         });
+
+
+        function togglediv(id) {
+            document.querySelectorAll(".TableBody").forEach(function(div) {
+                if (div.id == id) {
+                    // Toggle specified DIV
+                    div.style.display = div.style.display == "none" ? "block" : "none";
+                } else {
+                    // Hide other DIVs
+                    div.style.display = "none";
+                }
+            });
+        }
     </script>
 </div>
