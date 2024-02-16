@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Livewire\RoomBed\View;
 use App\Http\Livewire\Bed\BedIndex;
 use App\Http\Livewire\Dash\Index;
+use App\Http\Livewire\Room\RoomIndex;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,8 +33,8 @@ Route::middleware([
     })->name('dashboard');
 });
 
-
-
+Route::get('/room', RoomIndex::class)->name('room');
+Route::get('/charts', Index::class)->name('charts');
 Route::middleware([
     'auth:sanctum', 'role:admin',
     config('jetstream.auth_session'),

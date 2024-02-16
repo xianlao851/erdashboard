@@ -19,7 +19,8 @@ class HospitalHerlog extends Model
 
     public function patientInfo()
     {
-        return $this->belongsTo(HospitalPatient::class, 'hpercode', 'hpercode');
+        return $this->belongsTo(HospitalPatient::class, 'hpercode', 'hpercode')->select('patfirst', 'patlast', 'patmiddle', 'patsex', 'hpercode');
+        //return $this->belongsTo(HospitalPatient::class, 'hpercode', 'hpercode');
     }
 
     public function getPatientBedInfo()

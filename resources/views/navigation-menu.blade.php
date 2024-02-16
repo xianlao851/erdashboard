@@ -17,6 +17,18 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('charts') }}" :active="request()->routeIs('charts')" class="text-white">
+                            {{ __('Census') }}
+                        </x-nav-link>
+                    </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link href="{{ route('room') }}" :active="request()->routeIs('room')" class="text-white">
+                            {{ __('Room') }}
+                        </x-nav-link>
+                    </div>
                 @endif
 
 

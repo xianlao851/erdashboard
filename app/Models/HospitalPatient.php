@@ -21,6 +21,16 @@ class HospitalPatient extends Model
         }
     }
 
+    public function get_patient_name_initial()
+    {
+        //return $this->belongsTo()
+        if ($this->patmiddle) {
+            return $this->patlast . ', ' . $this->patfirst[0] . '.';
+        } else {
+            return $this->patlast . ', ' . $this->patfirst[0] . '.';
+        }
+    }
+
     public function getPatientRoom()
     {
         return $this->belongsTo(HospitalHpatroom::class, 'hpercode', 'hpercode')->latest('hprdate')->where('patrmstat', 'A');

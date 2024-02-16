@@ -12,6 +12,7 @@ class Bed extends Model
     protected $primaryKey = "bed_id";
     protected $fillable = [
         'bed_name',
+        'room_id',
     ];
 
     public function patientBed()

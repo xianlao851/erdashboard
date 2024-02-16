@@ -14,6 +14,7 @@ class PatientBed extends Model
     protected $foreignKey = 'enccode';
     protected $fillable = [
         'patient_id',
+        'room_id',
         'bed_id',
         'ward_code',
         'enccode'
