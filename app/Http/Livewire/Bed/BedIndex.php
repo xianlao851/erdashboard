@@ -70,6 +70,9 @@ class BedIndex extends Component
     public $setEnd;
     public $getDiv;
 
+    public $resultGetTakeDivByTwo;
+    public $getRemainingPage;
+
     public $num = 1;
     public $wards = [
         '2FICU',
@@ -121,7 +124,7 @@ class BedIndex extends Component
                      INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
                      WHERE herlog.erstat='A'
                      AND (hencdiag.diagtext IS NOT NULL)
-                    --  AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+                    -- AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
                      AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
                  ) e
                  WHERE row_num > {$offset} AND row_num <= {$take}"
@@ -355,16 +358,53 @@ class BedIndex extends Component
         $this->currentPage = $page;
     }
 
+    public function setPageToOne()
+    {
+        $this->setStart = 1;
+        $this->setEnd = 7;
+        $this->currentPage = 1;
+    }
+
     public function next()
     {
-        if ($this->getTake <= $this->totalCount && $this->setEnd <= $this->getDiv) {
-            $this->setStart++;
-            $this->setEnd++;
-            $this->currentPage++;
+        // if ($this->getTake <= $this->totalCount && $this->setEnd <= $this->getDiv) {
+        //     $this->setStart++;
+        //     $this->setEnd++;
+        //     $this->currentPage++;
+        // }
+
+        $this->getRemainingPage =  $this->getDiv - $this->setEnd;
+        $getSetStart = $this->setStart;
+        $getSetEnd = $this->setEnd;
+        $getcurrentPage = $this->currentPage;
+
+        if ($this->setEnd <= $this->getDiv) {
+            $getSetStart = $getSetStart + 1;
+            $getSetEnd = $getSetEnd + 1;
+            $getcurrentPage = $getcurrentPage + 1;
         }
 
+        if ($getSetEnd <= $this->getDiv) {
+            $this->setStart = $this->setStart + 1;
+            $this->setEnd = $this->setEnd + 1;
+            $this->currentPage = $this->currentPage + 1;
+        } else {
+            $this->setStart = $this->setStart + $this->getRemainingPage;
+            $this->setEnd = $this->setEnd + $this->getRemainingPage;
+            $this->currentPage = $this->currentPage + 1;
+        }
 
-
+        // if ($getSetEnd > $this->getDiv) {
+        //     $this->setStart = $this->setStart + $this->getRemainingPage;
+        //     $this->setEnd = $this->setEnd + $this->getRemainingPage;
+        //     $this->currentPage = $this->setStart;
+        //     dd('here');
+        //     // if ($this->getTake <= $this->totalCount && $this->setEnd <= $this->getDiv) {
+        //     //          $this->setStart++;
+        //     //          $this->setEnd++;
+        //     //          $this->currentPage++;
+        //     //      }
+        // }
         // $this->setStart++;
         // $this->setEnd++;
         // $this->currentPage = $this->setStart;
@@ -376,24 +416,80 @@ class BedIndex extends Component
 
     public function nextNext()
     {
-        if ($this->getTake <= $this->totalCount) {
+
+        $this->getRemainingPage =  $this->getDiv - $this->setEnd;
+        $getSetStart = $this->setStart;
+        $getSetEnd = $this->setEnd;
+        $getcurrentPage = $this->currentPage;
+
+        if ($this->setEnd <= $this->getDiv) {
+            $getSetStart = $getSetStart + 6;
+            $getSetEnd = $getSetEnd + 6;
+            $getcurrentPage = $getcurrentPage + 6;
+        }
+
+        if ($getSetEnd <= $this->getDiv) {
             $this->setStart = $this->setStart + 6;
             $this->setEnd = $this->setEnd + 6;
             $this->currentPage = $this->currentPage + 6;
+        } else {
+            $this->setStart = $this->setStart + $this->getRemainingPage;
+            $this->setEnd = $this->setEnd + $this->getRemainingPage;
+            $this->currentPage = $this->currentPage + $this->getRemainingPage;
         }
+
+
+
+
+        // if ($this->getTake <= $this->totalCount) {
+        //     $this->setStart = $this->setStart + 6;
+        //     $this->setEnd = $this->setEnd + 6;
+        //     $this->currentPage = $this->currentPage + 6;
+        // }
+        $this->resultGetTakeDivByTwo = $this->getTake / $this->totalCount;
+        //dd($this->resultGetTakeDivByTwo);
     }
 
     public function previous()
     {
-        if ($this->getTake > 20 && $this->currentPage > 1) {
-            if ($this->currentPage >= 2) {
-                $this->setStart = 1;
-            } else {
-                $this->setStart--;
-            }
-            $this->setEnd--;
-            $this->currentPage--;
+
+        $this->getRemainingPage =  $this->getDiv - $this->setEnd;
+        $getSetStart = $this->setStart;
+        $getSetEnd = $this->setEnd;
+        $getcurrentPage = $this->currentPage;
+
+        if ($this->setStart >= 1) {
+            //$getSetStart = $getSetStart - 1;
+            //$getSetEnd = $getSetEnd - 1;
+            $getcurrentPage = $getcurrentPage - 1;
         }
+
+        if ($getSetStart > 1) {
+            if ($getcurrentPage == $getSetStart) {
+                $this->setStart = $this->setStart - 1;
+                $this->setEnd = $this->setEnd - 1;
+            } else {
+                $this->currentPage = $this->currentPage - 1;
+            }
+        } else {
+            // $this->setStart = -1;
+            // $this->setEnd = -1;
+            // $this->currentPage =  -1;
+        }
+
+        // if ($this->getTake > 20 && $this->currentPage > 1) {
+        //     if ($this->currentPage >= 2) {
+        //         $this->setStart = 1;
+        //     } else {
+        //         $this->setStart--;
+        //     }
+        //     $this->setEnd--;
+        //     $this->currentPage--;
+        // }
+    }
+
+    public function previousPrevious()
+    {
     }
     // public function getTransferBedenccode($getId)
     // {

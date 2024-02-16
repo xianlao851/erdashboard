@@ -15,7 +15,7 @@
 
                 <div class="w-full mx-4">
                     <select wire:model='room_id' class="border-green-600 w-28 select ">
-                        <option value="0">All</option>
+                        <option value="0">ALL</option>
                         @foreach ($rooms as $room)
                             <option value="{{ $room->room_id }}" class="uppercase">{{ $room->room_name }}</option>
                         @endforeach
@@ -30,7 +30,6 @@
                             <i class="text-white las la-plus-circle la-2x"></i></label> --}}
                     </div>
                 </div>
-
 
                 <!--Search Patient start--->
                 <div class="">
@@ -85,27 +84,29 @@
                     </ul>
                 </div>
 
-                <div class="p-2">
-                    {{-- Manual pagination --}}
+                <div class="p-2"> {{-- Manual pagination --}}
                     <div class="flex items-center justify-between px-1 py-1 mx-0 bg-white rounded-lg shadow-lg sm:px-6">
-                        {{-- Manual pagination --}}
                         <div>
                             <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div class="mx-1">
                                     <p class="text-sm text-gray-700">
                                         Showing
-                                        {{ $getTake - 19 }}
-                                        </span>
-                                        to
-                                        @if ($getTake >= $totalCount)
-                                            {{ $totalCount }}
-                                        @else
-                                            {{ $getTake }}
-                                        @endif
+                                        @if ($totalCount > 20)
+                                            {{ $getTake - 19 }}
 
-                                        {{-- {{ $getCount = $currentPage * $perPage }} --}}
-                                        <span class="font-medium"></span>
-                                        of
+
+                                            </span>
+                                            to
+                                            @if ($getTake >= $totalCount)
+                                                {{ $totalCount }}
+                                            @else
+                                                {{ $getTake }}
+                                            @endif
+
+                                            {{-- {{ $getCount = $currentPage * $perPage }} --}}
+                                            <span class="font-medium"></span>
+                                            of
+                                        @endif
                                         <span class="font-medium">{{ $totalCount }}</span>
                                         results
                                     </p>
@@ -114,16 +115,22 @@
                                     <nav class="inline-flex -space-x-px rounded-md shadow-sm isolate"
                                         aria-label="Pagination">
                                         <a class="relative inline-flex items-center px-2 py-2 text-gray-400 rounded-l-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                            wire:click='previousPrevious'>
+                                            <span class="sr-only">Previous</span>
+                                            <i class="las la-angle-double-left"></i>
+                                        </a>
+                                        <a class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                             wire:click='previous'>
                                             <span class="sr-only">Previous</span>
-                                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path fill-rule="evenodd"
-                                                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
+                                            <i class="las la-angle-left"></i>
                                         </a>
                                         {{-- @for ($i = $setStart; $i <= $setEnd; $i++) --}}
+                                        @if ($currentPage != 1 and $setEnd > 7)
+                                            <li class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 cursor-pointer ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                wire:click="setPageToOne({{ 1 }})">
+                                                1..
+                                            </li>
+                                        @endif
                                         @for ($i = $setStart; $i <= $setEnd; $i++)
                                             {{-- @for ($i = 1; $i <= ceil($totalCount / $perPage); $i++) --}}
                                             <li @if ($currentPage == $i) class="relative z-10 inline-flex items-center p-2 px-4 text-sm font-semibold text-white bg-green-600 cursor-pointer focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" @else
@@ -132,43 +139,28 @@
                                                 {{ $i }}
                                             </li>
                                         @endfor
-                                        <a class="relative inline-flex items-center px-2 py-2 text-gray-400 cursor-pointer rounded-r-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                        <a class="relative inline-flex items-center px-2 py-2 text-gray-400 cursor-pointer ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                             wire:click="next">
                                             <span class="sr-only">Next</span>
-                                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path fill-rule="evenodd"
-                                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
+                                            <i class="las la-angle-right"></i>
                                         </a>
-                                        {{-- <a class="relative inline-flex items-center px-2 py-2 text-gray-400 cursor-pointer rounded-r-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                        <a class="relative inline-flex items-center px-2 py-2 text-gray-400 cursor-pointer rounded-r-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                             wire:click="nextNext">
-                                            <span class="sr-only">Next 2</span>
-                                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path fill-rule="evenodd"
-                                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path fill-rule="evenodd"
-                                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </a> --}}
+                                            <i class="las la-angle-double-right"></i>
+                                        </a>
                                     </nav>
                                 @endif
                             </div>
                         </div>
                     </div>
-                    {{-- {{ $getTake }},
+                    get take{{ $getTake }},
                     {{ $totalCount }},
                     cur page{{ $currentPage }},
                     start{{ $setStart }},
                     end {{ $setEnd }},
-                    getDiv{{ $getDiv }} --}}
+                    getDiv{{ $getDiv }},
+
+                    getRemainingPage {{ $getRemainingPage }}
                 </div>
                 {{-- <div class="mx-auto mt-2 w-[350px]">
                     @if ($patients)
