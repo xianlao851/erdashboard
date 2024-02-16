@@ -121,7 +121,7 @@ class BedIndex extends Component
                      INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
                      WHERE herlog.erstat='A'
                      AND (hencdiag.diagtext IS NOT NULL)
-                     AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+                    --  AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
                      AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
                  ) e
                  WHERE row_num > {$offset} AND row_num <= {$take}"
@@ -133,7 +133,7 @@ class BedIndex extends Component
             INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
             WHERE herlog.erstat='A'
             AND (hencdiag.diagtext IS NOT NULL)
-            AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+            -- AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
             AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')"))->count();
 
         $this->getTake =  $take;
@@ -189,12 +189,15 @@ class BedIndex extends Component
                 }
             })->get();
         } else {
-            $this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
+            //$this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
         }
         if ($this->transferBedStatus == true) {
             $this->get_beds_transfer = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(12, ['*'], 'patient_list_transfer');
         }
 
+        if ($this->room_id != null || $this->room_id != '') {
+            $this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
+        }
 
 
         return view('livewire.bed.bed-index', [

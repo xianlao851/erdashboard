@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wards', function (Blueprint $table) {
+        Schema::create('erdash_wards', function (Blueprint $table) {
             $table->id('ward_id');
             $table->string('ward_code', 10);
             $table->timestamps();

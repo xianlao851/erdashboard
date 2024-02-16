@@ -9,6 +9,7 @@ class Room extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
+    protected $table = "erdash_rooms";
     protected $primaryKey = "room_id";
     //protected $foreignKey = 'enccode';
     protected $fillable = [

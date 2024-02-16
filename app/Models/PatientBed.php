@@ -10,6 +10,7 @@ class PatientBed extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
+    protected $table = "erdash_patient_beds";
     protected $primaryKey = "patient_bed_id";
     protected $foreignKey = 'enccode';
     protected $fillable = [

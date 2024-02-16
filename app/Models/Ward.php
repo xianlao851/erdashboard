@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ward extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql', $table = 'wards', $primaryKey = 'ward_id', $keyType = 'string', $foreignKey = 'ward_code';
+    protected $connection = 'mysql', $table = 'erdash_wards', $primaryKey = 'ward_id', $keyType = 'string', $foreignKey = 'ward_code';
 
     public function  getWardDetail()
     {

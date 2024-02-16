@@ -14,4 +14,14 @@
 
         </div>
     </div>
+
+    <div class="max-w-xl mx-auto">
+        <div class="">
+            <div class="flex flex-row p-1 bg-white rounded-lg shadow-lg h-28 w-72">
+                <div class="w-1/6 bg-green-600">1</div>
+                <div class="w-5/6 bg-gray-600">2</div>
+                <div class="w-1/6 bg-gray-800">3</div>
+            </div>
+        </div>
+    </div>
 </div>

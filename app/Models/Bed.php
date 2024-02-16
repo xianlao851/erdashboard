@@ -9,6 +9,7 @@ class Bed extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
+    protected $table = "erdash_beds";
     protected $primaryKey = "bed_id";
     protected $fillable = [
         'bed_name',
