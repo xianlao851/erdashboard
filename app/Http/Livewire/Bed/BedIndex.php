@@ -99,15 +99,15 @@ class BedIndex extends Component
     // }
     public function  mount()
     {
+        //$this->getPosition = Auth::user()->employee->position_id;
         $this->room_id = 0;
     }
 
     public function render()
     {
         $this->rooms = Room::select('room_name', 'room_id')->get();
-        //dd($this->rooms);
         $this->start_date = date('Y-m-d', strtotime('2024-02-14'));
-        $this->end_date = date('Y-m-d', strtotime('2024-02-15'));
+        $this->end_date = date('Y-m-d', strtotime('2024-02-21'));
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
@@ -115,17 +115,21 @@ class BedIndex extends Component
         $sdate = $this->start_date  . ' 17:00:00.000';
         $edate = $this->end_date  . ' 23:59:59.000';
         //$edate = $this->end_date  . ' 07:59:59.000';
-
+        $getPtientBedList = PatientBed::select('enccode')->get();
+        //dd($getPtientBedList[0]);
+        $query = [];
+        $get = [];
         $getPatients = collect(DB::connection('hospital')
             ->select(
                 "SELECT * FROM (SELECT hperson.patlast, hperson.patfirst, hperson.patmiddle, hperson.patsex, hperson.hpercode, herlog.erdate, hencdiag.primediag, herlog.enccode, herlog.tscode, herlog.patage, hencdiag.diagtext, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
                      FROM herlog
                      INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
                      INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
-                     WHERE herlog.erstat='A'
+                    WHERE herlog.erstat='A'
                      AND (hencdiag.diagtext IS NOT NULL)
-                    -- AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+                    AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
                      AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
+                    --  AND ( herlog.enccode NOT IN $getPtientBedList)
                  ) e
                  WHERE row_num > {$offset} AND row_num <= {$take}"
             ));
@@ -136,7 +140,7 @@ class BedIndex extends Component
             INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
             WHERE herlog.erstat='A'
             AND (hencdiag.diagtext IS NOT NULL)
-            -- AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+            AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
             AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')"))->count();
 
         $this->getTake =  $take;
@@ -269,22 +273,21 @@ class BedIndex extends Component
                 $getPatientLog = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $this->selected_patient_enccode)
                     ->where('erstat', 'A')->first();
                 //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
-
+                $getRoomdId = Bed::where('bed_id', $this->selected_patient_bed)->first();
                 $this->selected_patient_bed = $getID;
                 $patient_id = $getPatientLog->hpercode;
                 $bed_id =  $this->selected_patient_bed;
                 $enccode = $this->selected_patient_enccode;
-
-                $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first(); //check iuf the patient is assigned to a bed already
+                $room_id = $getRoomdId->room_id;
+                $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first(); //check if the patient is assigned to a bed already
 
                 if ($checkenccode) {
                     $this->dispatchBrowserEvent('notAvailable');
                 } else {
-
                     PatientBed::create([
                         'patient_id' => $patient_id,
                         'bed_id' => $bed_id,
-                        'room_id' => $this->room_id,
+                        'room_id' => $room_id,
                         'ward_code' => 'EROOM',
                         'enccode' => $enccode,
                     ]);
@@ -367,12 +370,6 @@ class BedIndex extends Component
 
     public function next()
     {
-        // if ($this->getTake <= $this->totalCount && $this->setEnd <= $this->getDiv) {
-        //     $this->setStart++;
-        //     $this->setEnd++;
-        //     $this->currentPage++;
-        // }
-
         $this->getRemainingPage =  $this->getDiv - $this->setEnd;
         $getSetStart = $this->setStart;
         $getSetEnd = $this->setEnd;
@@ -393,25 +390,6 @@ class BedIndex extends Component
             $this->setEnd = $this->setEnd + $this->getRemainingPage;
             $this->currentPage = $this->currentPage + 1;
         }
-
-        // if ($getSetEnd > $this->getDiv) {
-        //     $this->setStart = $this->setStart + $this->getRemainingPage;
-        //     $this->setEnd = $this->setEnd + $this->getRemainingPage;
-        //     $this->currentPage = $this->setStart;
-        //     dd('here');
-        //     // if ($this->getTake <= $this->totalCount && $this->setEnd <= $this->getDiv) {
-        //     //          $this->setStart++;
-        //     //          $this->setEnd++;
-        //     //          $this->currentPage++;
-        //     //      }
-        // }
-        // $this->setStart++;
-        // $this->setEnd++;
-        // $this->currentPage = $this->setStart;
-
-        // $this->setStart = $this->setStart + 10;
-        // $this->setEnd = $this->setEnd + 10;
-        // $this->currentPage = $this->setStart;
     }
 
     public function nextNext()

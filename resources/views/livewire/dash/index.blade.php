@@ -290,7 +290,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($ward3FMPColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -354,7 +354,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($ward3FMICColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -417,7 +417,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($ward3FMNColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -480,7 +480,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardCBNSColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -543,7 +543,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardCBPAColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -606,7 +606,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardCBPNColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -669,7 +669,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardSICUColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -732,7 +732,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($ward2FICUColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -795,7 +795,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($ward3FCCUColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -858,7 +858,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardSDICUColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -921,7 +921,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardFH2Color), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -984,7 +984,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($wardFH3Color), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -997,76 +997,6 @@
 
         var chartwardFH3 = new ApexCharts(document.querySelector("#wardFH3"), wardFH3);
         chartwardFH3.render(); //---wardFH3, 12 Field Hospital 3 (CAMES)
-
-        //-- NA 3rd Floor(NICU)*
-        var ward3FNIC = {
-            series: [@json($ward3FNIC), @json($ward3FNICAvailable)],
-            chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
-                type: 'donut',
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        labels: {
-                            show: true,
-                            total: {
-                                show: true,
-                                fontSize: 15,
-                                fontFamily: 'sans',
-                                // color: '#263238'
-                            }
-                        }
-                    }
-                }
-            },
-            labels: ['Ocuppied', 'Available', ],
-            legend: {
-                position: 'bottom',
-                fontSize: '12px',
-                fontWeight: 400,
-                fontFamily: 'sans',
-            },
-            // title: {
-            //     text: '3rd Floor(NICU)*',
-            //     align: 'center',
-            //     style: {
-            //         fontSize: '12px',
-            //         fontWeight: 'bold',
-            //         fontFamily: 'sans',
-            //         // color: '#263238'
-            //     },
-            // },
-            dataLabels: {
-                // enabled: true
-                formatter: (val, {
-                    seriesIndex,
-                    w
-                }) => w.config.series[seriesIndex]
-            },
-            colors: ["#04bd55", "#0571f5"],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 50
-                    },
-                }
-            }]
-        };
-
-        var chartward3FNIC = new ApexCharts(document.querySelector("#ward3FNIC"), ward3FNIC);
-        chartward3FNIC.render();
-        //---ward3FMP
-
-
-
-
-
-
 
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
@@ -1117,7 +1047,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: ["#04bd55", "#0571f5"],
+            colors: [@json($erAdmittedCountColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {

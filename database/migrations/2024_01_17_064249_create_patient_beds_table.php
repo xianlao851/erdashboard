@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('patient_id', 20);
             $table->foreignId('bed_id');
             $table->foreignId('room_id');
+            $table->string('emp_id', 10);
             $table->string('ward_code', 10);
             $table->string('enccode');
             $table->timestamps();

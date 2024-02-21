@@ -68,7 +68,7 @@
                                             @if ($patient->patmiddle != null or $patient->patmiddle == '')
                                                 {{ $patient->patmiddle }}
                                             @endif
-                                            {{-- {{ $patient->diagtext }} --}}
+                                            {{-- {{ $patient->enccode }} --}}
                                             {{-- {{ $patient->erdate }} --}}
                                         </div>
                                     </div>
@@ -153,14 +153,14 @@
                             </div>
                         </div>
                     </div>
-                    get take{{ $getTake }},
+                    {{-- get take{{ $getTake }},
                     {{ $totalCount }},
                     cur page{{ $currentPage }},
                     start{{ $setStart }},
                     end {{ $setEnd }},
                     getDiv{{ $getDiv }},
 
-                    getRemainingPage {{ $getRemainingPage }}
+                    getRemainingPage {{ $getRemainingPage }} --}}
                 </div>
                 {{-- <div class="mx-auto mt-2 w-[350px]">
                     @if ($patients)
@@ -262,7 +262,7 @@
                                                                     <div
                                                                         class="mt-3 ml-0 text-[11px] text-black  flex">
                                                                         {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
-
+                                                                        {{-- {{ $patient->patientHerlog->enccode }} --}}
                                                                     </div>
                                                                     <div>
                                                                         <label for="transferPatientBed"
@@ -362,7 +362,7 @@
 
         <!--Transfer patient bed start-->
         <input type="checkbox" id="transferPatientBed" class="modal-toggle" />
-        <div class="modal" role="dialog" wire:loading.remove>
+        <div class="modal" role="dialog">
             <div class="max-w-7xl modal-box">
                 {{-- <div wire:loading wire:target="transferBed" class="mt-2 mx-44">
                     <span class="text-green-400 loading loading-lg loading-spinner "></span>
@@ -504,26 +504,22 @@
         var getcode = {};
 
         function drag(ev) {
-
-            ev.dataTransfer.setData("text", ev.target.id);
             var enccode = ev.currentTarget.id;
-            //document.getElementById('patient').innerHTML = enccode;
-
             getcode.code = enccode; // get the enccode
+
+            //ev.dataTransfer.setData("text", ev.target.id);
+            //document.getElementById('patient').innerHTML = enccode;
             //Livewire.emit('onDrag', id);
         }
 
         function drop(ev) {
             ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            //ev.target.appendChild(document.getElementById(data));
-
             var getenccode = getcode.code; // get the enccode
             var bedid = ev.currentTarget.id;
-
-            //document.getElementById('bed').innerHTML = bedid;
             Livewire.emit('onDrop', bedid, getenccode);
-
+            //var data = ev.dataTransfer.getData("text");
+            //ev.target.appendChild(document.getElementById(data));
+            //document.getElementById('bed').innerHTML = bedid;
         }
 
 
