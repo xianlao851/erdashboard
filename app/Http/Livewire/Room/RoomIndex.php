@@ -10,7 +10,7 @@ class RoomIndex extends Component
 {
     use LivewireAlert;
     public $room_name;
-
+    protected $listeners = ['triggerBut'];
     public function render()
     {
         return view('livewire.room.room-index');
@@ -27,5 +27,10 @@ class RoomIndex extends Component
         ]);
         $this->alert('success', 'Bed Added');
         $this->reset('room_name');
+    }
+
+    public function clickMe()
+    {
+        $this->dispatchBrowserEvent('triggerBut');
     }
 }

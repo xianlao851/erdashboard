@@ -19,8 +19,10 @@ class BedIndex extends Component
     use LivewireAlert;
     use WithPagination;
     //protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['onDrag', 'onDrop', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode', 'reset_page'];
-
+    protected $listeners = [
+        'onDrag', 'onDrop', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode', 'reset_page',
+        'trgTransferBed'
+    ];
     public $bed_name;
 
     public $text = 'text';
@@ -106,8 +108,8 @@ class BedIndex extends Component
     public function render()
     {
         $this->rooms = Room::select('room_name', 'room_id')->get();
-        $this->start_date = date('Y-m-d', strtotime('2024-02-14'));
-        $this->end_date = date('Y-m-d', strtotime('2024-02-21'));
+        $this->start_date = date('Y-m-d', strtotime('2024-02-21'));
+        $this->end_date = date('Y-m-d', strtotime('2024-02-22'));
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
@@ -328,10 +330,12 @@ class BedIndex extends Component
         $this->transferBedStatus = true;
         $this->recentPatientBedId = $getPatienBedId;
         $this->recentBedId = $getBedId;
-        $this->selected_transfer_patient = HospitalHerlog::where('enccode', $getId)->first();
-        $getRoomid = Bed::where('bed_id', $this->recentBedId)->first();
+        $this->selected_transfer_patient = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $getId)->first();
+        if ($this->selected_transfer_patient) {
+            $this->dispatchBrowserEvent('trgTransferBed');
+        }
+        $getRoomid = Bed::select('bed_id', 'room_id')->where('bed_id', $this->recentBedId)->first();
         $this->room_id = $getRoomid->room_id;
-        //dd($this->room_id);
         $this->patient_list_results = null;
         $this->reset('get_patients');
     }

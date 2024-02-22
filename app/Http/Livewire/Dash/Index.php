@@ -5,13 +5,10 @@ namespace App\Http\Livewire\Dash;
 use Carbon\Carbon;
 use App\Models\Bed;
 use App\Models\Room;
-use App\Models\Ward;
 use Livewire\Component;
 use App\Models\PatientBed;
 use Livewire\WithPagination;
 use App\Models\HospitalHerlog;
-use App\Models\HospitalHadmlog;
-use App\Models\HospitalHpatroom;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
@@ -289,7 +286,7 @@ class Index extends Component
             if ($this->ward3FMP < floor($ward3FMPSlot * .5)) {
                 $this->ward3FMPColor = '#04bd55';
             }
-            if ($this->ward3FMP > ($ward3FMPSlot * .5)) {
+            if ($this->ward3FMP >= ($ward3FMPSlot * .5)) {
                 $this->ward3FMPColor = '#bd4602';
             }
             if ($this->ward3FMP >= floor($ward3FMPSlot * .8)) {
@@ -553,7 +550,6 @@ class Index extends Component
             $this->wardFH2Available = $ward3wardFH2Slot - $this->wardFH2;
             $this->wardFH2Color = '#04bd55';
         }
-        //dd(floor($wardFH2Slot * .5));
         //----12 Field Hospital 3 (CAMES)
         //$getwardwardFH3 = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'FH3')->where('patrmstat', 'A')->get();
         $this->wardFH3 = DB::connection('hospital')->table('dbo.hpatroom')

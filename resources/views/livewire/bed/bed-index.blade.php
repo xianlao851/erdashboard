@@ -203,8 +203,7 @@
                                                     {{-- {{ $patient->patientHerlog->enccode --}}
                                                 </div>
                                                 <div class="ml-2">
-                                                    <label for="transferPatientBed"
-                                                        class="mt-2 ml-0 bg-white btn btn-xs"
+                                                    <label class="mt-2 ml-0 bg-white btn btn-xs"
                                                         wire:click="transferBed('{{ $PatientBedAssinged->enccode }}','{{ $PatientBedAssinged->patient_bed_id }}','{{ $PatientBedAssinged->bed_id }}')"><img
                                                             src="{{ URL('/images/transfer.PNG') }}"
                                                             class="w-[20px] h-[20px]">
@@ -265,8 +264,7 @@
                                                                         {{-- {{ $patient->patientHerlog->enccode }} --}}
                                                                     </div>
                                                                     <div>
-                                                                        <label for="transferPatientBed"
-                                                                            class="mt-2 ml-0 bg-white btn btn-xs"
+                                                                        <label class="mt-2 ml-0 bg-white btn btn-xs"
                                                                             wire:click="transferBed('{{ $patient->enccode }}','{{ $patient->patient_bed_id }}','{{ $patient->bed_id }}')"><img
                                                                                 draggable="false"
                                                                                 src="{{ URL('/images/transfer.PNG') }}"
@@ -322,8 +320,7 @@
 
                                                         </div>
                                                         <div>
-                                                            <label for="transferPatientBed"
-                                                                class="mt-2 ml-0 bg-white btn btn-xs"
+                                                            <label class="mt-2 ml-0 bg-white btn btn-xs"
                                                                 wire:click="transferBed('{{ $patient->enccode }}','{{ $patient->patient_bed_id }}','{{ $patient->bed_id }}')"><img
                                                                     draggable="false"
                                                                     src="{{ URL('/images/transfer.PNG') }}"
@@ -574,6 +571,12 @@
                 confirmButtonColor: "#1737d4",
             });
         });
+
+
+        window.addEventListener('trgTransferBed', function() {
+            document.getElementById("transferPatientBed").checked = true;
+        });
+
 
         $("#toggle").on("click", function() {
             $(".isToggable").toggle();
