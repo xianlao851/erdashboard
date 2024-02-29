@@ -67,6 +67,10 @@ class PatientBed extends Model
         return $this->belongsTo(HospitalHerlog::class, 'patient_id', 'hpercode')->where('erstat', 'A')->latest('erdate');
     }
 
+    public function getHerlogPatientInfo()
+    {
+        return $this->belongsTo(HospitalHerlog::class, 'patient_id', 'hpercode');
+    }
     // public function checkLogsForBedAvailability()
     // {
     //     return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');

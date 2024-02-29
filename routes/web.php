@@ -35,6 +35,7 @@ Route::middleware([
 
 Route::get('/room', RoomIndex::class)->name('room');
 Route::get('/charts', Index::class)->name('charts');
+
 Route::middleware([
     'auth:sanctum', 'role:admin',
     config('jetstream.auth_session'),

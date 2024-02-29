@@ -18,38 +18,40 @@
                     <div class="" id="erAdmittedCount"></div>
                 </div>
             </div>
-            <div class="w-3/4" wire:ignore>
-                <div class="grid w-full grid-cols-6 grid-rows-2 gap-3">
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">*SICU
+            <div class="w-3/4 " wire:ignore>
+                <div class="grid w-full grid-cols-6 grid-rows-2 gap-3 h-[500px]">
+
+                    <div class="content-center max-w-full bg-white rounded-lg min-w-28">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            OPD 3rd Floor (MICU A)
                         </div>
-                        <div id="ward2FICU"> </div>
-                    </div> --}}
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU A)
-                        </div>
-                        <div class="content-center bg-white rounded-lg" id="ward3FMP"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="ward3FMP"></div>
                     </div>
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU B)
+
+                    <div class="content-center w-full bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            OPD 3rd Floor (MICU B)
                         </div>
-                        <div class="content-center bg-white rounded-lg" id="ward3FMIC"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="ward3FMIC"></div>
                     </div>
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU A)
+
+                    <div class="content-center w-full bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Main 3rd Floor (NICU A)
                         </div>
-                        <div class="content-center bg-white rounded-lg" id="ward3FMN"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="ward3FMN"></div>
                     </div>
+
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU B)
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Main 3rd Floor (NICU B)
                         </div>
-                        <div class="content-center bg-white rounded-lg" id="wardCBNS"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardCBNS"></div>
                     </div>
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">3rd Floor(NICU)*
-                        </div>
-                        <div class="content-center bg-white rounded-lg" id="ward3FNIC"></div>
-                    </div> --}}
 
                     <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center mx-auto text-[11px] mt-2 font-semibold text-nowrap">Annex 2nd
@@ -57,50 +59,65 @@
                             Pedia A &
                             PICU A
                         </div>
-                        <div class="mt-2" id="wardCBPA"></div>
-                    </div>
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Annex 2nd Floor (PICU B)
-                        </div>
-                        <div id="wardCBPN"></div>
-                    </div>
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
-                        </div>
-                        <div id="wardSDICU"></div>
-                    </div> --}}
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU A
-                        </div>
-                        <div id="wardSICU"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardCBPA"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU B
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Annex 2nd Floor (PICU B)
                         </div>
-                        <div id="ward2FICU"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardCBPN"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">CCU
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            SICU A
                         </div>
-                        <div id="ward3FCCU"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardSICU"></div>
                     </div>
+
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            SICU B
                         </div>
-                        <div id="wardSDICU"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="ward2FICU"></div>
                     </div>
+
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Eastern Ward Gr Floor
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            CCU
                         </div>
-                        <div id="wardFH2"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="ward3FCCU"></div>
                     </div>
+
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Field Hospital 3 (CAMES)
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Stepdown
                         </div>
-                        <div id="wardFH3"></div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardSDICU"></div>
                     </div>
+
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Eastern Ward Gr Floor
+                        </div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardFH2"></div>
+                    </div>
+
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
+                            Field Hospital 3 (CAMES)
+                        </div>
+                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
+                            id="wardFH3"></div>
+                    </div> -
                 </div>
             </div>
             <div class="w-1/16">
@@ -245,10 +262,14 @@
         var ward3FMP = {
             series: [@json($ward3FMP), @json($ward3FMPAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
+
                 type: 'donut',
             },
             plotOptions: {
@@ -292,10 +313,10 @@
             },
             colors: [@json($ward3FMPColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -309,10 +330,15 @@
         var ward3FMIC = {
             series: [@json($ward3FMIC), @json($ward3FMICAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
+
                 type: 'donut',
             },
             plotOptions: {
@@ -334,7 +360,7 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 400,
+                fontWeight: 1000,
                 fontFamily: 'sans',
             },
             // title: {
@@ -356,10 +382,10 @@
             },
             colors: [@json($ward3FMICColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -372,10 +398,13 @@
         var ward3FMN = {
             series: [@json($ward3FMN), @json($ward3FMNAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -419,10 +448,10 @@
             },
             colors: [@json($ward3FMNColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -435,10 +464,15 @@
         var wardCBNS = {
             series: [@json($wardCBNS), @json($wardCBNSAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -482,10 +516,10 @@
             },
             colors: [@json($wardCBNSColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -498,10 +532,15 @@
         var wardCBPA = {
             series: [@json($wardCBPA), @json($wardCBPAAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -545,10 +584,10 @@
             },
             colors: [@json($wardCBPAColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -561,10 +600,15 @@
         var wardCBPN = {
             series: [@json($wardCBPN), @json($wardCBPNAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -608,10 +652,10 @@
             },
             colors: [@json($wardCBPNColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -624,10 +668,15 @@
         var wardSICU = {
             series: [@json($wardSICU), @json($wardSICUAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -671,10 +720,10 @@
             },
             colors: [@json($wardSICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -687,14 +736,19 @@
         var ward2FICU = {
             series: [@json($ward2FICU), @json($ward2FICUAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
                 pie: {
-                    //size: 480,
+                    //size: undefined,
                     donut: {
                         labels: {
                             show: true,
@@ -734,10 +788,10 @@
             },
             colors: [@json($ward2FICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -750,10 +804,15 @@
         var ward3FCCU = {
             series: [@json($ward3FCCU), @json($ward3FCCUAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -797,10 +856,10 @@
             },
             colors: [@json($ward3FCCUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -813,10 +872,15 @@
         var wardSDICU = {
             series: [@json($wardSDICU), @json($wardSDICUAvailable)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -860,10 +924,10 @@
             },
             colors: [@json($wardSDICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -876,10 +940,15 @@
         var wardFH2 = {
             series: [@json($wardFH2), @json($wardFH2Available)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -923,10 +992,10 @@
             },
             colors: [@json($wardFH2Color), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -939,10 +1008,15 @@
         var wardFH3 = {
             series: [@json($wardFH3), @json($wardFH3Available)],
             chart: {
-                //height: 480,
-                height: 230,
-                width: 170,
-                align: 'left',
+                //height: undefined,
+                // height: 230,
+                // width: 170,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -986,10 +1060,10 @@
             },
             colors: [@json($wardFH3Color), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]
@@ -1001,9 +1075,14 @@
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
             chart: {
-                height: 400,
-                width: 330,
-                align: 'left',
+                // height: 400,
+                // width: 330,
+                // align: 'left',
+                // type: 'donut',
+
+                height: "120%",
+                width: "120%",
+                // offsetX: -12,
                 type: 'donut',
             },
             plotOptions: {
@@ -1049,10 +1128,10 @@
             },
             colors: [@json($erAdmittedCountColor), "#0571f5"],
             responsive: [{
-                breakpoint: 480,
+                breakpoint: 1000,
                 options: {
-                    chart: {
-                        width: 50
+                    plotOptions: {
+
                     },
                 }
             }]

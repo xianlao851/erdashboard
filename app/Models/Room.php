@@ -20,4 +20,16 @@ class Room extends Model
     {
         return $this->hasMany(Bed::class, 'room_id', 'room_id');
     }
+
+    public function getSelectedBeds($getId)
+    {
+        //dd($getId);
+        return $this->hasMany(Bed::class, 'room_id', 'room_id')->whereIn('bed_id', $getId)->get();
+    }
+
+    public function getSelectedBedsDesc($getId)
+    {
+        //dd($getId);
+        return $this->hasMany(Bed::class, 'room_id', 'room_id')->whereIn('bed_id', $getId)->orderBy('bed_id', 'desc')->get();
+    }
 }

@@ -411,7 +411,7 @@ class Index extends Component
             if ($this->wardCBPN < floor($wardCBPNSlot * .5)) {
                 $this->wardCBPNColor = '#04bd55';
             }
-            if ($this->wardCBPN > floor($wardCBPNSlot * .5)) {
+            if ($this->wardCBPN >= floor($wardCBPNSlot * .5)) {
                 $this->wardCBPNColor = '#bd4602';
             }
             if ($this->wardCBPN >= floor($wardCBPNSlot * .8)) {

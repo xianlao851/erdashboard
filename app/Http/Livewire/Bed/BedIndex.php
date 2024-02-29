@@ -21,7 +21,7 @@ class BedIndex extends Component
     //protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         'onDrag', 'onDrop', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode', 'reset_page',
-        'trgTransferBed'
+        'trgTransferBed', 'transferPatientBed', 'patientAssignedSuccess'
     ];
     public $bed_name;
 
@@ -39,6 +39,32 @@ class BedIndex extends Component
     protected $get_beds;
     protected $get_beds_transfer;
     public $rooms;
+    public $room_medicine_one_to_three, $room_medicine_four_nine, $room_medicine_ten_twenty, $room_resu, $room_trauma, $room_pedia_one_to_three, $room_ob_one_two, $room_fam_med;
+    public $room_pedia_seven, $room_pedia_four, $room_pedia_five, $room_pedia_six;
+    public $room_medicine_one_to_three_r = [
+            '22',
+            '23',
+            '24'
+        ],
+        $room_medicine_four_nine_r = [
+            '25',
+            '26',
+            '31',
+            '32',
+            '33',
+            '34',
+            '35',
+            '36',
+            '37',
+        ],
+        $room_medicine_ten_twenty_r = ['38', '39', '40', '41', '42', '43'],
+        $room_pedia_one_to_three_r = ['17', '15', '16'],
+        $room_ob_one_two_r = ['10', '11'],
+        $room_pedia_seven_r = ['21'],
+        $room_pedia_four_r = ['18'],
+        $room_pedia_five_r = ['19'],
+        $room_pedia_six_r = ['20'];
+
     public $room_id;
 
     protected $get_patients;
@@ -107,9 +133,8 @@ class BedIndex extends Component
 
     public function render()
     {
-        $this->rooms = Room::select('room_name', 'room_id')->get();
         $this->start_date = date('Y-m-d', strtotime('2024-02-21'));
-        $this->end_date = date('Y-m-d', strtotime('2024-02-22'));
+        $this->end_date = date('Y-m-d', strtotime('2024-02-29'));
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
@@ -208,6 +233,37 @@ class BedIndex extends Component
             $this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
         }
 
+        $this->rooms = Room::select('room_name', 'room_id')->get();
+
+        $get_rooms = Room::select('room_name', 'room_id')->get();
+
+        foreach ($get_rooms as $rooms) {
+            if ($rooms->room_id == '6') {
+                $this->room_medicine_one_to_three = $rooms->getSelectedBeds($this->room_medicine_one_to_three_r);
+                $this->room_medicine_four_nine = $rooms->getSelectedBeds($this->room_medicine_four_nine_r);
+                $this->room_medicine_ten_twenty = $rooms->getSelectedBeds($this->room_medicine_ten_twenty_r);
+            }
+            if ($rooms->room_id == '5') {
+                $this->room_resu = $rooms->getBeds;
+            }
+            if ($rooms->room_id == '2') {
+                $this->room_trauma = $rooms->getBeds;
+            }
+            if ($rooms->room_id == '4') {
+                $this->room_pedia_one_to_three = $rooms->getSelectedBedsDesc($this->room_pedia_one_to_three_r);
+                $this->room_pedia_seven = $rooms->getSelectedBedsDesc($this->room_pedia_seven_r);
+                $this->room_pedia_four = $rooms->getSelectedBedsDesc($this->room_pedia_four_r);
+                $this->room_pedia_five = $rooms->getSelectedBedsDesc($this->room_pedia_five_r);
+                $this->room_pedia_six = $rooms->getSelectedBedsDesc($this->room_pedia_six_r);
+            }
+            if ($rooms->room_id == '3') {
+                $this->room_ob_one_two = $rooms->getSelectedBeds($this->room_ob_one_two_r);
+            }
+            if ($rooms->room_id == '1') {
+                $this->room_fam_med = $rooms->getBeds;
+            }
+        }
+        //dd($this->room_medicine_one_to_three);
 
         return view('livewire.bed.bed-index', [
             //'patients' => $this->get_patients ?? null,
@@ -236,71 +292,74 @@ class BedIndex extends Component
         $this->selected_patient_bed = $getID;
         $this->selected_patient_enccode = $getenccode;
 
-        if ($this->transferBedStatus == true) {
 
-            $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
+        // $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
+        // $patientBed->bed_id = $getID;
+        // $patientBed->room_id = $this->room_id;
+        // $patientBed->save();
+        // $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
+        // $this->reset('patient_list_results', 'get_patients');
+        // //$this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list_transfer');
+        // $this->dispatchBrowserEvent('transferedBed');
 
-            foreach ($bedAvailability as $beds) { // checks if the bed is occupied
-                foreach ($beds->findPatientBed as $patienBed) {
-                    if ($patienBed->confirmPatientErlogStatus) {
+        $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
 
-                        $this->dispatchBrowserEvent('occupied');
-                        $this->status = true;
-                    }
+        foreach ($bedAvailability as $beds) { // checks if the bed is occupied
+            foreach ($beds->findPatientBed as $patienBed) {
+                if ($patienBed->confirmPatientErlogStatus) {
+
+                    $this->dispatchBrowserEvent('occupied');
+                    $this->status = true;
+                    $this->reset('selected_patient_enccode', 'selected_patient_bed');
                 }
             }
-            if ($this->status == false) {
-                $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
-                $patientBed->bed_id = $getID;
-                $patientBed->room_id = $this->room_id;
-                $patientBed->save();
-                $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
-                $this->reset('patient_list_results', 'get_patients');
-                //$this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list_transfer');
-                $this->dispatchBrowserEvent('transferedBed');
-            }
-        } else {
-            $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
+        }
 
-            foreach ($bedAvailability as $beds) { // checks if the bed is occupied
-                foreach ($beds->findPatientBed as $patienBed) {
-                    if ($patienBed->confirmPatientErlogStatus) {
-                        $this->dispatchBrowserEvent('occupied');
-                        $this->status = true;
-                    }
-                }
-            }
+        if ($this->status == false) {
+            //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
+            $checkenccode = PatientBed::where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already
+            $this->recentPatientBedId = $checkenccode->patient_bed_id;
 
-            if ($this->status == false) {
+            if ($checkenccode) {
+                $this->dispatchBrowserEvent('patientAssingedToABedAlready');
+            } else {
+
                 $getPatientLog = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $this->selected_patient_enccode)
                     ->where('erstat', 'A')->first();
-                //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
                 $getRoomdId = Bed::where('bed_id', $this->selected_patient_bed)->first();
                 $this->selected_patient_bed = $getID;
                 $patient_id = $getPatientLog->hpercode;
                 $bed_id =  $this->selected_patient_bed;
                 $enccode = $this->selected_patient_enccode;
                 $room_id = $getRoomdId->room_id;
-                $checkenccode = PatientBed::where('enccode', $getPatientLog->enccode)->first(); //check if the patient is assigned to a bed already
 
-                if ($checkenccode) {
-                    $this->dispatchBrowserEvent('notAvailable');
-                } else {
-                    PatientBed::create([
-                        'patient_id' => $patient_id,
-                        'bed_id' => $bed_id,
-                        'room_id' => $room_id,
-                        'ward_code' => 'EROOM',
-                        'enccode' => $enccode,
-                    ]);
-
-                    $this->dispatchBrowserEvent('patientAssigned');
-                }
+                PatientBed::create([
+                    'patient_id' => $patient_id,
+                    'bed_id' => $bed_id,
+                    'room_id' => $room_id,
+                    'ward_code' => 'EROOM',
+                    'enccode' => $enccode,
+                ]);
+                $this->reset('selected_patient_enccode', 'selected_patient_bed');
+                $this->dispatchBrowserEvent('patientAssigned');
             }
         }
 
         $this->status = false;
-        $this->reset('selected_patient_enccode', 'selected_patient_bed');
+    }
+
+    public function transferPatientBed()
+    {
+
+        $fetchRoomId = Bed::select('bed_id', 'room_id')->where('bed_id', $this->selected_patient_bed)->first();
+        $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
+        $patientBed->bed_id = $this->selected_patient_bed;
+        $patientBed->room_id = $fetchRoomId->room_id;
+        $patientBed->save();
+
+        $fetchPatientBedInfo = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
+        //dd($fetchPatientBedInfo->bedInfo->bed_name);
+        $this->dispatchBrowserEvent('patientAssignedSuccess', ['bedName' => $fetchPatientBedInfo->bedInfo->bed_name, 'patienInfo' => $fetchPatientBedInfo->getHerlogPatientInfo->getPatient->get_patient_name()]);
     }
 
     public function saveBed()
