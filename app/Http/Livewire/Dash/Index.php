@@ -436,7 +436,7 @@ class Index extends Component
             if ($this->wardSICU < floor($wardSICUSlot * .5)) {
                 $this->wardSICUColor = '#04bd55';
             }
-            if ($this->wardSICU > floor($wardSICUSlot * .5)) {
+            if ($this->wardSICU >= floor($wardSICUSlot * .5)) {
                 $this->wardSICUColor = '#bd4602';
             }
             if ($this->wardSICU >= floor($wardSICUSlot * .8)) {

@@ -67,41 +67,26 @@ class BedIndex extends Component
 
     public $room_id;
 
-    protected $get_patients;
-    protected $getWards;
-    protected $patient_list_results;
-    public $getRoomId;
-    public $getBeds;
+    protected $get_patients, $getWards, $patient_list_results;
+    public $getRoomId, $getBeds;
 
-    public $start_date;
-    public $end_date;
-    public $patient_list;
-    public $patient_list_transfer;
-    public $patient_bed_list;
+    public $start_date, $end_date;
+    public $patient_list, $patient_list_transfer, $patient_bed_list;
 
-    public $status = false;
-    public $bedStatus = false;
-    public $transferBedStatus = false;
+    public $status = false, $bedStatus = false, $transferBedStatus = false, $available = false;
 
-    public $recentBedId;
-    public $recentPatientBedId;
+    public $recentBedId, $recentPatientBedId, $getPtientBedList;
 
 
     //public $getPatients;
-    public $perPage = 20;
-    public $currentPage = 1;
-    public $totalCount = 0;
+    public $perPage = 20, $currentPage = 1, $totalCount = 0;
 
-    public $diffCount;
-    public $getTake;
-    public $setStart = 1;
-    public $setEnd;
-    public $getDiv;
+    public $diffCount, $getTake, $setStart = 1, $setEnd, $getDiv;
 
     public $resultGetTakeDivByTwo;
     public $getRemainingPage;
 
-    public $num = 1;
+    public $num = 0;
     public $wards = [
         '2FICU',
         '3FMIC',
@@ -129,12 +114,13 @@ class BedIndex extends Component
     {
         //$this->getPosition = Auth::user()->employee->position_id;
         $this->room_id = 0;
+        $this->available = false;
     }
 
     public function render()
     {
         $this->start_date = date('Y-m-d', strtotime('2024-02-21'));
-        $this->end_date = date('Y-m-d', strtotime('2024-02-29'));
+        $this->end_date = date('Y-m-d', strtotime('2024-03-04'));
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
@@ -142,21 +128,22 @@ class BedIndex extends Component
         $sdate = $this->start_date  . ' 17:00:00.000';
         $edate = $this->end_date  . ' 23:59:59.000';
         //$edate = $this->end_date  . ' 07:59:59.000';
-        $getPtientBedList = PatientBed::select('enccode')->get();
+        $this->getPtientBedList = PatientBed::select('enccode')->get();
+        //dd($this->getPtientBedList[0]);
         //dd($getPtientBedList[0]);
         $query = [];
         $get = [];
         $getPatients = collect(DB::connection('hospital')
             ->select(
                 "SELECT * FROM (SELECT hperson.patlast, hperson.patfirst, hperson.patmiddle, hperson.patsex, hperson.hpercode, herlog.erdate, hencdiag.primediag, herlog.enccode, herlog.tscode, herlog.patage, hencdiag.diagtext, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
-                     FROM herlog
-                     INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
-                     INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
+                    FROM herlog
+                    INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
+                    INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
                     WHERE herlog.erstat='A'
-                     AND (hencdiag.diagtext IS NOT NULL)
+                    AND (hencdiag.diagtext IS NOT NULL)
+                    AND (herlog.erdtedis IS NULL)
                     AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
-                     AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
-                    --  AND ( herlog.enccode NOT IN $getPtientBedList)
+                    AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
                  ) e
                  WHERE row_num > {$offset} AND row_num <= {$take}"
             ));
@@ -167,6 +154,7 @@ class BedIndex extends Component
             INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
             WHERE herlog.erstat='A'
             AND (hencdiag.diagtext IS NOT NULL)
+            AND (herlog.erdtedis IS NULL)
             AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
             AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')"))->count();
 
@@ -292,22 +280,11 @@ class BedIndex extends Component
         $this->selected_patient_bed = $getID;
         $this->selected_patient_enccode = $getenccode;
 
-
-        // $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
-        // $patientBed->bed_id = $getID;
-        // $patientBed->room_id = $this->room_id;
-        // $patientBed->save();
-        // $this->selected_transfer_patient = HospitalHerlog::where('enccode', $this->selected_patient_enccode)->first();
-        // $this->reset('patient_list_results', 'get_patients');
-        // //$this->get_beds_transfer = Bed::select('bed_id', 'bed_name')->paginate(12, ['*'], 'patient_list_transfer');
-        // $this->dispatchBrowserEvent('transferedBed');
-
         $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
 
         foreach ($bedAvailability as $beds) { // checks if the bed is occupied
             foreach ($beds->findPatientBed as $patienBed) {
                 if ($patienBed->confirmPatientErlogStatus) {
-
                     $this->dispatchBrowserEvent('occupied');
                     $this->status = true;
                     $this->reset('selected_patient_enccode', 'selected_patient_bed');
@@ -317,10 +294,10 @@ class BedIndex extends Component
 
         if ($this->status == false) {
             //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
-            $checkenccode = PatientBed::where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already
-            $this->recentPatientBedId = $checkenccode->patient_bed_id;
+            $checkenccode = PatientBed::select('enccode', 'patient_bed_id')->where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already=
 
             if ($checkenccode) {
+                $this->recentPatientBedId = $checkenccode->patient_bed_id;
                 $this->dispatchBrowserEvent('patientAssingedToABedAlready');
             } else {
 

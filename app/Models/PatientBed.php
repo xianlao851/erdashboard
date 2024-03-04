@@ -24,9 +24,15 @@ class PatientBed extends Model
 
     public function patientHerlog()
     {
-        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode')->where('erstat', 'A');
+        //return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode', 'erstat', 'erdate', 'erdtedis')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
     }
 
+    public function chkPatientBed()
+    {
+        //return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode', 'erstat', 'erdate')->where('erstat', 'A');
+    }
     public function bedInfo()
     {
         return $this->belongsTo(Bed::class, 'bed_id', 'bed_id');
@@ -44,7 +50,7 @@ class PatientBed extends Model
 
     public function confirmPatientErlogStatus()
     {
-        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'erstat')->where('erstat', 'A');
     }
 
     public function getPatientInfo()
@@ -70,6 +76,11 @@ class PatientBed extends Model
     public function getHerlogPatientInfo()
     {
         return $this->belongsTo(HospitalHerlog::class, 'patient_id', 'hpercode');
+    }
+
+    public function herlogchk()
+    {
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode');
     }
     // public function checkLogsForBedAvailability()
     // {
