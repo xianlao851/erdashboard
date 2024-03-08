@@ -7,12 +7,15 @@ use App\Models\HospitalHerlog;
 use App\Models\HospitalPatient;
 use App\Models\PatientBed;
 use App\Models\Room;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 //use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\WithPagination;
 //use DB;
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use function PHPUnit\Framework\isNull;
 
 class BedIndex extends Component
 {
@@ -39,31 +42,6 @@ class BedIndex extends Component
     protected $get_beds;
     protected $get_beds_transfer;
     public $rooms;
-    public $room_medicine_one_to_three, $room_medicine_four_nine, $room_medicine_ten_twenty, $room_resu, $room_trauma, $room_pedia_one_to_three, $room_ob_one_two, $room_fam_med;
-    public $room_pedia_seven, $room_pedia_four, $room_pedia_five, $room_pedia_six;
-    public $room_medicine_one_to_three_r = [
-            '22',
-            '23',
-            '24'
-        ],
-        $room_medicine_four_nine_r = [
-            '25',
-            '26',
-            '31',
-            '32',
-            '33',
-            '34',
-            '35',
-            '36',
-            '37',
-        ],
-        $room_medicine_ten_twenty_r = ['38', '39', '40', '41', '42', '43'],
-        $room_pedia_one_to_three_r = ['17', '15', '16'],
-        $room_ob_one_two_r = ['10', '11'],
-        $room_pedia_seven_r = ['21'],
-        $room_pedia_four_r = ['18'],
-        $room_pedia_five_r = ['19'],
-        $room_pedia_six_r = ['20'];
 
     public $room_id;
 
@@ -77,15 +55,13 @@ class BedIndex extends Component
 
     public $recentBedId, $recentPatientBedId, $getPtientBedList;
 
-
-    //public $getPatients;
     public $perPage = 20, $currentPage = 1, $totalCount = 0;
 
     public $diffCount, $getTake, $setStart = 1, $setEnd, $getDiv;
 
-    public $resultGetTakeDivByTwo;
+    public $resultGetTakeDivByTwo, $current_date;
     public $getRemainingPage;
-
+    public $checkenccode = [];
     public $num = 0;
     public $wards = [
         '2FICU',
@@ -119,36 +95,56 @@ class BedIndex extends Component
 
     public function render()
     {
-        $this->start_date = date('Y-m-d', strtotime('2024-02-21'));
-        $this->end_date = date('Y-m-d', strtotime('2024-03-04'));
+        $current_date = date('Y-m-d');
+
+        $getCurrentDate = new DateTime($current_date);
+        $getCurrentDate->modify('-7 day');
+        $setStartDate = $getCurrentDate->format('Y-m-d');
+
+        $this->start_date = date('Y-m-d', strtotime($setStartDate));
+        $this->end_date = date('Y-m-d', strtotime($current_date));
+
+        $sdate = $this->start_date  . ' 17:00:00.000';
+        $edate = $this->end_date  . ' 23:59:59.000';
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
 
-        $sdate = $this->start_date  . ' 17:00:00.000';
-        $edate = $this->end_date  . ' 23:59:59.000';
-        //$edate = $this->end_date  . ' 07:59:59.000';
-        $this->getPtientBedList = PatientBed::select('enccode')->get();
-        //dd($this->getPtientBedList[0]);
-        //dd($getPtientBedList[0]);
-        $query = [];
-        $get = [];
+        // $trygetPatients = collect(DB::connection('hospital')
+        //     ->select(
+        //         "SELECT * FROM (SELECT hperson.patlast, hperson.patfirst, hperson.patmiddle, hperson.patsex, hperson.hpercode, herlog.erdate, hencdiag.primediag, herlog.enccode, herlog.tscode, herlog.patage, hencdiag.diagtext, henctr.encstat, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
+        //         FROM henctr
+        //         INNER JOIN herlog ON  herlog.enccode = henctr.enccode
+        //         INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
+        //         INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
+        //         WHERE herlog.erstat='A'
+        //         AND (henctr.encstat = 'A')
+        //         AND (henctr.toecode = 'ER')
+        //         AND (hencdiag.diagtext IS NOT NULL)
+        //         AND (herlog.erdtedis IS NULL)
+        //         AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+        //         AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
+        //      ) e
+        //      WHERE row_num > {$offset} AND row_num <= {$take}"
+        //     ));
+        // dd($trygetPatients);
+
         $getPatients = collect(DB::connection('hospital')
             ->select(
                 "SELECT * FROM (SELECT hperson.patlast, hperson.patfirst, hperson.patmiddle, hperson.patsex, hperson.hpercode, herlog.erdate, hencdiag.primediag, herlog.enccode, herlog.tscode, herlog.patage, hencdiag.diagtext, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
-                    FROM herlog
-                    INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
-                    INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
-                    WHERE herlog.erstat='A'
-                    AND (hencdiag.diagtext IS NOT NULL)
-                    AND (herlog.erdtedis IS NULL)
-                    AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
-                    AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
-                 ) e
-                 WHERE row_num > {$offset} AND row_num <= {$take}"
+                FROM herlog
+                INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
+                INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
+                WHERE herlog.erstat='A'
+                AND (hencdiag.diagtext IS NOT NULL)
+                AND (herlog.erdtedis IS NULL)
+                AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
+                AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')
+             ) e
+             WHERE row_num > {$offset} AND row_num <= {$take}"
             ));
         //dd($getPatients);
-        $this->totalCount = collect(DB::connection('hospital')->select("SELECT hperson.patlast, hperson.patfirst, hperson.patmiddle, hperson.patsex, hperson.hpercode, herlog.erdate, hencdiag.primediag, herlog.enccode, herlog.tscode, herlog.patage, hencdiag.diagtext, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
+        $this->totalCount = count(DB::connection('hospital')->select("SELECT herlog.enccode, ROW_NUMBER() OVER (ORDER BY hperson.patlast ASC) as row_num
             FROM herlog
             INNER JOIN hencdiag ON hencdiag.enccode = herlog.enccode
             INNER JOIN hperson ON hencdiag.hpercode = hperson.hpercode
@@ -156,7 +152,7 @@ class BedIndex extends Component
             AND (hencdiag.diagtext IS NOT NULL)
             AND (herlog.erdtedis IS NULL)
             AND(herlog.erdate BETWEEN '$sdate' AND '$edate')
-            AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')"))->count();
+            AND (herlog.tscode IS NOT NULL) AND (hencdiag.primediag='Y')"));
 
         $this->getTake =  $take;
         if ($this->currentPage == 1) {
@@ -166,15 +162,6 @@ class BedIndex extends Component
             $this->getDiv = round($this->getDiv);
             $this->setEnd = round($this->getDiv / 2);
         }
-        //dd($this->setEnd);
-        //dd($this->totalCount);
-        //dd($this->getDiv);
-        // if ($this->getTake < 20) {
-        //     $getDiv = $this->totalCount / $this->perPage;
-        //     //$getDiv = (int)$getDiv;  252
-        //     $this->setEnd = $getDiv / 2;
-        // } else {
-        // }
 
 
         //dd($this->setEnd);
@@ -202,63 +189,56 @@ class BedIndex extends Component
 
         //dd($this->get_patients);
 
-        if (strlen($this->search_patient) > 3) {
-            $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
-            $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, 'LIKE', '%' . $this->search_patient . '%');
-                    //$query->orWhere($column, $this->search_patient);
-                }
-            })->get();
-        } else {
-            //$this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
-        }
-        if ($this->transferBedStatus == true) {
-            $this->get_beds_transfer = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(12, ['*'], 'patient_list_transfer');
-        }
+        // if (strlen($this->search_patient) > 3) {
+        //     $columns = ['hpercode', 'patlast', 'patfirst', 'patmiddle'];
+        //     $this->patient_list_results = HospitalPatient::select('hpercode', 'patlast', 'patfirst', 'patmiddle')->where(function ($query) use ($columns) {
+        //         foreach ($columns as $column) {
+        //             $query->orWhere($column, 'LIKE', '%' . $this->search_patient . '%');
+        //             //$query->orWhere($column, $this->search_patient);
+        //         }
+        //     })->get();
+        // } else {
+        //     //$this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
+        // }
+        // if ($this->transferBedStatus == true) {
+        //     $this->get_beds_transfer = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(12, ['*'], 'patient_list_transfer');
+        // }
 
-        if ($this->room_id != null || $this->room_id != '') {
-            $this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
-        }
+        // if ($this->room_id != null || $this->room_id != '') {
+        //     $this->get_beds = Bed::select('bed_id', 'bed_name', 'room_id')->where('room_id', $this->room_id)->paginate(20, ['*'], 'patient_bed_list');
+        // }
 
-        $this->rooms = Room::select('room_name', 'room_id')->get();
+        // $this->rooms = Room::select('room_name', 'room_id')->get();
 
-        $get_rooms = Room::select('room_name', 'room_id')->get();
+        // $roomBeds = collect(DB::select("SELECT room.room_name, bed.bed_id, bed.bed_name
+        // FROM erdashboard.erdash_rooms room
+        // RIGHT JOIN erdashboard.erdash_beds bed ON room.room_id = bed.room_id"));
 
-        foreach ($get_rooms as $rooms) {
-            if ($rooms->room_id == '6') {
-                $this->room_medicine_one_to_three = $rooms->getSelectedBeds($this->room_medicine_one_to_three_r);
-                $this->room_medicine_four_nine = $rooms->getSelectedBeds($this->room_medicine_four_nine_r);
-                $this->room_medicine_ten_twenty = $rooms->getSelectedBeds($this->room_medicine_ten_twenty_r);
-            }
-            if ($rooms->room_id == '5') {
-                $this->room_resu = $rooms->getBeds;
-            }
-            if ($rooms->room_id == '2') {
-                $this->room_trauma = $rooms->getBeds;
-            }
-            if ($rooms->room_id == '4') {
-                $this->room_pedia_one_to_three = $rooms->getSelectedBedsDesc($this->room_pedia_one_to_three_r);
-                $this->room_pedia_seven = $rooms->getSelectedBedsDesc($this->room_pedia_seven_r);
-                $this->room_pedia_four = $rooms->getSelectedBedsDesc($this->room_pedia_four_r);
-                $this->room_pedia_five = $rooms->getSelectedBedsDesc($this->room_pedia_five_r);
-                $this->room_pedia_six = $rooms->getSelectedBedsDesc($this->room_pedia_six_r);
-            }
-            if ($rooms->room_id == '3') {
-                $this->room_ob_one_two = $rooms->getSelectedBeds($this->room_ob_one_two_r);
-            }
-            if ($rooms->room_id == '1') {
-                $this->room_fam_med = $rooms->getBeds;
-            }
-        }
-        //dd($this->room_medicine_one_to_three);
+        $beds = collect(DB::select("SELECT bed.bed_id, bed.bed_name
+        FROM erdashboard.erdash_beds bed"));
 
+        $patientBeds = collect(DB::select("SELECT patientBed.enccode, patientBed.patient_id, patientBed.bed_id, patientBed.created_at
+        FROM erdashboard.erdash_patient_beds patientBed"));
+
+        $getHpersons = collect(DB::connection('hospital')
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex
+            FROM hospital.dbo.herlog er
+            RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
+            RIGHT JOIN hospital.dbo.hencdiag diag ON er.enccode = diag.enccode
+            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$sdate' AND '$edate')
+            AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)"));
+
+        //dd($getHpersons);
         return view('livewire.bed.bed-index', [
             //'patients' => $this->get_patients ?? null,
             'patient_results' => $this->patient_list_results ?? null,
             'beds' => $this->get_beds,
             'bedsTransfer' => $this->get_beds_transfer,
-            'getPatients' => $getPatients
+            'getPatients' => $getPatients,
+            'beds' => $beds,
+            'patientBeds' => $patientBeds,
+            'getHpersons' => $getHpersons
+
         ]);
     }
 
@@ -279,64 +259,74 @@ class BedIndex extends Component
         // $this->recentBedId = $getBedId;
         $this->selected_patient_bed = $getID;
         $this->selected_patient_enccode = $getenccode;
+        //dd($this->selected_patient_enccode);
+        if ($getID == 'delete') { // if for delete
+            $getBedDeatils = PatientBed::where('enccode', $this->selected_patient_enccode)->first();
+            if ($getBedDeatils) {
+                $getBedDeatils->delete();
+                $this->alert('success', 'DELETED');
+            } elseif (isNull($getBedDeatils)) {
+                $this->alert('info', 'NOT ASSIGNED TO A BED YET!');
+            }
+        } elseif ($getID != 'delete') { // code if not for delete
 
-        $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
+            $bedAvailability = Bed::select('bed_id')->where('bed_id', $this->selected_patient_bed)->get();
 
-        foreach ($bedAvailability as $beds) { // checks if the bed is occupied
-            foreach ($beds->findPatientBed as $patienBed) {
-                if ($patienBed->confirmPatientErlogStatus) {
-                    $this->dispatchBrowserEvent('occupied');
-                    $this->status = true;
+            foreach ($bedAvailability as $beds) { // checks if the bed is occupied
+                foreach ($beds->findPatientBed as $patienBed) {
+                    if ($patienBed->confirmPatientErlogStatus) {
+                        $this->dispatchBrowserEvent('occupied');
+                        $this->status = true;
+                        $this->reset('selected_patient_enccode', 'selected_patient_bed');
+                    }
+                }
+            }
+
+            if ($this->status == false) {
+                $checkenccode = PatientBed::select('enccode', 'patient_bed_id')->where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already=
+                if ($checkenccode) {
+                    $this->recentPatientBedId = $checkenccode->patient_bed_id;
+                    $this->dispatchBrowserEvent('patientAssingedToABedAlready');
+                } elseif (isNull($checkenccode)) {
+
+                    $getPatientLog = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $this->selected_patient_enccode)->first();
+                    $getRoomdId = Bed::where('bed_id', $this->selected_patient_bed)->first();
+                    $this->selected_patient_bed = $getID;
+                    $patient_id = $getPatientLog->hpercode;
+                    $bed_id =  $this->selected_patient_bed;
+                    $enccode = $this->selected_patient_enccode;
+                    $room_id = $getRoomdId->room_id;
+
+                    PatientBed::create([
+                        'patient_id' => $patient_id,
+                        'bed_id' => $bed_id,
+                        'room_id' => $room_id,
+                        'ward_code' => 'EROOM',
+                        'enccode' => $enccode,
+                    ]);
                     $this->reset('selected_patient_enccode', 'selected_patient_bed');
+                    $this->dispatchBrowserEvent('patientAssigned');
                 }
             }
         }
 
-        if ($this->status == false) {
-            //->whereBetween(DB::raw('erdate'), [$this->start_date  . ' 17:00:00', $this->end_date  . ' 07:59:59'])->latest('erdate')->first();
-            $checkenccode = PatientBed::select('enccode', 'patient_bed_id')->where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already=
-
-            if ($checkenccode) {
-                $this->recentPatientBedId = $checkenccode->patient_bed_id;
-                $this->dispatchBrowserEvent('patientAssingedToABedAlready');
-            } else {
-
-                $getPatientLog = HospitalHerlog::select('enccode', 'hpercode')->where('enccode', $this->selected_patient_enccode)
-                    ->where('erstat', 'A')->first();
-                $getRoomdId = Bed::where('bed_id', $this->selected_patient_bed)->first();
-                $this->selected_patient_bed = $getID;
-                $patient_id = $getPatientLog->hpercode;
-                $bed_id =  $this->selected_patient_bed;
-                $enccode = $this->selected_patient_enccode;
-                $room_id = $getRoomdId->room_id;
-
-                PatientBed::create([
-                    'patient_id' => $patient_id,
-                    'bed_id' => $bed_id,
-                    'room_id' => $room_id,
-                    'ward_code' => 'EROOM',
-                    'enccode' => $enccode,
-                ]);
-                $this->reset('selected_patient_enccode', 'selected_patient_bed');
-                $this->dispatchBrowserEvent('patientAssigned');
-            }
-        }
 
         $this->status = false;
     }
 
     public function transferPatientBed()
     {
-
+        //dd($this->recentPatientBedId);
         $fetchRoomId = Bed::select('bed_id', 'room_id')->where('bed_id', $this->selected_patient_bed)->first();
         $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
         $patientBed->bed_id = $this->selected_patient_bed;
         $patientBed->room_id = $fetchRoomId->room_id;
         $patientBed->save();
+        $this->dispatchBrowserEvent('patientAssignedSuccess');
 
-        $fetchPatientBedInfo = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
+        //$fetchPatientBedInfo = PatientBed::where('patient_bed_id')->first();
         //dd($fetchPatientBedInfo->bedInfo->bed_name);
-        $this->dispatchBrowserEvent('patientAssignedSuccess', ['bedName' => $fetchPatientBedInfo->bedInfo->bed_name, 'patienInfo' => $fetchPatientBedInfo->getHerlogPatientInfo->getPatient->get_patient_name()]);
+        //$this->dispatchBrowserEvent('patientAssignedSuccess', ['bedName' => $fetchPatientBedInfo->bedInfo->bed_name, 'patienInfo' => $fetchPatientBedInfo->getHerlogPatientInfo->getPatient->get_patient_name()]);
     }
 
     public function saveBed()

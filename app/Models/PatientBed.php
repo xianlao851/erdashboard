@@ -28,6 +28,11 @@ class PatientBed extends Model
         return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode', 'erstat', 'erdate', 'erdtedis')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
     }
 
+    public function patientInfo()
+    {
+        return $this->belongsTo(HospitalPatient::class, 'patient_id', 'hpercode')->select('patfirst', 'patlast', 'patmiddle', 'patsex', 'hpercode');
+    }
+
     public function chkPatientBed()
     {
         //return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'hpercode')->where('erstat', 'A');
@@ -50,7 +55,7 @@ class PatientBed extends Model
 
     public function confirmPatientErlogStatus()
     {
-        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'erstat')->where('erstat', 'A');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'erstat', 'erdtedis')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
     }
 
     public function getPatientInfo()

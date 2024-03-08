@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
+use DateTime;
 
 class Index extends Component
 {
@@ -20,72 +21,22 @@ class Index extends Component
     use WithPagination;
 
     public $erlogs;
-    public $ward2FICU = 0;
-    public $ward3FMIC = 0;
-    public $ward3FMN = 0;
-    public $ward3FMP = 0;
-    public $ward3FNIC = 0;
-    public $wardCBNS = 0;
-    public $wardCBPA = 0;
-    public $wardCBPN = 0;
-    public $wardSDICU = 0;
-    public $wardSICU = 0;
-    public $ward3FCCU = 0;
-    public $wardFH2 = 0;
-    public $wardFH3 = 0;
+    public $ward2FICU = 0, $ward3FMIC = 0, $ward3FMN = 0, $ward3FMP = 0, $ward3FNIC = 0, $wardCBNS = 0, $wardCBPA = 0, $wardCBPN = 0, $wardSDICU = 0, $wardSICU = 0, $ward3FCCU = 0, $wardFH2 = 0, $wardFH3 = 0;
 
-    public $ward2FICUAvailable;
-    public $ward3FMICAvailable;
-    public $ward3FMNAvailable;
-    public $ward3FMPAvailable;
-    public $ward3FNICAvailable;
-    public $wardCBNSAvailable;
-    public $wardCBPAAvailable;
-    public $wardCBPNAvailable;
-    public $wardSDICUAvailable;
-    public $wardSICUAvailable;
-    public $ward3FCCUAvailable;
-    public $wardFH2Available;
-    public $wardFH3Available;
+    public $ward2FICUAvailable, $ward3FMICAvailable, $ward3FMNAvailable, $ward3FMPAvailable, $ward3FNICAvailable, $wardCBNSAvailable, $wardCBPAAvailable, $wardCBPNAvailable, $wardSDICUAvailable, $wardSICUAvailable, $ward3FCCUAvailable, $wardFH2Available, $wardFH3Available;
 
-    public $ward3FMPColor;
-    public $ward3FMICColor;
-    public $ward3FMNColor;
-    public $wardCBNSColor;
-    public $wardCBPAColor;
-    public $wardCBPNColor;
-    public $wardSICUColor;
-    public $ward2FICUColor;
-    public $ward3FCCUColor;
-    public $wardSDICUColor;
-    public $wardFH2Color;
-    public $wardFH3Color;
+    public $ward3FMPColor, $ward3FMICColor, $ward3FMNColor, $wardCBNSColor, $wardCBPAColor, $wardCBPNColor, $wardSICUColor, $ward2FICUColor, $ward3FCCUColor, $wardSDICUColor, $wardFH2Color, $wardFH3Color;
 
     public $erAdmittedCount = 0;
     public $erSlotAvailable;
     public $erAdmittedCountColor;
 
-    public $months = [];
-    public $monthCount = [];
-    public $days = [];
-    public $dayCount = [];
-    public $departments = [];
-    public $deptCount = [];
-    public $dateFilter;
-    public $date_filter;
-    public $i = 0;
-    public $k = 0;
-    public $j = 0;
+    public $months = [], $monthCount = [], $days = [], $dayCount = [], $departments = [], $deptCount = [], $dateFilter, $date_filter, $i = 0, $k = 0, $j = 0;
 
     public $wards = [];
     public $wardsCount = [];
 
-    protected $get_beds;
-    public $getWard2FICU;
-    public $patient_list;
-    public $room_id;
-    public $rooms;
-    public $colors = [
+    protected $get_beds, $getWard2FICU, $patient_list, $room_id, $rooms, $colors = [
         // 'Pediatrics Department' => '#7210e3',
         // 'Surgery Department' => '#fc8181',
         // 'Orthopedics Department' => '#90cdf4',
@@ -148,6 +99,8 @@ class Index extends Component
         'SICU',
     ];
 
+    public $start_date, $end_date;
+
     public function mount()
     {
         //$this->get_date = Carbon::createFromFormat('Y', DB::raw('CONVERT(date, erdate)'));
@@ -172,13 +125,13 @@ class Index extends Component
             });
         } // this year
 
-        if ($this->date_filter == 'this_year') {
+        elseif ($this->date_filter == 'this_year') {
             //$patients = HospitalHerlog::whereYear('erdate', Carbon::now()->year)->get()->groupBy(function ($data) {
             $patients = HospitalHerlog::select('erdate')->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
                 return Carbon::parse($data->erdate)->format('M');
             });
         } // this year
-        if ($this->date_filter == 'this_week') {
+        elseif ($this->date_filter == 'this_week') {
             //$patients = Patient::whereBetween('created_at',[Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])->get()->groupBy(function($data)
             $patients = HospitalHerlog::select('erdate')->whereBetween(DB::raw('CONVERT(date, erdate)'), [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
                 ->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
@@ -186,29 +139,29 @@ class Index extends Component
                 });
         } //this week
 
-        if ($this->date_filter == 'last_week') {
+        elseif ($this->date_filter == 'last_week') {
             $patients = HospitalHerlog::select('erdate')->whereBetween(DB::raw('CONVERT(date, erdate)'), [Carbon::now()->subWeek(), Carbon::now()])
                 ->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
                     return Carbon::parse($data->erdate)->format('M-d');
                 });
         } //last week
-        if ($this->date_filter == 'this_month') {
+        elseif ($this->date_filter == 'this_month') {
             $patients = HospitalHerlog::select('erdate')->whereMonth(DB::raw('CONVERT(date, erdate)'), Carbon::now()->month)->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
                 return Carbon::parse($data->erdate)->format('M-d');
             });
         } //this month
-        if ($this->date_filter == 'last_month') {
+        elseif ($this->date_filter == 'last_month') {
             $patients = HospitalHerlog::select('erdate')->whereMonth(DB::raw('CONVERT(date, erdate)'), Carbon::now()->subMonth()->month)->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
                 return Carbon::parse($data->erdate)->format('M-d');
             });
         } //last month
-        if ($this->date_filter == 'yesterday') {
+        elseif ($this->date_filter == 'yesterday') {
             $patients = HospitalHerlog::select('erdate')->wheredate('erdate', Carbon::yesterday())->orderBy('erdate', 'asc')->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->year)->get()->groupBy(function ($data) {
                 return Carbon::parse($data->erdate)->format('H');
             });
         } // yesterday
 
-        if ($this->date_filter == 'last_year') {
+        elseif ($this->date_filter == 'last_year') {
             $patients = HospitalHerlog::select('erdate')->whereYear(DB::raw('CONVERT(date, erdate)'), Carbon::now()->subYear()->year)->orderBy('erdate', 'asc')->get()->groupBy(function ($data) {
                 return Carbon::parse($data->erdate)->format('M');
             });
@@ -246,40 +199,41 @@ class Index extends Component
         #d10202
         #6b0303
         #990202
-        //---- ER
-        $this->erlogs = PatientBed::select('enccode', 'patient_id')->get();
-        foreach ($this->erlogs as $logcount) {
-            if ($logcount->patientErLog) {
-                $this->erAdmittedCount++;
-                //dd('here');
-            }
-        }
+
+
+        // $this->erlogs = PatientBed::select('enccode', 'patient_id')->get();
+        // foreach ($this->erlogs as $logcount) {
+        //     if ($logcount->patientErLog) {
+        //         $this->erAdmittedCount++;
+        //         //dd('here');
+        //     }
+        // }
         //$this->erAdmittedCount = 30;
-        if ($this->erAdmittedCount) {
-            $erslot = 38;
-            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
-            if ($this->erAdmittedCount < floor($erslot * .5)) {
-                $this->erAdmittedCountColor = '#04bd55';
-            }
-            if ($this->erAdmittedCount > floor($erslot * .5)) {
-                $this->erAdmittedCountColor = '#bd4602';
-            }
-            if ($this->erAdmittedCount >= floor($erslot * .8)) {
-                $this->erAdmittedCountColor = '#b30202';
-            }
-        } else {
-            $erslot = 38;
-            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
-            $this->erAdmittedCountColor = '#04bd55';
-        }
+
         //---- 1 OPD 3rd Floor (MICU A)
         //$getward3FMP = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMP')->where('patrmstat', 'A')->get();
-        $this->ward3FMP = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', '3FMP')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        // $this->ward3FMP = DB::connection('hospital')->table('dbo.hpatroom')
+        //     ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
+        //     ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
+        //     ->where('dbo.hpatroom.wardcode', '3FMP')
+        //     ->where('dbo.hpatroom.patrmstat', 'A')
+        //     ->where('dbo.hadmlog.admstat', 'A')->count();
+
+        //---- 1 OPD 3rd Floor (MICU A)
+        // $this->ward3FMP = collect(DB::connection('hospital')
+        //     ->select("SELECT patrm.enccode, per.patfirst, per.patlast, per.patmiddle, per.patsex, patrm.patrmstat, hdlg.admstat, hdlg.disdate, hdlg.admdate
+        //     FROM hospital.dbo.hpatroom patrm
+        //     RIGHT JOIN hospital.dbo.hadmlog hdlg ON hdlg.enccode = patrm.enccode
+        //     RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = patrm.hpercode
+        //     WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (patrm.wardcode ='3FMIC') AND (hdlg.disdate IS NULL)"));
+        // dd($this->ward3FMP);
+        $this->ward3FMP = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+            FROM hospital.dbo.henctr enctr
+            RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+            RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+            WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMP') "));
+
         if ($this->ward3FMP > 0) {
             $ward3FMPSlot = 8;
             $this->ward3FMPAvailable = $ward3FMPSlot - $this->ward3FMP;
@@ -298,13 +252,13 @@ class Index extends Component
             $this->ward3FMPColor = '#04bd55';
         }
         //---- 2 OPD 3rd Floor (MICU B)
-        //$getward3FMIC = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMIC')->where('patrmstat', 'A')->get();
-        $this->ward3FMIC = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', '3FMIC')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->ward3FMIC = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMIC')"));
+
         if ($this->ward3FMIC > 0) {
             $ward3FMICSlot = 22;
             $this->ward3FMICAvailable = $ward3FMICSlot - $this->ward3FMIC;
@@ -323,20 +277,20 @@ class Index extends Component
             $this->ward3FMICColor = '#04bd55';
         }
         //---- 3 Main 3rd Floor  (NICU A)
-        //$getward3FMN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FMN')->where('patrmstat', 'A')->get();
-        $this->ward3FMN = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', '3FMN')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->ward3FMN = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMN')"));
+
         if ($this->ward3FMN > 0) {
             $ward3FMNSlot = 15;
             $this->ward3FMNAvailable = $ward3FMNSlot - $this->ward3FMN;
             if ($this->ward3FMN < floor($ward3FMNSlot * .5)) {
                 $this->ward3FMNColor = '#04bd55';
             }
-            if ($this->ward3FMN > floor($ward3FMNSlot * .5)) {
+            if ($this->ward3FMN >= floor($ward3FMNSlot * .5)) {
                 $this->ward3FMNColor = '#bd4602';
             }
             if ($this->ward3FMN >= floor($ward3FMNSlot * .8)) {
@@ -348,13 +302,13 @@ class Index extends Component
             $this->ward3FMNColor = '#04bd55';
         }
         //---- 4 Main 3rd Floor (NICU B)
-        //$getwardCBNS = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBNS')->where('patrmstat', 'A')->get();
-        $this->wardCBNS = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'CBNS')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardCBNS = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBNS')"));
+
         if ($this->wardCBNS > 0) {
             $wardCBNSSlot = 15;
             $this->wardCBNSAvailable = $wardCBNSSlot - $this->wardCBNS;
@@ -373,20 +327,20 @@ class Index extends Component
             $this->wardCBNSColor = '#04bd55';
         }
         //---- 5 Annex 2nd Floor (Pedia A & PICU A)
-        //$getwardCBPA = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPA')->where('patrmstat', 'A')->get();
-        $this->wardCBPA = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'CBNS')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardCBPA = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPA')"));
+
         if ($this->wardCBPA > 0) {
             $wardCBPASlot = 6;
             $this->wardCBPAAvailable = $wardCBPASlot - $this->wardCBPA;
             if ($this->wardCBPA < floor($wardCBPASlot * .5)) {
                 $this->wardCBPAColor = '#04bd55';
             }
-            if ($this->wardCBPA > floor($wardCBPASlot * .5)) {
+            if ($this->wardCBPA >= floor($wardCBPASlot * .5)) {
                 $this->wardCBPAColor = '#bd4602';
             }
             if ($this->wardCBPA >= floor($wardCBPASlot * .8)) {
@@ -398,13 +352,13 @@ class Index extends Component
             $this->wardCBPAColor = '#04bd55';
         }
         //---- 6 Annex 2nd Floor (PICU B)
-        //$getwardCBPN = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'CBPN')->where('patrmstat', 'A')->get();
-        $this->wardCBPN = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'CBPN')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardCBPN = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPN')"));
+
         if ($this->wardCBPN > 0) {
             $wardCBPNSlot = 8;
             $this->wardCBPNAvailable = $wardCBPNSlot - $this->wardCBPN;
@@ -423,13 +377,13 @@ class Index extends Component
             $this->wardCBPNColor = '#04bd55';
         }
         //---- 7 SICU A
-        //$getwardSICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SICU')->where('patrmstat', 'A')->get();
-        $this->wardSICU = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'CBPN')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardSICU = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SICU')"));
+
         if ($this->wardSICU > 0) {
             $wardSICUSlot = 21;
             $this->wardSICUAvailable = $wardSICUSlot - $this->wardSICU;
@@ -447,14 +401,15 @@ class Index extends Component
             $this->wardSICUAvailable = $ward3SICUSlot - $this->wardSICU;
             $this->wardSICUColor = '#04bd55';
         }
+
         //---- 8 SICU B
-        //$getward2FICU = HospitalHpatroom::with('admittedLogs')->select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '2FICU')->where('patrmstat', 'A')->get();
-        $this->ward2FICU = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', '2FICU')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->ward2FICU = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='2FICU')"));
+
         if ($this->ward2FICU > 0) {
             $ward2FICUSlot = 6;
             $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
@@ -472,15 +427,14 @@ class Index extends Component
             $this->ward2FICUAvailable = $ward2FICUSlot - $this->ward2FICU;
             $this->ward2FICUColor = '#04bd55';
         }
-
         //---- 9 CCU
-        //$getward3FCCU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', '3FCCU')->where('patrmstat', 'A')->get();
-        $this->ward3FCCU = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', '3FCCU')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->ward3FCCU = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FCCU')"));
+
         if ($this->ward3FCCU > 0) {
             $ward3FCCUSlot = 14;
             $this->ward3FCCUAvailable = $ward3FCCUSlot - $this->ward3FCCU;
@@ -498,15 +452,14 @@ class Index extends Component
             $this->ward3FCCUAvailable = $ward3SICUSlot - $this->ward3FCCU;
             $this->ward3FCCUColor = '#04bd55';
         }
-
         //----10 Stepdown
-        //$getwardSDICU = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'SDICU')->where('patrmstat', 'A')->get();
-        $this->wardSDICU = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'SDICU')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardSDICU = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SDICU')"));
+
         if ($this->wardSDICU > 0) {
             $wardSDICUSlot = 10;
             $this->wardSDICUAvailable = $wardSDICUSlot - $this->wardSDICU;
@@ -524,15 +477,14 @@ class Index extends Component
             $this->wardSDICUAvailable = $ward3SDICUSlot - $this->wardSDICU;
             $this->wardSDICUColor = '#04bd55';
         }
-
         //----11 Eastern Ward Gr Floor
-        //$getwardwardFH2 = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'FH2')->where('patrmstat', 'A')->get();
-        $this->wardFH2 = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'FH2')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardFH2 = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH2')"));
+
         if ($this->wardFH2 > 0) {
             $wardFH2Slot = 13;
             $this->wardFH2Available = $wardFH2Slot - $this->wardFH2;
@@ -551,13 +503,13 @@ class Index extends Component
             $this->wardFH2Color = '#04bd55';
         }
         //----12 Field Hospital 3 (CAMES)
-        //$getwardwardFH3 = HospitalHpatroom::select('enccode', 'patrmstat', 'wardcode')->where('wardcode', 'FH3')->where('patrmstat', 'A')->get();
-        $this->wardFH3 = DB::connection('hospital')->table('dbo.hpatroom')
-            ->join('dbo.hadmlog', 'dbo.hpatroom.enccode', '=', 'dbo.hadmlog.enccode')
-            ->select('dbo.hpatroom.enccode', 'dbo.hadmlog.enccode',  'dbo.hpatroom.patrmstat', 'dbo.hpatroom.wardcode', 'dbo.hadmlog.wardcode', 'dbo.hadmlog.admstat')
-            ->where('dbo.hpatroom.wardcode', 'FH3')
-            ->where('dbo.hpatroom.patrmstat', 'A')
-            ->where('dbo.hadmlog.admstat', 'A')->count();
+        $this->wardFH3 = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode
+        FROM hospital.dbo.henctr enctr
+        RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH3')"));
+
         if ($this->wardFH3 > 0) {
             $wardFH3Slot = 15;
             $this->wardFH3Available = $wardFH3Slot - $this->wardFH3;
@@ -576,8 +528,72 @@ class Index extends Component
             $this->wardFH3Color = '#04bd55';
         }
 
-        $this->get_beds = Bed::select('bed_id', 'bed_name')->paginate(8, ['*'], 'patient_list');
-        $this->rooms = Room::select('room_name', 'room_id')->get();
+        //---- ER
+        $current_date = date('Y-m-d');
+
+        $getCurrentDate = new DateTime($current_date);
+        $getCurrentDate->modify('-15 day');
+        $setStartDate = $getCurrentDate->format('Y-m-d');
+
+        $this->start_date = date('Y-m-d', strtotime($setStartDate));
+        $this->end_date = date('Y-m-d', strtotime($current_date));
+
+        $sdate = $this->start_date  . ' 17:00:00.000';
+        $edate = $this->end_date  . ' 23:59:59.000';
+
+        $getpatientBeds = collect(DB::select("SELECT patientBed.enccode, patientBed.patient_id, patientBed.bed_id, patientBed.created_at
+            FROM erdashboard.erdash_patient_beds patientBed"));
+
+        $getErlogs = collect(DB::connection('hospital')
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex
+                FROM hospital.dbo.herlog er
+                RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
+                WHERE er.erstat= 'A' AND (er.tscode IS NOT NULL)
+                AND(er.erdate BETWEEN '$sdate' AND '$edate')"));
+        //$getdat;
+        foreach ($getpatientBeds as $patientBed) {
+            foreach ($getErlogs as $getErlog) {
+                if ($patientBed->enccode == $getErlog->enccode) {
+                    $this->erAdmittedCount++;
+                    //$getdat[] = $getErlog;
+                }
+            }
+        }
+        //dd($getdat);
+        if ($this->erAdmittedCount) {
+            $erslot = 38;
+            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
+            if ($this->erAdmittedCount < floor($erslot * .5)) {
+                $this->erAdmittedCountColor = '#04bd55';
+            }
+            if ($this->erAdmittedCount > floor($erslot * .5)) {
+                $this->erAdmittedCountColor = '#bd4602';
+            }
+            if ($this->erAdmittedCount >= floor($erslot * .8)) {
+                $this->erAdmittedCountColor = '#b30202';
+            }
+        } else {
+            $erslot = 38;
+            $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
+            $this->erAdmittedCountColor = '#04bd55';
+        }
+        /// ER END
+
+        $rooms = collect(DB::select("SELECT room.room_id, room.room_name
+        FROM erdashboard.erdash_rooms room"));
+
+        $beds = collect(DB::select("SELECT bed.bed_id, bed.bed_name, bed.room_id
+        FROM erdashboard.erdash_beds bed"));
+
+        $patientBeds = collect(DB::select("SELECT patientBed.enccode, patientBed.patient_id, patientBed.bed_id, patientBed.created_at
+        FROM erdashboard.erdash_patient_beds patientBed"));
+        $getHpersons = collect(DB::connection('hospital')
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex
+            FROM hospital.dbo.herlog er
+            RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
+            RIGHT JOIN hospital.dbo.hencdiag diag ON er.enccode = diag.enccode
+            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$sdate' AND '$edate')
+            AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)"));
 
         return view('livewire.dash.index', [
             //'admlogs' => $admlogs,
@@ -585,6 +601,10 @@ class Index extends Component
             //'admittedlogs' => $admittedlogs,
             'lineChartModel' => $lineChartModel,
             //'pieChartModelallWards' => $pieChartModelallWards
+            'beds' => $beds,
+            'patientBeds' => $patientBeds,
+            'getHpersons' => $getHpersons,
+            'rooms' => $rooms
         ]);
     }
 }

@@ -32,4 +32,21 @@ class Room extends Model
         //dd($getId);
         return $this->hasMany(Bed::class, 'room_id', 'room_id')->whereIn('bed_id', $getId)->orderBy('bed_id', 'desc')->get();
     }
+
+    public function getSelectedBeds1()
+    {
+        //dd($getId);
+        return $this->hasMany(Bed::class, 'room_id', 'room_id')->with('patientBed');
+    }
+
+    public function getSelectedBedsDesc1()
+    {
+        //dd($getId);
+        return $this->hasMany(Bed::class, 'room_id', 'room_id');
+    }
+
+    public function bedCount($getId)
+    {
+        return $this->hasMany(Bed::class, 'room_id', 'room_id')->where('room_id', $getId);
+    }
 }

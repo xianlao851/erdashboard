@@ -11,47 +11,45 @@
     </div>
     <div class="w-full p-2 mx-auto">
         <div class="flex w-full gap-3 p-4 mt-4">
-            <div class="w-1/16" wire:ignore>
-                <div class="w-full bg-white rounded-lg h-[435px]">
+            <div class="w-2/12" wire:ignore>
+                <div class="w-full bg-white rounded-lg h-[470px]">
                     <div class="flex justify-center p-2 mx-auto font-semibold text-md">ER
                     </div>
                     <div class="" id="erAdmittedCount"></div>
                 </div>
             </div>
-            <div class="w-3/4 " wire:ignore>
-                <div class="grid w-full grid-cols-6 grid-rows-2 gap-3 h-[500px]">
-
-                    <div class="content-center max-w-full bg-white rounded-lg min-w-28">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            OPD 3rd Floor (MICU A)
+            <div class="w-8/12" wire:ignore>
+                <div class="grid w-full grid-cols-6 grid-rows-2 gap-3">
+                    {{-- <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">*SICU
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="ward3FMP"></div>
-                    </div>
-
-                    <div class="content-center w-full bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            OPD 3rd Floor (MICU B)
-                        </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="ward3FMIC"></div>
-                    </div>
-
-                    <div class="content-center w-full bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Main 3rd Floor (NICU A)
-                        </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="ward3FMN"></div>
-                    </div>
-
+                        <div id="ward2FICU"> </div>
+                    </div> --}}
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Main 3rd Floor (NICU B)
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU A)
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardCBNS"></div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMP"></div>
                     </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU B)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMIC"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU A)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FMN"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU B)
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="wardCBNS"></div>
+                    </div>
+                    {{-- <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">3rd Floor(NICU)*
+                        </div>
+                        <div class="content-center bg-white rounded-lg" id="ward3FNIC"></div>
+                    </div> --}}
 
                     <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center mx-auto text-[11px] mt-2 font-semibold text-nowrap">Annex 2nd
@@ -59,112 +57,97 @@
                             Pedia A &
                             PICU A
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardCBPA"></div>
+                        <div class="mt-2" id="wardCBPA"></div>
+                    </div>
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Annex 2nd Floor (PICU B)
+                        </div>
+                        <div id="wardCBPN"></div>
+                    </div>
+                    {{-- <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
+                        </div>
+                        <div id="wardSDICU"></div>
+                    </div> --}}
+                    <div class="content-center bg-white rounded-lg">
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU A
+                        </div>
+                        <div id="wardSICU"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Annex 2nd Floor (PICU B)
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU B
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardCBPN"></div>
+                        <div id="ward2FICU"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            SICU A
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">CCU
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardSICU"></div>
+                        <div id="ward3FCCU"></div>
                     </div>
-
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            SICU B
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="ward2FICU"></div>
+                        <div id="wardSDICU"></div>
                     </div>
-
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            CCU
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Eastern Ward Gr Floor
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="ward3FCCU"></div>
+                        <div id="wardFH2"></div>
                     </div>
-
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Stepdown
+                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Field Hospital 3 (CAMES)
                         </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardSDICU"></div>
+                        <div id="wardFH3"></div>
                     </div>
-
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Eastern Ward Gr Floor
-                        </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardFH2"></div>
-                    </div>
-
-                    <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">
-                            Field Hospital 3 (CAMES)
-                        </div>
-                        <div class="content-center bg-white rounded-lg max-w-36 min-w-28 max-h-36 min-h-12"
-                            id="wardFH3"></div>
-                    </div> -
                 </div>
             </div>
-            <div class="w-1/16">
-                <div class="overflow-y-auto h-[410px] w-96" wire:ignore>
-                    @foreach ($rooms as $room)
-                        <div class="grid w-full">
-                            <div class="ml-4 text-green-700 underline "> {{ $room->room_name }}
-                            </div>
-                            <div class="grid w-full grid-cols-2 gap-2 p-2 rounded-lg">
-                                @foreach ($room->getBeds as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        class="h-20 p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
-                                        <div class="flex items-center mt-0">
-                                            <img draggable="false" src="{{ URL('/images/bed III.png') }}"
-                                                class="w-[30px] h-[30px]">
-                                            <div class="mt-4 ml-2 text-[10px] text-black underline uppercase">
-                                                {{ $bed->bed_name }}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            @foreach ($bed->patientBed as $patient)
-                                                @if ($patient->patientHerlog)
-                                                    <div class="w-full grid-cols-3 gap-1 mt-2 join">
-                                                        <div>
-                                                            @if ($patient->patientHerlog->patientInfo->patsex == 'M')
-                                                                <img draggable="false"
-                                                                    src="{{ URL('/images/man III.PNG') }}"
-                                                                    class="w-[30px] h-[30px]">
-                                                            @endif
-                                                            @if ($patient->patientHerlog->patientInfo->patsex == 'F')
-                                                                <img draggable="false"
-                                                                    src="{{ URL('/images/women II.PNG') }}"
-                                                                    class="w-[30px] h-[30px]">
-                                                            @endif
-                                                        </div>
-                                                        <div class="mt-2 ml-0 text-[10px] text-black">
-                                                            {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                        </div>
-                                                    </div>
+            <div class="w-2/12">
+                <div class="overflow-y-auto h-[470px] w-full bg-white p-3 rounded-lg" id="data">
+                    <div class="">
+                        @foreach ($rooms as $room)
+                            <div> {{ $room->room_name }}</div>
+                            <div class="grid grid-cols-2 grid-rows-2 gap-2">
+                                @forelse ($beds as $bed)
+                                    @if ($room->room_id == $bed->room_id)
+                                        <div
+                                            class="relative flex flex-col w-32 p-1 mt-0 rounded-md bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                            <span
+                                                class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                            <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                    {{ $bed->bed_name }}</span>
+                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                    {{ $getHperson->patlast }},
+                                                                </span>
+                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                    {{ $getHperson->patfirst }}.
+                                                                </span>
+                                                                <div></div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
                                                 @endif
-                                            @endforeach
+                                                <!----->
+                                            @empty
+                                            @endforelse
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endif
+
+                                @empty
+                                @endforelse
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
                 {{-- <div class="grid w-full grid-cols-2 grid-rows-1 gap-2 mt-0">
                     @if ($beds)
@@ -200,7 +183,7 @@
                             </div> <!-- bed div container--->
                         @endforeach
                     @endif
-                </div> --}}
+                </div>  --}}
                 {{-- <div class="mt-2">
                     @if ($beds)
                         {{ $beds->links() }}
@@ -262,15 +245,25 @@
         var ward3FMP = {
             series: [@json($ward3FMP), @json($ward3FMPAvailable)],
             chart: {
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
-
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    //shade: 'dark',
+                    //type: "horizontal",
+                    shadeIntensity: 0.5,
+                    gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 50, 100],
+                    colorStops: []
+                }
             },
             plotOptions: {
                 pie: {
@@ -313,10 +306,10 @@
             },
             colors: [@json($ward3FMPColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -330,15 +323,10 @@
         var ward3FMIC = {
             series: [@json($ward3FMIC), @json($ward3FMICAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
-
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -360,7 +348,7 @@
             legend: {
                 position: 'bottom',
                 fontSize: '12px',
-                fontWeight: 1000,
+                fontWeight: 400,
                 fontFamily: 'sans',
             },
             // title: {
@@ -382,10 +370,10 @@
             },
             colors: [@json($ward3FMICColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -398,13 +386,10 @@
         var ward3FMN = {
             series: [@json($ward3FMN), @json($ward3FMNAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -448,10 +433,10 @@
             },
             colors: [@json($ward3FMNColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -464,15 +449,10 @@
         var wardCBNS = {
             series: [@json($wardCBNS), @json($wardCBNSAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -516,10 +496,10 @@
             },
             colors: [@json($wardCBNSColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -532,15 +512,10 @@
         var wardCBPA = {
             series: [@json($wardCBPA), @json($wardCBPAAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -584,10 +559,10 @@
             },
             colors: [@json($wardCBPAColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -600,15 +575,10 @@
         var wardCBPN = {
             series: [@json($wardCBPN), @json($wardCBPNAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -652,10 +622,10 @@
             },
             colors: [@json($wardCBPNColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -668,15 +638,10 @@
         var wardSICU = {
             series: [@json($wardSICU), @json($wardSICUAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -720,10 +685,10 @@
             },
             colors: [@json($wardSICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -736,19 +701,14 @@
         var ward2FICU = {
             series: [@json($ward2FICU), @json($ward2FICUAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
                 type: 'donut',
             },
             plotOptions: {
                 pie: {
-                    //size: undefined,
+                    //size: 480,
                     donut: {
                         labels: {
                             show: true,
@@ -788,10 +748,10 @@
             },
             colors: [@json($ward2FICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -804,15 +764,10 @@
         var ward3FCCU = {
             series: [@json($ward3FCCU), @json($ward3FCCUAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -856,10 +811,10 @@
             },
             colors: [@json($ward3FCCUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -872,15 +827,10 @@
         var wardSDICU = {
             series: [@json($wardSDICU), @json($wardSDICUAvailable)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -924,10 +874,10 @@
             },
             colors: [@json($wardSDICUColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -940,15 +890,10 @@
         var wardFH2 = {
             series: [@json($wardFH2), @json($wardFH2Available)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -992,10 +937,10 @@
             },
             colors: [@json($wardFH2Color), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -1008,15 +953,10 @@
         var wardFH3 = {
             series: [@json($wardFH3), @json($wardFH3Available)],
             chart: {
-                //height: undefined,
-                // height: 230,
-                // width: 170,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                //height: 480,
+                height: 230,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -1060,10 +1000,10 @@
             },
             colors: [@json($wardFH3Color), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -1075,14 +1015,9 @@
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
             chart: {
-                // height: 400,
-                // width: 330,
-                // align: 'left',
-                // type: 'donut',
-
-                height: "120%",
-                width: "120%",
-                // offsetX: -12,
+                height: 450,
+                width: '100%',
+                align: 'left',
                 type: 'donut',
             },
             plotOptions: {
@@ -1128,10 +1063,10 @@
             },
             colors: [@json($erAdmittedCountColor), "#0571f5"],
             responsive: [{
-                breakpoint: 1000,
+                breakpoint: 480,
                 options: {
-                    plotOptions: {
-
+                    chart: {
+                        width: 50
                     },
                 }
             }]
@@ -1140,5 +1075,11 @@
         var charterAdmittedCount = new ApexCharts(document.querySelector("#erAdmittedCount"), erAdmittedCount);
         charterAdmittedCount.render();
         //---erAdmittedCount
+
+
+        // window.setInterval(function() {
+        //     var elem = document.getElementById('data');
+        //     elem.scrollTop = elem.scrollHeight;
+        // }, 5000);
     </script>
 </div>

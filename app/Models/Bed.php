@@ -18,12 +18,12 @@ class Bed extends Model
 
     public function patientBed()
     {
-        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
+        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id')->select('bed_id', 'enccode', 'patient_id');
     }
 
     public function findPatientBed()
     {
-        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id');
+        return $this->hasMany(PatientBed::class, 'bed_id', 'bed_id')->select('bed_id', 'enccode', 'patient_id');
     }
 
     // public function bedAvailability()

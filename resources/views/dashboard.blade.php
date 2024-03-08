@@ -1,7 +1,7 @@
 <x-app-layout>
-    <x-slot name="header">
+    <x-slot name="header" class="h-6">
         <h2 class="text-lg font-semibold leading-tight text-gray-800">
-            {{ __('ERDASH') }}
+            {{ __('ERDASHBOARD') }}
         </h2>
     </x-slot>
 

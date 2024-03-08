@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-green-600 border-b border-gray-100">
+<nav x-data="{ open: false }" class="border-b border-gray-100 bg-emerald-600">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-between h-12">
@@ -16,9 +16,17 @@
                         <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-white">
                             {{ __('Dashboard') }}
                         </x-nav-link>
+
+                        <x-nav-link href="{{ route('charts') }}" :active="request()->routeIs('charts')" class="text-white">
+                            {{ __('Census') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('room') }}" :active="request()->routeIs('room')" class="text-white">
+                            {{ __('Room') }}
+                        </x-nav-link>
                     </div>
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link href="{{ route('charts') }}" :active="request()->routeIs('charts')" class="text-white">
                             {{ __('Census') }}
                         </x-nav-link>
@@ -28,7 +36,7 @@
                         <x-nav-link href="{{ route('room') }}" :active="request()->routeIs('room')" class="text-white">
                             {{ __('Room') }}
                         </x-nav-link>
-                    </div>
+                    </div> --}}
                 @endif
 
 
@@ -110,7 +118,7 @@
                                 @else
                                     <span class="inline-flex rounded-md">
                                         <button type="button"
-                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:text-gray-700 focus:outline-none focus:bg-green-600 active:bg-gray-100">
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out border border-transparent rounded-md bg-emerald-600 hover:text-gray-700 focus:outline-none focus:bg-emerald-600 active:bg-gray-100">
 
                                             {{ Auth::user()->name }}
 

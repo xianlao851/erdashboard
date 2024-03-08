@@ -1,15 +1,10 @@
-<x-slot name="header">
-    <h3 class="text-lg font-normal leading-tight text-gray-800">
-        BED ASSIGNMENT </h3>
-</x-slot>
-
-<div class="w-full p-2 ">
+<div class="w-full p-2 mt-4 bg-gray-200">
     <div class="w-full" wire:loading>
         <div class="absolute flex items-center justify-center mt-0 ml-0 bg-black z-[9999] w-full h-full opacity-75">
             <span class="text-green-400 loading loading-spinner loading-lg"></span>
         </div>
     </div>
-    <div class="flex flex-col w-full h-screen bg-gray-200">
+    <div class="flex flex-col w-ful">
         {{-- <div class="relative">
             <div class="absolute top-0 flex flex-row space-x-4 right-4">
 
@@ -42,21 +37,29 @@
                 <!--Search Patient--->
             </div>
         </div> --}}
+        <div class="flex justify-center">
+            <div class="content-center mt-2 bg-white rounded-full w-22 ">
+                <label class="btn btn-circle btn-lg "><i ondrop="drop(event)" ondragover="allowDrop(event)" id="delete"
+                        class="las la-trash la-3x "></i></label>
+            </div>
+        </div>
 
-        <div class="flex mt-4">
+        <div class="flex mt-4 space-x-2">
             <!--First conatainer-->
-            <div class="w-2/12 mt-10">
+            <div class="w-2/12 p-2 rounded-md">
                 <h3 class="ml-2">Patient's list</h3>
                 <div class="mt-2">
-                    <ul class="grid grid-cols-3 gap-2 p-1 rounded-lg">
+                    <ul class="grid grid-cols-2 gap-2 p-0 rounded-lg">
+
                         @if ($getPatients)
                             @forelse ($getPatients as $patient)
                                 <li drag-item draggable="true"
-                                    class="  h-14 p-1 text-[10px] antialiased bg-white rounded-lg shadow-lg cursor-pointer hover:bg-gray-50"
+                                    class="cursor-move h-6 p-1 text-[11px] antialiased bg-white rounded-lg text-black shadow-xl hover:bg-gray-300"
                                     id="{{ $patient->enccode }}" wire:key='$patient-{{ $patient->enccode }}'
                                     ondragstart="drag(event)">
                                     <div class="flex w-full p-1">
-                                        <div class="mt-0">{{ $patient->patlast }}, {{ $patient->patfirst[0] }}
+                                        <div class="mt-0 truncate">{{ $patient->patlast }},
+                                            {{ $patient->patfirst }}
                                         </div>
                                     </div>
                                 </li>
@@ -66,8 +69,8 @@
                     </ul>
                 </div>
 
-                <div class="p-2"> {{-- Manual pagination --}}
-                    <div class="flex items-center justify-between px-1 py-1 mx-0 bg-white rounded-lg shadow-lg sm:px-6">
+                <div class="p-0 mt-2"> {{-- Manual pagination --}}
+                    <div class="flex items-center justify-between px-0 py-0 mx-0 bg-white shadow-md rounded-xl sm:px-2">
                         <div>
                             <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div class="mx-1">
@@ -137,145 +140,213 @@
             </div> <!--First conatainer end, for patient list in the erlogs-->
 
             <!--Second conatainer for beds and patient admitted-->
-            <div class="w-10/12 p-3 mt-16 ml-2 overflow-scroll bg-gray-200 border-4 border-gray-700 rounded-md">
-                <div class="flex flex-row gap-8">
-
-                    <div class="flex flex-row gap-2">
+            <div class="w-10/12 p-0 overflow-scroll bg-gray-200 border-4 border-gray-700">
+                <div class="flex flex-row gap-10">
+                    <div class="flex flex-row gap-2 p-2 bg-white">
                         <div class="">
-                            <h6>Overflow</h6>
+                            <h6 class="w-full p-1 mt-2 text-sm text-center text-white bg-green-900 rounded-md">OVERFLOW
+                            </h6>
                             <div class="grid grid-rows-6 gap-2 mt-1">
-                                @for ($i = 1; $i <= 6; $i++)
-                                    <div class="w-16 bg-white border-2 border-gray-300 rounded-md h-28"> </div>
-                                @endfor
+                                @forelse ($beds as $bed)
+                                    @if (
+                                        $bed->bed_id == '27' or
+                                            $bed->bed_id == '28' or
+                                            $bed->bed_id == '29' or
+                                            $bed->bed_id == '30' or
+                                            $bed->bed_id == '44' or
+                                            $bed->bed_id == '45')
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                            id="{{ $bed->bed_id }}"
+                                            class="relative flex flex-col w-16 p-0 mt-0 rounded-md bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                            <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                            </div>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div drag-item draggable="true"
+                                                                id="{{ $patientBed->enccode }}"
+                                                                ondragstart="drag(event)"
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md cursor-move bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                <div style="transform: rotate(-90deg);"
+                                                                    class="flex flex-col mt-12">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 ">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
+                                                @endif
+                                                <!----->
+                                            @empty
+                                            @endforelse
+                                        </div>
+                                    @endif
+                                @empty
+                                @endforelse
                             </div>
                         </div><!--overflow -->
                         <div class=" mt-7"> <!--medicine left extension start-->
                             <div class="grid gap-2 grid-rows-9">
-                                @foreach ($room_medicine_four_nine as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                        <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                        <div>
-                                            @forelse ($bed->patientBed as $patient)
-                                                @if ($patient->patientHerlog)
-                                                    <div drag-item draggable="true"
-                                                        id="{{ $patient->patientHerlog->enccode }}"
-                                                        wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                        ondragstart="drag(event)" class="mt-0 bg-red-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                            {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                        </div>
-                                                    </div>
+                                @forelse ($beds as $bed)
+                                    @if (
+                                        $bed->bed_id == '25' or
+                                            $bed->bed_id == '26' or
+                                            $bed->bed_id == '31' or
+                                            $bed->bed_id == '32' or
+                                            $bed->bed_id == '33' or
+                                            $bed->bed_id == '34' or
+                                            $bed->bed_id == '35' or
+                                            $bed->bed_id == '36' or
+                                            $bed->bed_id == '37')
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                            id="{{ $bed->bed_id }}"
+                                            class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                            <span
+                                                class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                            <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div drag-item draggable="true"
+                                                                id="{{ $patientBed->enccode }}"
+                                                                ondragstart="drag(event)"
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                    {{ $bed->bed_name }}</span>
+                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                    {{ $getHperson->patlast }},
+                                                                </span>
+                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                    {{ $getHperson->patfirst }}.
+                                                                </span>
+                                                                <div></div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
                                                 @endif
-                                                @if ($patient->patientHerlog == null and $loop->last)
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                <!----->
                                             @empty
-                                                <div class="mt-0 bg-green-500 rounded-md ">
-                                                    <div class="text-[10px] text-black p-1">
-                                                        VACANT BED
-                                                    </div>
-                                                </div>
                                             @endforelse
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endif
+                                @empty
+                                @endforelse
                             </div>
                         </div> <!--medicine left extension end-->
                     </div> <!--first -->
 
                     <div class="flex flex-col">
                         <div class="flex space-x-0">
-                            <div class="p-1 bg-white rounded-l-md">
-                                <h6>Medicine</h6>
-                                <div class="grid grid-rows-3 gap-2">
-                                    @foreach ($room_medicine_one_to_three as $bed)
-                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                            id="{{ $bed->bed_id }}"
-                                            class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                            <div class="text-[10px] text-black"> {{ $bed->bed_name }}</div>
-                                            <div>
-                                                @forelse ($bed->patientBed as $patient)
-                                                    @if ($patient->patientHerlog)
-                                                        <div drag-item draggable="true"
-                                                            id="{{ $patient->patientHerlog->enccode }}"
-                                                            wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                            ondragstart="drag(event)"
-                                                            class="mt-0 bg-red-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                            </div>
-                                                        </div>
+                            <div class="p-1 bg-white rounded-md ">
+                                <h6 class="p-1 mt-0 text-sm text-center text-white bg-green-900 rounded-md">MEDICINE
+                                </h6>
+                                <div class="grid grid-rows-3 gap-2 mt-2">
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '22' or $bed->bed_id == '23' or $bed->bed_id == '24')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
                                                     @endif
-                                                    @if ($patient->patientHerlog == null and $loop->last)
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <!----->
                                                 @empty
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
                                                 @endforelse
                                             </div>
-                                        </div>
-                                    @endforeach
-
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                             </div><!-- medicine 1 to 3 bed end -->
-                            <div class="p-2 bg-white border-2 border-gray-600 w-28">
+                            <div class="p-2 bg-white border-2 border-t-0 border-gray-600 w-28">
                                 <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">SUP OFFICE
                                 </h4>
                             </div>
-                            <div class="bg-white border-2 border-l-0 border-gray-600">
+                            <div class="bg-white border-2 border-t-0 border-l-0 border-gray-600">
                                 <div class="mt-2 ">
                                     <div class="flex flex-col gap-2 p-2">
-                                        @foreach ($room_resu as $bed)
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
-                                                class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                                <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                                <div>
-                                                    @forelse ($bed->patientBed as $patient)
-                                                        @if ($patient->patientHerlog)
-                                                            <div drag-item draggable="true"
-                                                                id="{{ $patient->patientHerlog->enccode }}"
-                                                                wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                                ondragstart="drag(event)"
-                                                                class="mt-0 bg-red-500 rounded-md ">
-                                                                <div class="text-[10px] text-black p-1">
-                                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                    {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                                </div>
-                                                            </div>
+                                        @forelse ($beds as $bed)
+                                            @if ($bed->bed_id == '4' or $bed->bed_id == '5')
+                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                    id="{{ $bed->bed_id }}"
+                                                    class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                    <span
+                                                        class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                    <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                    @forelse ($patientBeds as $patientBed)
+                                                        @if ($patientBed->bed_id == $bed->bed_id)
+                                                            @forelse ($getHpersons as $getHperson)
+                                                                @if ($patientBed->enccode == $getHperson->enccode)
+                                                                    <div drag-item draggable="true"
+                                                                        id="{{ $patientBed->enccode }}"
+                                                                        ondragstart="drag(event)"
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                        <span
+                                                                            class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                            {{ $bed->bed_name }}</span>
+                                                                        <span
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            {{ $getHperson->patlast }},
+                                                                        </span>
+                                                                        <span
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            {{ $getHperson->patfirst }}.
+                                                                        </span>
+                                                                        <div></div>
+                                                                    </div>
+                                                                @else
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
                                                         @endif
-                                                        @if ($patient->patientHerlog == null and $loop->last)
-                                                            <div class="mt-0 bg-green-500 rounded-md ">
-                                                                <div class="text-[10px] text-black p-1">
-                                                                    VACANT BED
-                                                                </div>
-                                                            </div>
-                                                        @endif
+                                                        <!----->
                                                     @empty
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
                                                     @endforelse
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endif
+                                        @empty
+                                        @endforelse
                                     </div>
                                     <div class="p-2">
                                         <h6 class="p-1 mt-1 text-sm text-center text-white bg-green-900 rounded-md">
@@ -284,10 +355,10 @@
 
                                 </div>
                             </div>
-                            <div class="bg-white border-2 border-l-0 border-gray-600 w-28">
+                            <div class="bg-white border-2 border-t-0 border-l-0 border-gray-600 w-28">
 
                             </div>
-                            <div class="p-2 bg-white border-2 border-l-0 border-gray-600 w-28 rounded-r-md">
+                            <div class="p-2 bg-white border-2 border-t-0 border-l-0 border-gray-600 w-28">
                                 <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
                                     TRIAGE
                                 </h4>
@@ -318,43 +389,46 @@
                             </div>
                             <div class="p-2 bg-white border-2 border-gray-600 rounded-md">
                                 <div class="grid grid-rows-3 gap-2">
-                                    @foreach ($room_trauma as $bed)
-                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                            id="{{ $bed->bed_id }}"
-                                            class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                            <div class="text-[13px] text-black"> {{ $bed->bed_name }},
-                                                {{ $bed->bed_id }}</div>
-                                            <div>
-                                                @forelse ($bed->patientBed as $patient)
-                                                    @if ($patient->patientHerlog)
-                                                        <div drag-item draggable="true"
-                                                            id="{{ $patient->patientHerlog->enccode }}"
-                                                            wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                            ondragstart="drag(event)"
-                                                            class="mt-0 bg-red-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                            </div>
-                                                        </div>
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '7' or $bed->bed_id == '8' or $bed->bed_id == '9')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
                                                     @endif
-                                                    @if ($patient->patientHerlog == null and $loop->last)
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <!----->
                                                 @empty
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
                                                 @endforelse
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                                 <div class="mt-4">
                                     <p class="p-1 text-sm text-center text-white bg-green-900 rounded-md">TRAUMA
@@ -366,82 +440,100 @@
                         <!--bottom for famed and medicine extension--->
                         <div class="flex flex-col mt-12 bg-white rounded-md">
                             <div class="grid grid-cols-6 gap-6 p-2 bg-white border-b-4 border-gray-600 rounded-t-md">
-                                @foreach ($room_medicine_ten_twenty as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        class="w-16 p-1 bg-white border-2 border-gray-300 rounded-md h-28 text-wrap">
-                                        <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                        <div>
-                                            @forelse($bed->patientBed as $patient)
-                                                @if ($patient->patientHerlog)
-                                                    <div drag-item draggable="true"
-                                                        id="{{ $patient->patientHerlog->enccode }}"
-                                                        wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                        ondragstart="drag(event)">
-                                                        <div style="text-wrap: wrap; writing-mode: vertical-rl;
-                                                            text-orientation: mixed;"
-                                                            class="text-[10px] text-black p-1  bg-red-500 rounded-md text-center">
-                                                            {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }},
-                                                        </div>
-                                                    </div>
+                                @forelse ($beds as $bed)
+                                    @if (
+                                        $bed->bed_id == '38' or
+                                            $bed->bed_id == '39' or
+                                            $bed->bed_id == '40' or
+                                            $bed->bed_id == '41' or
+                                            $bed->bed_id == '42' or
+                                            $bed->bed_id == '43')
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                            id="{{ $bed->bed_id }}"
+                                            class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-move bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                            <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                            </div>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div drag-item draggable="true"
+                                                                id="{{ $patientBed->enccode }}"
+                                                                ondragstart="drag(event)"
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                <div style="transform: rotate(-90deg);"
+                                                                    class="flex flex-col mt-12">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 ">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
                                                 @endif
-                                                @if ($patient->patientHerlog == null and $loop->last)
-                                                    <div class="p-0 mt-0">
-                                                        <div style="text-wrap: wrap; writing-mode: vertical-rl;
-                                                        text-orientation: mixed;direction: rtl;"
-                                                            class="text-[10px] text-black p-1  bg-green-500 rounded-md text-center">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                <!----->
                                             @empty
-                                                <div class="p-0 mt-0">
-                                                    <div
-                                                        class="text-wrap  text-[10px] text-black p-0 bg-green-500 rounded-sm text-center">
-                                                        VACANT BED
-                                                    </div>
-                                                </div>
                                             @endforelse
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endif
+                                @empty
+                                @endforelse
                             </div> <!--medicine -->
                             <div class="grid grid-cols-6 gap-6 p-2 mt-0 bg-white rounded-b-md">
-                                @foreach ($room_fam_med as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        class="w-16 p-1 bg-white border-2 border-gray-300 rounded-md h-28">
-                                        <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                        <div>
-                                            @forelse($bed->patientBed as $patient)
-                                                @if ($patient->patientHerlog)
-                                                    <div drag-item draggable="true"
-                                                        id="{{ $patient->patientHerlog->enccode }}"
-                                                        wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                        ondragstart="drag(event)">
-                                                        <div
-                                                            class="text-[10px] text-black p-1  bg-red-500 rounded-sm text-center">
-                                                            {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }},
-                                                        </div>
-                                                    </div>
+                                @forelse ($beds as $bed)
+                                    @if ($bed->bed_id == '1' or $bed->bed_id == '2' or $bed->bed_id == '3')
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                            id="{{ $bed->bed_id }}"
+                                            class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-move bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                            <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                            </div>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div drag-item draggable="true"
+                                                                id="{{ $patientBed->enccode }}"
+                                                                ondragstart="drag(event)"
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                <div style="transform: rotate(-90deg);"
+                                                                    class="flex flex-col mt-12">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 ">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
                                                 @endif
-                                                @if ($patient->patientHerlog == null and $loop->last)
-                                                    <div class="p-0 mt-0">
-                                                        <div
-                                                            class="text-[10px] text-black p-0 bg-green-500 rounded-sm text-center">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                <!----->
                                             @empty
-                                                <div class="p-0 mt-0">
-                                                    <div
-                                                        class="text-[10px] text-black p-0 bg-green-500 rounded-sm text-center">
-                                                        VACANT BED
-                                                    </div>
-                                                </div>
                                             @endforelse
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endif
+                                @empty
+                                @endforelse
                             </div>
                             <div class="p-2 ml-8 w-44">
                                 <h4 class="w-full p-1 mt-2 text-sm text-center text-white bg-green-900 rounded-md">
@@ -451,114 +543,146 @@
                         </div><!--3 -->
                     </div> <!--second -->
 
-                    <div class="border-2 "> <!--third start-->
-                        <div class="flex flex-row gap-4 p-2 bg-white border-2 border-gray-600 rounded-md">
-                            <div class="">
+                    <div class=""> <!--third start-->
+                        <div class="flex flex-row gap-4 p-2 bg-white border-2 border-t-0 border-gray-600">
+                            <div class="mt-2">
                                 <div class="">
-                                    @foreach ($room_pedia_seven as $bed)
-                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                            id="{{ $bed->bed_id }}"
-                                            class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                            <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                            <div>
-
-                                                @forelse ($bed->patientBed as $patient)
-                                                    @if ($patient->patientHerlog)
-                                                        <div drag-item draggable="true"
-                                                            id="{{ $patient->patientHerlog->enccode }}"
-                                                            wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                            ondragstart="drag(event)"
-                                                            class="mt-0 bg-red-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                            </div>
-                                                        </div>
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '21')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
                                                     @endif
-                                                    @if ($patient->patientHerlog == null and $loop->last)
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <!----->
                                                 @empty
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
                                                 @endforelse
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                                 <!-- pedia bed 7-->
                                 <div class="w-32 h-14"> </div>
                                 <div class="">
-                                    @foreach ($room_pedia_five as $bed)
-                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                            id="{{ $bed->bed_id }}"
-                                            class="w-32 p-1 mt-10 bg-white border-2 border-gray-300 rounded-md h-14">
-                                            <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                            <div>
-                                                @forelse ($bed->patientBed as $patient)
-                                                    @if ($patient->patientHerlog)
-                                                        <div drag-item draggable="true"
-                                                            id="{{ $patient->patientHerlog->enccode }}"
-                                                            wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                            ondragstart="drag(event)"
-                                                            class="mt-0 bg-red-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                            </div>
-                                                        </div>
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '19')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
                                                     @endif
-                                                    @if ($patient->patientHerlog == null and $loop->last)
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <!----->
                                                 @empty
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
                                                 @endforelse
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                                 <!-- pedia bed 5-->
                             </div>
                             <div class="mt-6">
                                 <div>
                                     <div class="">
-                                        @foreach ($room_pedia_four as $bed)
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
-                                                class="w-16 p-2 bg-white border-2 border-gray-300 rounded-md h-28">
-                                                <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                                <div>
-                                                    @foreach ($bed->patientBed as $patient)
-                                                        @if ($patient->patientHerlog)
-                                                            <div drag-item draggable="true"
-                                                                id="{{ $patient->patientHerlog->enccode }}"
-                                                                wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                                ondragstart="drag(event)" class="mt-0 join">
-                                                                <div class="text-[12px] text-black">
-                                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                    {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                                </div>
-                                                            </div>
+                                        @forelse ($beds as $bed)
+                                            @if ($bed->bed_id == '18')
+                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                    id="{{ $bed->bed_id }}"
+                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-move bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    <div style="transform: rotate(-90deg);"
+                                                        class="flex flex-col mt-12">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                    </div>
+                                                    @forelse ($patientBeds as $patientBed)
+                                                        @if ($patientBed->bed_id == $bed->bed_id)
+                                                            @forelse ($getHpersons as $getHperson)
+                                                                @if ($patientBed->enccode == $getHperson->enccode)
+                                                                    <div drag-item draggable="true"
+                                                                        id="{{ $patientBed->enccode }}"
+                                                                        ondragstart="drag(event)"
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        <div style="transform: rotate(-90deg);"
+                                                                            class="flex flex-col mt-12">
+                                                                            <span
+                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                {{ $bed->bed_name }}</span>
+                                                                            <span
+                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </span>
+                                                                            <span
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
                                                         @endif
-                                                    @endforeach
+                                                        <!----->
+                                                    @empty
+                                                    @endforelse
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endif
+                                        @empty
+                                        @endforelse
                                     </div>
                                     <!-- pedia bed 4-->
                                 </div>
@@ -572,84 +696,175 @@
                                         </div>
                                     </div>
                                     <div class="mt-4">
-                                        @foreach ($room_pedia_six as $bed)
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
-                                                class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                                <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                                <div>
-                                                    @forelse ($bed->patientBed as $patient)
-                                                        @if ($patient->patientHerlog)
-                                                            <div drag-item draggable="true"
-                                                                id="{{ $patient->patientHerlog->enccode }}"
-                                                                wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                                ondragstart="drag(event)"
-                                                                class="mt-0 bg-red-500 rounded-md ">
-                                                                <div class="text-[10px] text-black p-1">
-                                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                    {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                                </div>
-                                                            </div>
+                                        @forelse ($beds as $bed)
+                                            @if ($bed->bed_id == '20')
+                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                    id="{{ $bed->bed_id }}"
+                                                    class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                    <span
+                                                        class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                    <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                    @forelse ($patientBeds as $patientBed)
+                                                        @if ($patientBed->bed_id == $bed->bed_id)
+                                                            @forelse ($getHpersons as $getHperson)
+                                                                @if ($patientBed->enccode == $getHperson->enccode)
+                                                                    <div drag-item draggable="true"
+                                                                        id="{{ $patientBed->enccode }}"
+                                                                        ondragstart="drag(event)"
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                        <span
+                                                                            class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                            {{ $bed->bed_name }}</span>
+                                                                        <span
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            {{ $getHperson->patlast }},
+                                                                        </span>
+                                                                        <span
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            {{ $getHperson->patfirst }}.
+                                                                        </span>
+                                                                        <div></div>
+                                                                    </div>
+                                                                @else
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
                                                         @endif
-                                                        @if ($patient->patientHerlog == null and $loop->last)
-                                                            <div class="mt-0 bg-green-500 rounded-md ">
-                                                                <div class="text-[10px] text-black p-1">
-                                                                    VACANT BED
-                                                                </div>
-                                                            </div>
-                                                        @endif
+                                                        <!----->
                                                     @empty
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
                                                     @endforelse
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endif
+                                        @empty
+                                        @endforelse
                                     </div>
                                     <!-- pedia bed 6-->
                                 </div>
                             </div>
-                            <div class="flex flex-col ml-2">
+                            <div class="flex flex-col mt-2 ml-2"> <!-- pedia bed 1 bed 2 bed 3-->
                                 <div class="grid grid-rows-3 gap-2 ">
-                                    @foreach ($room_pedia_one_to_three as $bed)
-                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                            id="{{ $bed->bed_id }}"
-                                            class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14">
-                                            <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                            <div>
-                                                @forelse ($bed->patientBed as $patient)
-                                                    @if ($patient->patientHerlog)
-                                                        <div drag-item draggable="true"
-                                                            id="{{ $patient->patientHerlog->enccode }}"
-                                                            wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                            ondragstart="drag(event)"
-                                                            class="mt-0 bg-red-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                                {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                            </div>
-                                                        </div>
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '15')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
                                                     @endif
-                                                    @if ($patient->patientHerlog == null and $loop->last)
-                                                        <div class="mt-0 bg-green-500 rounded-md ">
-                                                            <div class="text-[10px] text-black p-1">
-                                                                VACANT BED
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <!----->
                                                 @empty
-                                                    <div class="mt-0 bg-green-500 rounded-md ">
-                                                        <div class="text-[10px] text-black p-1">
-                                                            VACANT BED
-                                                        </div>
-                                                    </div>
                                                 @endforelse
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endif
+                                    @empty
+                                    @endforelse
+
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '16')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
+                                                    @endif
+                                                    <!----->
+                                                @empty
+                                                @endforelse
+                                            </div>
+                                        @endif
+                                    @empty
+                                    @endforelse
+
+                                    @forelse ($beds as $bed)
+                                        @if ($bed->bed_id == '17')
+                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                id="{{ $bed->bed_id }}"
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-move bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div drag-item draggable="true"
+                                                                    id="{{ $patientBed->enccode }}"
+                                                                    ondragstart="drag(event)"
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
+                                                    @endif
+                                                    <!----->
+                                                @empty
+                                                @endforelse
+                                            </div>
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                                 <div class="p-2">
                                     <h4 class="p-1 mt-6 text-sm text-center text-white bg-green-900 rounded-md"> PEDIA
@@ -662,27 +877,49 @@
                         <div class="flex flex-row p-6 mt-12 bg-white border-2 border-gray-600 rounded-md">
                             <!--- for ob start -->
                             <div class="flex flex-row space-x-4">
-                                @foreach ($room_ob_one_two as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        class="w-16 bg-white border-2 border-gray-300 rounded-md h-28">
-                                        <div class="text-[13px] text-black"> {{ $bed->bed_name }}</div>
-                                        <div>
-                                            @foreach ($bed->patientBed as $patient)
-                                                @if ($patient->patientHerlog)
-                                                    <div drag-item draggable="true"
-                                                        id="{{ $patient->patientHerlog->enccode }}"
-                                                        wire:key='$patient->patientHerlog-{{ $patient->patientHerlog->enccode }}'
-                                                        ondragstart="drag(event)" class="mt-0 join">
-                                                        <div class="text-[12px] text-black">
-                                                            {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                            {{-- {{ $patient->patientHerlog->enccode }} --}}
-                                                        </div>
-                                                    </div>
+                                @forelse ($beds as $bed)
+                                    @if ($bed->bed_id == '10' or $bed->bed_id == '11' or $bed->bed_id == '12')
+                                        <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                            id="{{ $bed->bed_id }}"
+                                            class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-move bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                            <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                            </div>
+                                            @forelse ($patientBeds as $patientBed)
+                                                @if ($patientBed->bed_id == $bed->bed_id)
+                                                    @forelse ($getHpersons as $getHperson)
+                                                        @if ($patientBed->enccode == $getHperson->enccode)
+                                                            <div drag-item draggable="true"
+                                                                id="{{ $patientBed->enccode }}"
+                                                                ondragstart="drag(event)"
+                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                <div style="transform: rotate(-90deg);"
+                                                                    class="flex flex-col mt-12">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 ">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span
+                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                        @endif
+                                                    @empty
+                                                    @endforelse
                                                 @endif
-                                            @endforeach
+                                                <!----->
+                                            @empty
+                                            @endforelse
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endif
+                                @empty
+                                @endforelse
                             </div>
                             <div class="p-2">
                                 <h4 class="p-1 text-sm text-center text-white bg-green-900 rounded-md">OB/GYNE</h4>
@@ -742,7 +979,7 @@
                                         </div>
                                         <div class="mt-3 ml-0 text-[12px] text-black  flex">
                                             {{ $selected_transfer_patient->patientInfo->get_patient_name() }}
-                                            {{-- {{ $patient->patientHerlog->enccode }} --}}
+                                            {{-- {{ $patient->enccode }} --}}
                                         </div>
                                     </div>
                                 </div>
@@ -764,8 +1001,8 @@
                         <div class="grid grid-cols-4 grid-rows-1 gap-2 mt-1">
                             @if ($bedsTransfer)
                                 @foreach ($bedsTransfer as $bed)
-                                    <div ondrop="drop(event)" ondragover="allowDrop(event)" id="{{ $bed->bed_id }}"
-                                        wire:key='$bed-{{ $bed->bed_id }}'
+                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                        id="{{ $bed->bed_id }}" wire:key='$bed-{{ $bed->bed_id }}'
                                         class="h-24 p-2 bg-gray-200 rounded-lg shadow-lg hover:bg-gray-50">
                                         <div class="flex items-center mt-0">
                                             <img draggable="false" src="{{ URL('/images/bed III.png') }}"
@@ -792,7 +1029,7 @@
                                                         </div>
                                                         <div class="mt-3 ml-0 text-[12px] text-black  flex">
                                                             {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
-                                                            {{-- {{ $patient->patientHerlog->enccode }} --}}
+                                                            {{-- {{ $patient->enccode }} --}}
                                                         </div>
                                                     </div>
                                                 @endif
@@ -839,9 +1076,9 @@
     </div> <!--main div end-->
     <!--scripts start-->
     <script>
-        window.onload = function() {
-            Livewire.emit('reset_page');
-        }
+        // window.onload = function() {
+        //     Livewire.emit('reset_page');
+        // }
 
         function allowDrop(ev) {
             ev.preventDefault();
@@ -863,6 +1100,7 @@
             var getenccode = getcode.code; // get the enccode
             var bedid = ev.currentTarget.id;
             Livewire.emit('onDrop', bedid, getenccode);
+            //console.log(bedid);
             //var data = ev.dataTransfer.getData("text");
             //ev.target.appendChild(document.getElementById(data));
             //document.getElementById('bed').innerHTML = bedid;
@@ -921,8 +1159,8 @@
             // });
         });
 
-        window.addEventListener('patientAssignedSuccess', event => {
-            var patientinfo = event.detail.patienInfo;
+        window.addEventListener('patientAssignedSuccess', function() {
+            //var patientinfo = event.detail.patienInfo;
             Swal.fire({
                 title: "Success",
                 text: "Successfully transfered",
