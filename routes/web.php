@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Livewire\RoomBed\View;
 use App\Http\Livewire\Bed\BedIndex;
 use App\Http\Livewire\Dash\Index;
+use App\Http\Livewire\Dash\IndexTwo;
 use App\Http\Livewire\Room\RoomIndex;
+use App\Http\Livewire\User\UserList;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,14 +35,15 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/room', RoomIndex::class)->name('room');
 Route::get('/charts', Index::class)->name('charts');
+Route::get('/active', IndexTwo::class)->name('active');
 
 Route::middleware([
     'auth:sanctum', 'role:admin',
     config('jetstream.auth_session'),
     'verified',
-])->name('bed.')->prefix('bed')->group(function () {
-    //Route::get('/bed_index', BedIndex::class)->name('bed_index');
+])->name('admin.')->prefix('admin')->group(function () {
+    Route::get('/user_list', UserList::class)->name('user_list');
+    Route::get('/room', RoomIndex::class)->name('room');
     //Route::get('/view/{id}', View::class)->name('view');
 });

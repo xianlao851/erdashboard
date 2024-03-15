@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dash;
 
 use Carbon\Carbon;
 use App\Models\Bed;
+use App\Models\ErdashActivePatient;
 use App\Models\Room;
 use Livewire\Component;
 use App\Models\PatientBed;
@@ -19,7 +20,9 @@ class Index extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
+    protected $listeners = [
+        'saveCount'
+    ];
     public $erlogs;
     public $ward2FICU = 0, $ward3FMIC = 0, $ward3FMN = 0, $ward3FMP = 0, $ward3FNIC = 0, $wardCBNS = 0, $wardCBPA = 0, $wardCBPN = 0, $wardSDICU = 0, $wardSICU = 0, $ward3FCCU = 0, $wardFH2 = 0, $wardFH3 = 0;
 
@@ -99,13 +102,13 @@ class Index extends Component
         'SICU',
     ];
 
-    public $start_date, $end_date;
+    public $start_date, $end_date, $sdate, $edate;
 
     public function mount()
     {
         //$this->get_date = Carbon::createFromFormat('Y', DB::raw('CONVERT(date, erdate)'));
 
-        $this->date_filter = 'this_month';
+        $this->date_filter = 'today';
     }
     public function render()
     {
@@ -172,10 +175,12 @@ class Index extends Component
                 ->setAnimated(true)
                 //->setTitle('Total Patient Count')
                 ->withDataLabels();
+
             foreach ($patients as $month => $values) {
                 $this->months[] = $month;
                 $this->monthCount[] = count($values);
                 $lineChartModel->addPoint($this->months[$this->i], $this->monthCount[$this->i], $this->colors['blue']);
+
                 $this->i++;
             }
         } // End, lineChartmodel for this_year and last_year filter
@@ -219,7 +224,7 @@ class Index extends Component
         //     ->where('dbo.hpatroom.patrmstat', 'A')
         //     ->where('dbo.hadmlog.admstat', 'A')->count();
 
-        //---- 1 OPD 3rd Floor (MICU A)
+
         // $this->ward3FMP = collect(DB::connection('hospital')
         //     ->select("SELECT patrm.enccode, per.patfirst, per.patlast, per.patmiddle, per.patsex, patrm.patrmstat, hdlg.admstat, hdlg.disdate, hdlg.admdate
         //     FROM hospital.dbo.hpatroom patrm
@@ -227,6 +232,10 @@ class Index extends Component
         //     RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = patrm.hpercode
         //     WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (patrm.wardcode ='3FMIC') AND (hdlg.disdate IS NULL)"));
         // dd($this->ward3FMP);
+        // #04bd55 green
+        // #bd4602 orange
+        // #b30202 red
+        //---- 1 OPD 3rd Floor (MICU A)
         $this->ward3FMP = count(DB::connection('hospital')
             ->select("SELECT patrm.enccode
             FROM hospital.dbo.henctr enctr
@@ -241,9 +250,12 @@ class Index extends Component
                 $this->ward3FMPColor = '#04bd55';
             }
             if ($this->ward3FMP >= ($ward3FMPSlot * .5)) {
-                $this->ward3FMPColor = '#bd4602';
+                $this->ward3FMPColor = '#d1c704';
             }
             if ($this->ward3FMP >= floor($ward3FMPSlot * .8)) {
+                $this->ward3FMPColor = '#bd4602';
+            }
+            if ($this->ward3FMP > $ward3FMPSlot) {
                 $this->ward3FMPColor = '#b30202';
             }
         } else {
@@ -266,9 +278,12 @@ class Index extends Component
                 $this->ward3FMICColor = '#04bd55';
             }
             if ($this->ward3FMIC > floor($ward3FMICSlot * .5)) {
-                $this->ward3FMICColor = '#bd4602';
+                $this->ward3FMICColor = '#d1c704';
             }
             if ($this->ward3FMIC >= floor($ward3FMICSlot * .8)) {
+                $this->ward3FMICColor = '#bd4602';
+            }
+            if ($this->ward3FMIC > $ward3FMICSlot) {
                 $this->ward3FMICColor = '#b30202';
             }
         } else {
@@ -291,9 +306,12 @@ class Index extends Component
                 $this->ward3FMNColor = '#04bd55';
             }
             if ($this->ward3FMN >= floor($ward3FMNSlot * .5)) {
-                $this->ward3FMNColor = '#bd4602';
+                $this->ward3FMNColor = '#d1c704';
             }
             if ($this->ward3FMN >= floor($ward3FMNSlot * .8)) {
+                $this->ward3FMNColor = '#bd4602';
+            }
+            if ($this->ward3FMN > $ward3FMNSlot) {
                 $this->ward3FMNColor = '#b30202';
             }
         } else {
@@ -316,9 +334,12 @@ class Index extends Component
                 $this->wardCBNSColor = '#04bd55';
             }
             if ($this->wardCBNS >= floor($wardCBNSSlot * .5)) {
-                $this->wardCBNSColor = '#bd4602';
+                $this->wardCBNSColor = '#d1c704';
             }
             if ($this->wardCBNS >= floor($wardCBNSSlot * .8)) {
+                $this->wardCBNSColor = '#bd4602';
+            }
+            if ($this->wardCBNS > $wardCBNSSlot) {
                 $this->wardCBNSColor = '#b30202';
             }
         } else {
@@ -341,9 +362,12 @@ class Index extends Component
                 $this->wardCBPAColor = '#04bd55';
             }
             if ($this->wardCBPA >= floor($wardCBPASlot * .5)) {
-                $this->wardCBPAColor = '#bd4602';
+                $this->wardCBPAColor = '#d1c704';
             }
             if ($this->wardCBPA >= floor($wardCBPASlot * .8)) {
+                $this->wardCBPAColor = '#bd4602';
+            }
+            if ($this->wardCBPA > $wardCBPASlot) {
                 $this->wardCBPAColor = '#b30202';
             }
         } else {
@@ -366,9 +390,12 @@ class Index extends Component
                 $this->wardCBPNColor = '#04bd55';
             }
             if ($this->wardCBPN >= floor($wardCBPNSlot * .5)) {
-                $this->wardCBPNColor = '#bd4602';
+                $this->wardCBPNColor = '#d1c704';
             }
             if ($this->wardCBPN >= floor($wardCBPNSlot * .8)) {
+                $this->wardCBPNColor = '#bd4602';
+            }
+            if ($this->wardCBPN > $wardCBPNSlot) {
                 $this->wardCBPNColor = '#b30202';
             }
         } else {
@@ -391,9 +418,12 @@ class Index extends Component
                 $this->wardSICUColor = '#04bd55';
             }
             if ($this->wardSICU >= floor($wardSICUSlot * .5)) {
-                $this->wardSICUColor = '#bd4602';
+                $this->wardSICUColor = '#d1c704';
             }
             if ($this->wardSICU >= floor($wardSICUSlot * .8)) {
+                $this->wardSICUColor = '#bd4602';
+            }
+            if ($this->wardSICU > $wardSICUSlot) {
                 $this->wardSICUColor = '#b30202';
             }
         } else {
@@ -417,9 +447,12 @@ class Index extends Component
                 $this->ward2FICUColor = '#04bd55';
             }
             if ($this->ward2FICU >= floor($ward2FICUSlot * .5)) {
-                $this->ward2FICUColor = '#bd4602';
+                $this->ward2FICUColor = '#d1c704';
             }
             if ($this->ward2FICU >= floor($ward2FICUSlot * .8)) {
+                $this->ward2FICUColor = '#bd4602';
+            }
+            if ($this->ward2FICU > $ward2FICUSlot) {
                 $this->ward2FICUColor = '#b30202';
             }
         } else {
@@ -442,9 +475,12 @@ class Index extends Component
                 $this->ward3FCCUColor = '#04bd55';
             }
             if ($this->ward3FCCU > floor($ward3FCCUSlot * .5)) {
-                $this->ward3FCCUColor = '#bd4602';
+                $this->ward3FCCUColor = '#d1c704';
             }
             if ($this->ward3FCCU >= floor($ward3FCCUSlot * .8)) {
+                $this->ward3FCCUColor = '#bd4602';
+            }
+            if ($this->ward3FCCU > $ward3FCCUSlot) {
                 $this->ward3FCCUColor = '#b30202';
             }
         } else {
@@ -467,9 +503,12 @@ class Index extends Component
                 $this->wardSDICUColor = '#04bd55';
             }
             if ($this->wardSDICU >= floor($wardSDICUSlot * .5)) {
-                $this->wardSDICUColor = '#bd4602';
+                $this->wardSDICUColor = '#d1c704';
             }
             if ($this->wardSDICU >= floor($wardSDICUSlot * .8)) {
+                $this->wardSDICUColor = '#bd4602';
+            }
+            if ($this->wardSDICU > $wardSDICUSlot) {
                 $this->wardSDICUColor = '#b30202';
             }
         } else {
@@ -491,10 +530,13 @@ class Index extends Component
             if ($this->wardFH2 <= floor($wardFH2Slot * .5)) {
                 $this->wardFH2Color = '#04bd55';
             }
-            if ($this->wardFH2 > floor($wardFH2Slot * .5)) {
+            if ($this->wardFH2 >= floor($wardFH2Slot * .5)) {
+                $this->wardFH2Color = '#d1c704';
+            }
+            if ($this->wardFH2 > floor($wardFH2Slot * .8)) {
                 $this->wardFH2Color = '#bd4602';
             }
-            if ($this->wardFH2 >= floor($wardFH2Slot * .8)) {
+            if ($this->wardFH2 > $wardFH2Slot) {
                 $this->wardFH2Color = '#b30202';
             }
         } else {
@@ -517,10 +559,13 @@ class Index extends Component
                 $this->wardFH3Color = '#04bd55';
             }
             if ($this->wardFH3 > floor($wardFH3Slot * .5)) {
+                $this->wardFH3Color = '#d1c704';
+            }
+            if ($this->wardFH3 > floor($wardFH3Slot * .8)) {
                 $this->wardFH3Color = '#bd4602';
             }
-            if ($this->wardFH3 >= floor($wardFH3Slot * .8)) {
-                $this->wardFH3Color = '#b30202';
+            if ($this->wardFH3 > $wardFH3Slot) {
+                $this->wardFH2Color = '#b30202';
             }
         } else {
             $ward3wardFH3Slot = 15;
@@ -532,14 +577,14 @@ class Index extends Component
         $current_date = date('Y-m-d');
 
         $getCurrentDate = new DateTime($current_date);
-        $getCurrentDate->modify('-15 day');
+        $getCurrentDate->modify('-7 day');
         $setStartDate = $getCurrentDate->format('Y-m-d');
 
         $this->start_date = date('Y-m-d', strtotime($setStartDate));
         $this->end_date = date('Y-m-d', strtotime($current_date));
 
-        $sdate = $this->start_date  . ' 17:00:00.000';
-        $edate = $this->end_date  . ' 23:59:59.000';
+        $this->sdate = $this->start_date  . ' 00:00:00.000';
+        $this->edate = $this->end_date  . ' 23:59:59.000';
 
         $getpatientBeds = collect(DB::select("SELECT patientBed.enccode, patientBed.patient_id, patientBed.bed_id, patientBed.created_at
             FROM erdashboard.erdash_patient_beds patientBed"));
@@ -549,7 +594,7 @@ class Index extends Component
                 FROM hospital.dbo.herlog er
                 RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
                 WHERE er.erstat= 'A' AND (er.tscode IS NOT NULL)
-                AND(er.erdate BETWEEN '$sdate' AND '$edate')"));
+                AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')"));
         //$getdat;
         foreach ($getpatientBeds as $patientBed) {
             foreach ($getErlogs as $getErlog) {
@@ -572,6 +617,9 @@ class Index extends Component
             if ($this->erAdmittedCount >= floor($erslot * .8)) {
                 $this->erAdmittedCountColor = '#b30202';
             }
+            if ($this->erAdmittedCount > $erslot) {
+                $this->erAdmittedCountColor = '#b30202';
+            }
         } else {
             $erslot = 38;
             $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
@@ -587,24 +635,108 @@ class Index extends Component
 
         $patientBeds = collect(DB::select("SELECT patientBed.enccode, patientBed.patient_id, patientBed.bed_id, patientBed.created_at
         FROM erdashboard.erdash_patient_beds patientBed"));
+
         $getHpersons = collect(DB::connection('hospital')
-            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, per.patfirst, per.patlast, per.patmiddle, per.patsex, er.erdate, er.erdtedis
             FROM hospital.dbo.herlog er
             RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
             RIGHT JOIN hospital.dbo.hencdiag diag ON er.enccode = diag.enccode
-            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$sdate' AND '$edate')
+            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
             AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)"));
 
+        ///--- trial codes
+
+        //$cur_time = Carbon::parse(now())->format('Y-m-d H');
+
+        //$cur_time = Carbon::parse(now())->format('Y-m-d H');
+        //$cur_time = date('2024-03-14 15');
+
+        // $counActive = count(DB::connection('hospital')
+        //     ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        //     FROM hospital.dbo.henctr entr
+        //     RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        //     RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+        //     RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+        //     WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        //     AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+        //     AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+
+        // $checkLogCount = collect(DB::connection('mysql')->select("SELECT act.id, act.created_at, act.count
+        //  FROM erdashboard.erdash_active_patients act
+        //  WHERE(act.created_at BETWEEN '$cur_time:00:00' AND '$this->edate:59:59')"));
+        // if ($checkLogCount) {
+        //     foreach ($checkLogCount as $getcheckLogCount) {
+        //         if ($getcheckLogCount->count <  $counActive) {
+        //             $updateCount = ErdashActivePatient::where('id', $getcheckLogCount->id)->first();
+        //             $updateCount->count = $counActive;
+        //             $updateCount->save();
+        //         }
+        //     }
+        // }
+        //good for checking
+
+        //$ssdate = '2024-03-14'  . ' 13:00:00';
+        //$edate = $this->end_date  . ' 13:59:59';
+        //dd($ssdate);
+        // $getHpersons = collect(DB::connection('hospital')
+        //     ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdate, er.erdtedis
+        // FROM hospital.dbo.herlog er
+        // ---RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
+        // ---RIGHT JOIN hospital.dbo.hencdiag diag ON er.enccode = diag.enccode
+        // WHERE(er.erdate BETWEEN '$sdate' AND '$edate')"));
+
+        // $count = [];
+        // foreach ($getHpersons as $getHperson) {
+        //     $getDate = new DateTime($getHperson->erdate);
+        //     $getDate = $getDate->format('H');
+        //     if ($getDate == 1) {
+        //         $count[] = $getHperson;
+        //     }
+        // }
+        // dd($count);
+
         return view('livewire.dash.index', [
-            //'admlogs' => $admlogs,
             'beds' => $this->get_beds,
-            //'admittedlogs' => $admittedlogs,
             'lineChartModel' => $lineChartModel,
-            //'pieChartModelallWards' => $pieChartModelallWards
             'beds' => $beds,
             'patientBeds' => $patientBeds,
             'getHpersons' => $getHpersons,
             'rooms' => $rooms
         ]);
+    }
+
+
+    public function saveCount()
+    {
+        $cur_time = Carbon::parse(now())->format('H');
+        $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
+
+
+        $counActive = count(DB::connection('hospital')
+            ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+            FROM hospital.dbo.henctr entr
+            RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+            RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+            RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+            AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+            AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+
+        $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+        if ($findHourDate) {
+            if ($findHourDate->count < $counActive) {
+                $findHourDate->count = $counActive;
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            } else {
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            }
+        } else {
+            ErdashActivePatient::create([
+                'count' => $counActive,
+                'hour' => $cur_time
+            ]);
+        }
     }
 }

@@ -19,14 +19,14 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-
+    //protected $connection = 'hris', $table = 'tbl_useraccount', $primaryKey = 'userid';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'emp_id',
         'email',
         'password',
     ];
@@ -60,4 +60,18 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function employee()
+    {
+        return $this->belongsTo(HrisEmployee::class, 'emp_id', 'emp_id');
+    }
+    public function empInfo()
+    {
+        return $this->belongsTo(HrisEmployee::class, 'emp_id', 'emp_id');
+    }
+
+    public function gethasRole()
+    {
+        return $this->hasMany(ModelHasRole::class, 'model_id', 'id');
+    }
 }

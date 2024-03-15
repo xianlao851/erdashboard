@@ -45,14 +45,8 @@
                         </div>
                         <div class="content-center bg-white rounded-lg" id="wardCBNS"></div>
                     </div>
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">3rd Floor(NICU)*
-                        </div>
-                        <div class="content-center bg-white rounded-lg" id="ward3FNIC"></div>
-                    </div> --}}
-
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center mx-auto text-[11px] mt-2 font-semibold text-nowrap">Annex 2nd
+                        <div class="flex justify-center mx-auto mt-2 text-xs font-semibold text-nowrap">Annex 2nd
                             Floor
                             Pedia A &
                             PICU A
@@ -1077,6 +1071,39 @@
         //---erAdmittedCount
 
 
+        function tick() {
+            //get the mins of the current time
+            var mins = new Date().getMinutes();
+            var seconds = new Date().getSeconds();
+            if (mins == "00" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "10" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "20" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "30" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "40" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "50" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "58" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            console.log('Tick ' + mins);
+        }
+
+        setInterval(tick, 1000);
+
+        $("#toggle").on("click", function() {
+            $(".isToggable").toggle();
+        });
         // window.setInterval(function() {
         //     var elem = document.getElementById('data');
         //     elem.scrollTop = elem.scrollHeight;
