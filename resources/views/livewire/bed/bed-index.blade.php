@@ -340,6 +340,7 @@
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
                                                         <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+
                                                         @forelse ($patientBeds as $patientBed)
                                                             @if ($patientBed->bed_id == $bed->bed_id)
                                                                 @forelse ($getHpersons as $getHperson)
@@ -1053,13 +1054,47 @@
         </div> <!--Second conatainer end-->
 
         <!-- Modals start-->
+        <input type="checkbox" id="showMdPatientDidNotDischarged" class="modal-toggle" />
+        <div class="modal" role="dialog">
+            <div class="max-w-2xl modal-box">
+                <h3 class="text-lg font-bold text-red-600">WARNING!</h3>
+                <p class="py-4">Discharge or update the patient status first to assign another patient into this
+                    bed!</p>
+
+                @if ($selected_person)
+                    <div>
+                        <div class="grid grid-cols-2 mt-2">
+                            <div class="w-full join join-vertical">
+                                <div class="w-24 px-2 text-sm text-white bg-emerald-700 join-item">NAME</div>
+                                <div class="w-64 h-10 border-2 join-item">
+                                    <p class="mt-2 ml-2 font-bold text-black text-md">
+                                        {{ $selected_person->patientInfo->get_patient_name() }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="w-full join join-vertical">
+                                <div class="w-24 px-2 text-sm text-white bg-emerald-700 join-item">DATE</div>
+                                <div class="w-64 h-10 border-2 join-item">
+                                    <p class="mt-2 ml-2 font-bold text-black text-md">
+                                        {{ \Carbon\Carbon::parse($selected_person->erdate)->format('F-j-Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="modal-action">
+                    <label for="showMdPatientDidNotDischarged" class="btn btn-sm">Close!</label>
+                </div>
+            </div>
+        </div>
+
+
         <!--Transfer patient bed start-->
-        <input type="checkbox" id="transferPatientBed" class="modal-toggle" />
+        {{-- <input type="checkbox" id="transferPatientBed" class="modal-toggle" />
         <div class="modal" role="dialog">
             <div class="max-w-7xl modal-box">
-                {{-- <div wire:loading wire:target="transferBed" class="mt-2 mx-44">
-                    <span class="text-green-400 loading loading-lg loading-spinner "></span>
-                </div> --}}
                 <div class="w-full">
                     @if ($selected_transfer_patient)
                         <div class="flex">
@@ -1089,7 +1124,7 @@
                                         </div>
                                         <div class="mt-3 ml-0 text-[12px] text-black  flex">
                                             {{ $selected_transfer_patient->patientInfo->get_patient_name() }}
-                                            {{-- {{ $patient->enccode }} --}}
+
                                         </div>
                                     </div>
                                 </div>
@@ -1139,7 +1174,7 @@
                                                         </div>
                                                         <div class="mt-3 ml-0 text-[12px] text-black  flex">
                                                             {{ $patient->patientHerlog->patientInfo->get_patient_name() }}
-                                                            {{-- {{ $patient->enccode }} --}}
+
                                                         </div>
                                                     </div>
                                                 @endif
@@ -1161,10 +1196,10 @@
                     <label for="transferPatientBed" class="btn btn-sm" wire:click='resetVar'>Close!</label>
                 </div>
             </div>
-        </div> <!--Transfer patient bed end-->
+        </div> <!--Transfer patient bed end--> --}}
 
         <!-- add bed start--->
-        <input type="checkbox" id="add_bed" class="modal-toggle" />
+        {{-- <input type="checkbox" id="add_bed" class="modal-toggle" />
         <div class="modal" role="dialog">
             <div class="modal-box">
                 <h3 class="text-lg font-bold">Add beds</h3>
@@ -1181,7 +1216,7 @@
                     <label for="add_bed" class="btn btn-sm">Close!</label>
                 </div>
             </div>
-        </div> <!-- add bed end--->
+        </div> <!-- add bed end---> --}}
         <!-- Modals end--->
     </div> <!--main div end-->
     <!--scripts start-->
@@ -1301,6 +1336,10 @@
 
         window.addEventListener('trgTransferBed', function() {
             document.getElementById("transferPatientBed").checked = true;
+        });
+
+        window.addEventListener('showMdPatientDidNotDischargedTrg', function() {
+            document.getElementById("showMdPatientDidNotDischarged").checked = true;
         });
 
 

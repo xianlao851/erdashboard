@@ -1,4 +1,4 @@
-<div>
+<div class="p-4">
     <div class="h-screen max-w-6xl p-1 mx-auto mt-4 bg-white rounded-md">
         <div class="relative h-10 border-b-2">
             <div class="absolute left-0 top-3">

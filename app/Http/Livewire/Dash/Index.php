@@ -577,7 +577,7 @@ class Index extends Component
         $current_date = date('Y-m-d');
 
         $getCurrentDate = new DateTime($current_date);
-        $getCurrentDate->modify('-7 day');
+        $getCurrentDate->modify('-0 day');
         $setStartDate = $getCurrentDate->format('Y-m-d');
 
         $this->start_date = date('Y-m-d', strtotime($setStartDate));

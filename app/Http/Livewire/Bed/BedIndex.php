@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Bed;
 
 use DateTime;
+use Carbon\Carbon;
 use App\Models\Bed;
-use App\Models\ErdashActivePatient;
 use App\Models\Room;
 use Livewire\Component;
 use App\Models\PatientBed;
@@ -13,12 +13,16 @@ use App\Models\HospitalHerlog;
 //use Illuminate\Support\Facades\DB;
 use App\Models\HospitalPatient;
 use Illuminate\Support\Facades\DB;
-//use DB;
+use App\Models\ErdashActivePatient;
 use Illuminate\Support\Facades\Auth;
+//use DB;
+use App\Models\PatienBedUpdatedByLog;
+use App\Models\PatientBedDeleteByLog;
+use App\Models\PatientBedDeletedByLog;
+use App\Models\PatientBedUpdatedByLog;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Collection;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-use Carbon\Carbon;
 
 class BedIndex extends Component
 {
@@ -27,7 +31,7 @@ class BedIndex extends Component
     //protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         'onDrag', 'onDrop', 'dischargePatient', 'getTransferBedenccode', 'getTransferBedCode', 'reset_page',
-        'trgTransferBed', 'transferPatientBed', 'patientAssignedSuccess', 'saveCount'
+        'trgTransferBed', 'transferPatientBed', 'patientAssignedSuccess', 'saveCount', 'showMdPatientDidNotDischargedTrg'
     ];
     public $bed_name;
 
@@ -57,7 +61,7 @@ class BedIndex extends Component
 
     public $diffCount, $getTake, $setStart = 1, $setEnd, $getDiv, $sdate, $edate;
 
-    public $resultGetTakeDivByTwo, $current_date, $created_by_emp_id;
+    public $resultGetTakeDivByTwo, $current_date, $created_by_emp_id, $selected_person;
     public $getRemainingPage;
     public $checkenccode = [], $getEnccode = [];
     public $getPatients = null;
@@ -99,7 +103,7 @@ class BedIndex extends Component
         $current_date = date('Y-m-d');
 
         $getCurrentDate = new DateTime($current_date);
-        $getCurrentDate->modify('-7 day');
+        $getCurrentDate->modify('-0 day');
         $setStartDate = $getCurrentDate->format('Y-m-d');
 
         $this->start_date = date('Y-m-d', strtotime($setStartDate));
@@ -211,7 +215,7 @@ class BedIndex extends Component
         AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
 
-
+        //dd($getHpersons);
         // old query, patient assigned is removed in the patient list but response is slow
         foreach ($patientBeds as $patientBed) {
             foreach ($getHpersons as $getHperson) {
@@ -319,6 +323,18 @@ class BedIndex extends Component
         // });
 
         // dd($checkLogCount->);
+
+
+        // $ward3FMP = collect(DB::connection('hospital')
+        //     ->select("SELECT patrm.enccode, hdlg.admdate, patrm.patrmstat, hdlg.disdate, per.patfirst, per.patlast, per.patmiddle
+        //     FROM hospital.dbo.henctr enctr
+        //     RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
+        //     RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
+        //     RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = patrm.hpercode
+        //     WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL)  AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH3')
+        //     AND(hdlg.admdate BETWEEN '$this->sdate' AND '$this->edate')"));
+        // dd($ward3FMP);
+
         return view('livewire.bed.bed-index', [
             //'patients' => $this->get_patients ?? null,
             'patient_results' => $this->patient_list_results ?? null,
@@ -354,7 +370,15 @@ class BedIndex extends Component
         if ($getID == 'delete') { // if for delete
             $getBedDeatils = PatientBed::where('enccode', $this->selected_patient_enccode)->first();
             if ($getBedDeatils) {
-                $getBedDeatils->delete();
+
+                PatientBedDeletedByLog::create([
+                    'enccode' => $this->selected_patient_enccode,
+                    'emp_id' => $this->created_by_emp_id,
+                    'bed_id' => $getBedDeatils->bed_id,
+                ]);
+
+                $getBedDeatilsToDelete = PatientBed::where('patient_bed_id', $getBedDeatils->patient_bed_id)->first();
+                $getBedDeatilsToDelete->delete();
                 $this->alert('success', 'DELETED');
             } elseif (isNull($getBedDeatils)) {
                 $this->alert('info', 'NOT ASSIGNED TO A BED YET!');
@@ -366,17 +390,34 @@ class BedIndex extends Component
             foreach ($bedAvailability as $beds) { // checks if the bed is occupied
                 foreach ($beds->findPatientBed as $patienBed) {
                     if ($patienBed->confirmPatientErlogStatus) {
-                        $this->dispatchBrowserEvent('occupied');
-                        $this->status = true;
-                        $this->reset('selected_patient_enccode', 'selected_patient_bed');
+                        $getEnccode = $patienBed->confirmPatientErlogStatus->enccode;
+
+                        $getHperson = collect(DB::connection('hospital')
+                            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, er.erdate, per.patfirst, per.patlast, per.patmiddle, per.patsex, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+                            FROM hospital.dbo.henctr entr
+                            RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+                            RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+                            RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+                            WHERE (er.enccode= '$getEnccode') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')"));
+
+                        if ($getHperson->isNotEmpty()) {
+                            $this->status = true;
+                            $this->reset('selected_patient_enccode', 'selected_patient_bed');
+                            $this->dispatchBrowserEvent('occupied');
+                        } else {
+                            $this->status = true;
+                            $this->selected_person = $patienBed->confirmPatientErlogStatus;
+                            $this->dispatchBrowserEvent('showMdPatientDidNotDischargedTrg');
+                        }
                     }
                 }
             }
 
             if ($this->status == false) {
-                $checkenccode = PatientBed::select('enccode', 'patient_bed_id')->where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already=
+                $checkenccode = PatientBed::select('enccode', 'patient_bed_id', 'bed_id')->where('enccode', $this->selected_patient_enccode)->first(); //check if the patient is assigned to a bed already=
                 if ($checkenccode) {
                     $this->recentPatientBedId = $checkenccode->patient_bed_id;
+                    $this->recentBedId = $checkenccode->bed_id;
                     $this->dispatchBrowserEvent('patientAssingedToABedAlready');
                 } elseif (isNull($checkenccode)) {
 
@@ -408,12 +449,22 @@ class BedIndex extends Component
 
     public function transferPatientBed()
     {
-        //dd($this->recentPatientBedId);
+        //dd();
+
         $fetchRoomId = Bed::select('bed_id', 'room_id')->where('bed_id', $this->selected_patient_bed)->first();
+        //$getRecentBedId = $fetchRoomId->bed_id;
         $patientBed = PatientBed::where('patient_bed_id', $this->recentPatientBedId)->first();
         $patientBed->bed_id = $this->selected_patient_bed;
         $patientBed->room_id = $fetchRoomId->room_id;
         $patientBed->save();
+
+        PatientBedUpdatedByLog::create([
+            'enccode' => $this->selected_patient_enccode,
+            'bed_id_from' => $this->recentBedId,
+            'bed_id_to' => $this->selected_patient_bed,
+            'emp_id' => $this->created_by_emp_id
+        ]);
+
         $this->dispatchBrowserEvent('patientAssignedSuccess');
 
         //$fetchPatientBedInfo = PatientBed::where('patient_bed_id')->first();
