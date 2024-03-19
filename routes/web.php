@@ -8,6 +8,7 @@ use App\Http\Livewire\Dash\Index;
 use App\Http\Livewire\Dash\IndexTwo;
 use App\Http\Livewire\Room\RoomIndex;
 use App\Http\Livewire\User\UserList;
+use App\Http\Livewire\Dash\SecondMonitor;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,6 +38,7 @@ Route::middleware([
 
 Route::get('/charts', Index::class)->name('charts');
 Route::get('/active', IndexTwo::class)->name('active');
+Route::get('/second_monitor', SecondMonitor::class)->name('second_monitor');
 
 Route::middleware([
     'auth:sanctum', 'role:admin',

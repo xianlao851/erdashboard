@@ -24,6 +24,9 @@
                         <x-nav-link href="{{ route('active') }}" :active="request()->routeIs('active')" class="text-white">
                             {{ __('Active') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('second_monitor') }}" :active="request()->routeIs('second_monitor')" class="text-white">
+                            {{ __('Second Monitor') }}
+                        </x-nav-link>
                         {{-- <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">
                             {{ __('Room') }}
                         </x-nav-link> --}}

@@ -3,12 +3,13 @@
         {{ __('ERDASHBOARD') }}
     </h2>
 </x-slot>
-<div class="flex w-full">
+<div class="flex flex-col w-full">
     {{-- <div class="w-full" wire:loading>
         <div class="absolute flex items-center justify-center mt-0 ml-0 bg-black z-[9999] w-full h-full opacity-75">
             <span class="text-green-400 loading loading-spinner loading-lg"></span>
         </div>
     </div> --}}
+
     <div class="w-full p-2 mx-auto">
         <div class="flex w-full gap-3 p-4 mt-4">
             <div class="w-2/12" wire:ignore>
@@ -20,11 +21,6 @@
             </div>
             <div class="w-10/12" wire:ignore>
                 <div class="grid w-full grid-cols-6 grid-rows-2 gap-3">
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold">*SICU
-                        </div>
-                        <div id="ward2FICU"> </div>
-                    </div> --}}
                     <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">OPD 3rd Floor (MICU A)
                         </div>
@@ -58,11 +54,6 @@
                         </div>
                         <div id="wardCBPN"></div>
                     </div>
-                    {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Stepdown
-                        </div>
-                        <div id="wardSDICU"></div>
-                    </div> --}}
                     <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">SICU A
                         </div>
@@ -98,101 +89,101 @@
                 </div>
             </div>
             {{-- <div class="w-2/12">
-                <div class="overflow-y-auto h-[470px] w-full bg-white p-3 rounded-lg" id="data">
-                    <div class="">
-                        @foreach ($rooms as $room)
-                            <div> {{ $room->room_name }}</div>
-                            <div class="grid grid-cols-2 grid-rows-2 gap-2">
-                                @forelse ($beds as $bed)
-                                    @if ($room->room_id == $bed->room_id)
-                                        <div
-                                            class="relative flex flex-col w-32 p-1 mt-0 rounded-md bg-gradient-to-r from-green-300 to-emerald-500 h-14">
-                                            <span
-                                                class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
-                                            <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
-                                            @forelse ($patientBeds as $patientBed)
-                                                @if ($patientBed->bed_id == $bed->bed_id)
-                                                    @forelse ($getHpersons as $getHperson)
-                                                        @if ($patientBed->enccode == $getHperson->enccode)
-                                                            <div
-                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                <span class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                    {{ $bed->bed_name }}</span>
-                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                    {{ $getHperson->patlast }},
-                                                                </span>
-                                                                <span class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                    {{ $getHperson->patfirst }}.
-                                                                </span>
-                                                                <div></div>
-                                                            </div>
-                                                        @else
-                                                        @endif
-                                                    @empty
-                                                    @endforelse
-                                                @endif
-                                                <!----->
-                                            @empty
-                                            @endforelse
-                                        </div>
-                                    @endif
+                    <div class="overflow-y-auto h-[470px] w-full bg-white p-3 rounded-lg" id="data">
+                        <div class="">
+                            @foreach ($rooms as $room)
+                                <div> {{ $room->room_name }}</div>
+                                <div class="grid grid-cols-2 grid-rows-2 gap-2">
+                                    @forelse ($beds as $bed)
+                                        @if ($room->room_id == $bed->room_id)
+                                            <div
+                                                class="relative flex flex-col w-32 p-1 mt-0 rounded-md bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                <span
+                                                    class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                @forelse ($patientBeds as $patientBed)
+                                                    @if ($patientBed->bed_id == $bed->bed_id)
+                                                        @forelse ($getHpersons as $getHperson)
+                                                            @if ($patientBed->enccode == $getHperson->enccode)
+                                                                <div
+                                                                    class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
+                                                                    <span class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                        {{ $bed->bed_name }}</span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patlast }},
+                                                                    </span>
+                                                                    <span class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        {{ $getHperson->patfirst }}.
+                                                                    </span>
+                                                                    <div></div>
+                                                                </div>
+                                                            @else
+                                                            @endif
+                                                        @empty
+                                                        @endforelse
+                                                    @endif
+                                                    <!----->
+                                                @empty
+                                                @endforelse
+                                            </div>
+                                        @endif
 
-                                @empty
-                                @endforelse
-                            </div>
-                        @endforeach
+                                    @empty
+                                    @endforelse
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            </div> --}}
+                </div> --}}
         </div> <!-- div for ocuppied beds --->
 
         {{-- <div class="relative mt-3">
-            <div class="absolute left-7 top-6">
-                <h2>PATIENT COUNT</h2>
-            </div>
-            <div class="absolute left-4">
-                <div class="join">
-                    <select class="select select-bordered join-item focus:border-blue-700 focus:ring-blue-700"
-                        wire:model.lazy="date_filter">
-                        <option class="hover:bg-green-700" value="today"
-                            {{ $dateFilter == 'today' ? 'selected' : '' }}>
-                            Today</option>
-                        <option class="hover:bg-green-700" value="this_year"
-                            {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
-                        </option>
-                        <option class="hover:bg-green-700" value="this_year"
-                            {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This
-                            Year
-                        </option>
-                        <option class="hover:bg-green-700" value="yesterday"
-                            {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>
-                            Yesterday
-                        </option>
-                        <option class="hover:bg-green-700" value="this_week"
-                            {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This
-                            Week
-                        </option>
-                        <option class="hover:bg-green-700" value="last_week"
-                            {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last
-                            Week
-                        </option>
-                        <option class="hover:bg-green-700" value="this_month"
-                            {{ $dateFilter == 'this_month' ? 'selected' : '' }}>
-                            This
-                            Month</option>
-                        <option class="hover:bg-green-700" value="last_month"
-                            {{ $dateFilter == 'last_month' ? 'selected' : '' }}>
-                            Last
-                            Month</option>
-                        <option class="hover:bg-green-700" value="last_year"
-                            {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last
-                            Year
-                        </option>
-                    </select>
-                    <label type="submit" class="text-white bg-blue-600 btn join-item">Filter</label>
+                <div class="absolute left-7 top-6">
+                    <h2>PATIENT COUNT</h2>
                 </div>
-            </div>
-        </div> --}}
+                <div class="absolute left-4">
+                    <div class="join">
+                        <select class="select select-bordered join-item focus:border-blue-700 focus:ring-blue-700"
+                            wire:model.lazy="date_filter">
+                            <option class="hover:bg-green-700" value="today"
+                                {{ $dateFilter == 'today' ? 'selected' : '' }}>
+                                Today</option>
+                            <option class="hover:bg-green-700" value="this_year"
+                                {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
+                            </option>
+                            <option class="hover:bg-green-700" value="this_year"
+                                {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This
+                                Year
+                            </option>
+                            <option class="hover:bg-green-700" value="yesterday"
+                                {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>
+                                Yesterday
+                            </option>
+                            <option class="hover:bg-green-700" value="this_week"
+                                {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This
+                                Week
+                            </option>
+                            <option class="hover:bg-green-700" value="last_week"
+                                {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last
+                                Week
+                            </option>
+                            <option class="hover:bg-green-700" value="this_month"
+                                {{ $dateFilter == 'this_month' ? 'selected' : '' }}>
+                                This
+                                Month</option>
+                            <option class="hover:bg-green-700" value="last_month"
+                                {{ $dateFilter == 'last_month' ? 'selected' : '' }}>
+                                Last
+                                Month</option>
+                            <option class="hover:bg-green-700" value="last_year"
+                                {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last
+                                Year
+                            </option>
+                        </select>
+                        <label type="submit" class="text-white bg-blue-600 btn join-item">Filter</label>
+                    </div>
+                </div>
+            </div> --}}
         <div class="grid grid-cols-2 gap-4 p-3 mt-4">
             <div class="p-2 bg-white rounded-lg h-96">
                 <div class="flex justify-center p-2 mx-auto font-semibold text-md ">PATIENT ARRIVED HOURLY CENSUS
@@ -208,10 +199,11 @@
 
             </div>
         </div>
-
-        <!--MODALS HERE-->
-        <!--MODALS HERE-->
     </div>
+
+
+    <!--MODALS HERE-->
+    <!--MODALS HERE-->
     <!--Script here-->
     <script>
         //--- 1 OPD 3rd Floor (MICU A)

@@ -98,6 +98,24 @@ class BedIndex extends Component
 
     public function render()
     {
+        //-- SET USER DATA
+        $this->created_by_emp_id = sprintf('%06d', Auth::user()->employee->emp_id);
+        //-- SET USER DATA END
+
+        //-- SET DATES
+        $current_date = date('Y-m-d');
+
+        $getCurrentDate = new DateTime($current_date);
+        $getCurrentDate->modify('-0 day');
+        $setStartDate = $getCurrentDate->format('Y-m-d');
+
+        $this->start_date = date('Y-m-d', strtotime($setStartDate));
+        $this->end_date = date('Y-m-d', strtotime($current_date));
+
+        $this->sdate = $this->start_date  . ' 00:00:00.000';
+        $this->edate = $this->end_date  . ' 23:59:59.000';
+        //-- SET DATES END
+
         //-- UDPATE ACTIVE PATIENT COUNT
         $cur_time = Carbon::parse(now())->format('H');
         $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
@@ -130,21 +148,7 @@ class BedIndex extends Component
                 'hour' => $cur_time,
             ]);
         }
-        //-- UDPATE ACTIVE PATIENT COUNT
-
-        $this->created_by_emp_id = sprintf('%06d', Auth::user()->employee->emp_id);
-
-        $current_date = date('Y-m-d');
-
-        $getCurrentDate = new DateTime($current_date);
-        $getCurrentDate->modify('-0 day');
-        $setStartDate = $getCurrentDate->format('Y-m-d');
-
-        $this->start_date = date('Y-m-d', strtotime($setStartDate));
-        $this->end_date = date('Y-m-d', strtotime($current_date));
-
-        $this->sdate = $this->start_date  . ' 00:00:00.000';
-        $this->edate = $this->end_date  . ' 23:59:59.000';
+        //-- UDPATE ACTIVE PATIENT COUNT END
 
         $offset = ($this->currentPage - 1) * $this->perPage;
         $take = $offset + $this->perPage;
