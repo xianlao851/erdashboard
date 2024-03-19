@@ -14,5 +14,6 @@ class ErdashActivePatient extends Model
     protected $fillable = [
         'count',
         'hour'
+
     ];
 }

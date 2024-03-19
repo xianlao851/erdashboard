@@ -4,21 +4,21 @@
     </h2>
 </x-slot>
 <div class="flex w-full">
-    <div class="w-full" wire:loading>
+    {{-- <div class="w-full" wire:loading>
         <div class="absolute flex items-center justify-center mt-0 ml-0 bg-black z-[9999] w-full h-full opacity-75">
             <span class="text-green-400 loading loading-spinner loading-lg"></span>
         </div>
-    </div>
+    </div> --}}
     <div class="w-full p-2 mx-auto">
         <div class="flex w-full gap-3 p-4 mt-4">
             <div class="w-2/12" wire:ignore>
-                <div class="w-full bg-white rounded-lg h-[470px]">
+                <div class="w-full bg-white rounded-lg h-[480px]">
                     <div class="flex justify-center p-2 mx-auto font-semibold text-md">ER
                     </div>
                     <div class="" id="erAdmittedCount"></div>
                 </div>
             </div>
-            <div class="w-8/12" wire:ignore>
+            <div class="w-10/12" wire:ignore>
                 <div class="grid w-full grid-cols-6 grid-rows-2 gap-3">
                     {{-- <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center p-2 mx-auto text-xs font-semibold">*SICU
@@ -26,27 +26,27 @@
                         <div id="ward2FICU"> </div>
                     </div> --}}
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU A)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">OPD 3rd Floor (MICU A)
                         </div>
                         <div class="content-center bg-white rounded-lg" id="ward3FMP"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">OPD 3rd Floor (MICU B)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">OPD 3rd Floor (MICU B)
                         </div>
                         <div class="content-center bg-white rounded-lg" id="ward3FMIC"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU A)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Main 3rd Floor (NICU A)
                         </div>
                         <div class="content-center bg-white rounded-lg" id="ward3FMN"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Main 3rd Floor (NICU B)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Main 3rd Floor (NICU B)
                         </div>
                         <div class="content-center bg-white rounded-lg" id="wardCBNS"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center mx-auto mt-2 text-xs font-semibold text-nowrap">Annex 2nd
+                        <div class="flex justify-center mx-auto mt-2 text-sm font-semibold text-nowrap">Annex 2nd
                             Floor
                             Pedia A &
                             PICU A
@@ -54,50 +54,50 @@
                         <div class="mt-2" id="wardCBPA"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Annex 2nd Floor (PICU B)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Annex 2nd Floor (PICU B)
                         </div>
                         <div id="wardCBPN"></div>
                     </div>
                     {{-- <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Stepdown
                         </div>
                         <div id="wardSDICU"></div>
                     </div> --}}
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU A
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">SICU A
                         </div>
                         <div id="wardSICU"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">SICU B
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">SICU B
                         </div>
                         <div id="ward2FICU"></div>
                     </div>
 
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">CCU
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">CCU
                         </div>
                         <div id="ward3FCCU"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Stepdown
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Stepdown
                         </div>
                         <div id="wardSDICU"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Eastern Ward Gr Floor
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Eastern Ward Gr Floor
                         </div>
                         <div id="wardFH2"></div>
                     </div>
                     <div class="content-center bg-white rounded-lg">
-                        <div class="flex justify-center p-2 mx-auto text-xs font-semibold ">Field Hospital 3 (CAMES)
+                        <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Field Hospital 3 (CAMES)
                         </div>
                         <div id="wardFH3"></div>
                     </div>
                 </div>
             </div>
-            <div class="w-2/12">
+            {{-- <div class="w-2/12">
                 <div class="overflow-y-auto h-[470px] w-full bg-white p-3 rounded-lg" id="data">
                     <div class="">
                         @foreach ($rooms as $room)
@@ -143,93 +143,72 @@
                         @endforeach
                     </div>
                 </div>
-                {{-- <div class="grid w-full grid-cols-2 grid-rows-1 gap-2 mt-0">
-                    @if ($beds)
-                        @foreach ($beds as $bed)
-                            <div class="h-24 p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50">
-                                <div class="flex items-center mt-0">
-                                    <img src="{{ URL('/images/bed III.png') }}" class="w-[30px] h-[30px]">
-                                    <div class="mt-4 ml-2 text-[10px] text-black underline uppercase">
-                                        {{ $bed->bed_name }}
-                                    </div>
-                                </div> <!-- for bed info and bed image-->
-                                <div>
-                                    @foreach ($bed->patientBed as $patient)
-                                        @if ($patient->patientHerlog)
-                                            <div class="w-full grid-cols-2 gap-1 mt-2 join">
-                                                <div>
-                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'M')
-                                                        <img src="{{ URL('/images/man III.PNG') }}"
-                                                            class="w-[30px] h-[30px]">
-                                                    @endif
-                                                    @if ($patient->patientHerlog->patientInfo->patsex == 'F')
-                                                        <img src="{{ URL('/images/women II.PNG') }}"
-                                                            class="w-[30px] h-[30px]">
-                                                    @endif
-                                                </div>
-                                                <div class="mt-3 ml-0 text-[10px] text-black flex w-44">
-                                                    {{ $patient->patientHerlog->patientInfo->get_patient_name_initial() }}
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            </div> <!-- bed div container--->
-                        @endforeach
-                    @endif
-                </div>  --}}
-                {{-- <div class="mt-2">
-                    @if ($beds)
-                        {{ $beds->links() }}
-                    @endif
-                </div> --}}
-            </div>
+            </div> --}}
         </div> <!-- div for ocuppied beds --->
 
-        <div class="relative mt-3">
+        {{-- <div class="relative mt-3">
             <div class="absolute left-7 top-6">
                 <h2>PATIENT COUNT</h2>
             </div>
-            <div class="absolute right-4">
+            <div class="absolute left-4">
                 <div class="join">
                     <select class="select select-bordered join-item focus:border-blue-700 focus:ring-blue-700"
                         wire:model.lazy="date_filter">
                         <option class="hover:bg-green-700" value="today"
                             {{ $dateFilter == 'today' ? 'selected' : '' }}>
                             Today</option>
-                        {{-- <option class="hover:bg-green-700" value="this_year"
-                                {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
-                            </option> --}}
                         <option class="hover:bg-green-700" value="this_year"
-                            {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This Year
+                            {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
+                        </option>
+                        <option class="hover:bg-green-700" value="this_year"
+                            {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This
+                            Year
                         </option>
                         <option class="hover:bg-green-700" value="yesterday"
-                            {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>Yesterday
+                            {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>
+                            Yesterday
                         </option>
                         <option class="hover:bg-green-700" value="this_week"
-                            {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This Week
+                            {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This
+                            Week
                         </option>
                         <option class="hover:bg-green-700" value="last_week"
-                            {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last Week
+                            {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last
+                            Week
                         </option>
                         <option class="hover:bg-green-700" value="this_month"
-                            {{ $dateFilter == 'this_month' ? 'selected' : '' }}>This
+                            {{ $dateFilter == 'this_month' ? 'selected' : '' }}>
+                            This
                             Month</option>
                         <option class="hover:bg-green-700" value="last_month"
-                            {{ $dateFilter == 'last_month' ? 'selected' : '' }}>Last
+                            {{ $dateFilter == 'last_month' ? 'selected' : '' }}>
+                            Last
                             Month</option>
                         <option class="hover:bg-green-700" value="last_year"
-                            {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last Year
+                            {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last
+                            Year
                         </option>
                     </select>
                     <label type="submit" class="text-white bg-blue-600 btn join-item">Filter</label>
                 </div>
             </div>
+        </div> --}}
+        <div class="grid grid-cols-2 gap-4 p-3 mt-4">
+            <div class="p-2 bg-white rounded-lg h-96">
+                <div class="flex justify-center p-2 mx-auto font-semibold text-md ">PATIENT ARRIVED HOURLY CENSUS
+                </div>
+                <div class="h-5/6"><livewire:livewire-line-chart key="{{ $lineChartModel->reactiveKey() }}"
+                        :line-chart-model="$lineChartModel" /></div>
+            </div>
+            <div class="w-full p-2 bg-white rounded-lg h-96">
+                <div class="flex justify-center p-2 mx-auto font-semibold text-md ">ACTIVE PATIENT CENSUS
+                </div>
+                <div class="h-5/6"><livewire:livewire-line-chart key="{{ $activepatients->reactiveKey() }}"
+                        :line-chart-model="$activepatients" /></div>
+
+            </div>
         </div>
 
-        <div class="h-64 mx-4 mt-16 bg-white rounded-lg" wire:target='date_filter'>
-            <livewire:livewire-line-chart key="{{ $lineChartModel->reactiveKey() }}" :line-chart-model="$lineChartModel" />
-        </div>
         <!--MODALS HERE-->
         <!--MODALS HERE-->
     </div>
@@ -266,7 +245,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 fontFamily: 'sans',
                                 // color: '#263238'
                             }
@@ -277,7 +256,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -285,7 +264,7 @@
             //     text: 'OPD 3rd Floor (MICU A)',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -330,7 +309,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 fontFamily: 'sans',
                                 // color: '#263238'
                             }
@@ -341,7 +320,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -349,7 +328,7 @@
             //     text: 'OPD 3rd Floor (MICU B)',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -393,7 +372,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 fontFamily: 'sans',
                                 // color: '#263238'
                             }
@@ -404,7 +383,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -412,7 +391,7 @@
             //     text: 'Main 3rd Floor  (NICU A)',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -456,7 +435,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -467,7 +446,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -475,7 +454,7 @@
             //     text: 'Main 3rd Floor (NICU B)',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -519,7 +498,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -530,7 +509,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -538,7 +517,7 @@
             //     text: 'Annex 2nd Floor Pedia A & PICU A',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -582,7 +561,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -593,7 +572,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -601,7 +580,7 @@
             //     text: 'Annex 2nd Floor (PICU B)',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -645,7 +624,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -656,7 +635,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -664,7 +643,7 @@
             //     text: 'SICU',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -708,7 +687,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 fontFamily: 'sans',
                                 // color: '#089629',
                             }
@@ -719,7 +698,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -727,7 +706,7 @@
             //     text: '*SICU',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -771,7 +750,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -782,7 +761,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -790,7 +769,7 @@
             //     text: '3FCCU',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -834,7 +813,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -845,7 +824,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -853,7 +832,7 @@
             //     text: 'Stepdown',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -897,7 +876,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -908,7 +887,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -916,7 +895,7 @@
             //     text: 'Stepdown',
             //     align: 'center',
             //     style: {
-            //         fontSize: '12px',
+            //         fontSize: '14px',
             //         fontWeight: 'bold',
             //         fontFamily: 'sans',
             //         // color: '#263238'
@@ -943,7 +922,7 @@
         var chartwardFH2 = new ApexCharts(document.querySelector("#wardFH2"), wardFH2);
         chartwardFH2.render(); //---wardFH2, 11 Eastern Ward Gr Floor
 
-        //---wardFH2, 11 Eastern Ward Gr Floor
+        //---wardFH2, 12 Field Hospital 3 (CAMES)
         var wardFH3 = {
             series: [@json($wardFH3), @json($wardFH3Available)],
             chart: {
@@ -960,7 +939,7 @@
                             show: true,
                             total: {
                                 show: true,
-                                fontSize: 15,
+                                fontSize: 22,
                                 //fontWeight: 'bold',
                                 fontFamily: 'sans',
                             }
@@ -971,7 +950,7 @@
             labels: ['Ocuppied', 'Available', ],
             legend: {
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -1034,7 +1013,7 @@
             legend: {
                 //color: '#4d4c4a',
                 position: 'bottom',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'sans',
             },
@@ -1078,19 +1057,37 @@
             if (mins == "00" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
+            if (mins == "05" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
             if (mins == "10" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "15" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
             if (mins == "20" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
+            if (mins == "25" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
             if (mins == "30" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "35" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
             if (mins == "40" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
+            if (mins == "45" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
             if (mins == "50" && seconds == "00") {
+                Livewire.emit('saveCount');
+            }
+            if (mins == "55" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
             if (mins == "58" && seconds == "00") {

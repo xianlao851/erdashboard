@@ -112,6 +112,40 @@ class Index extends Component
     }
     public function render()
     {
+        //-- UDPATE ACTIVE PATIENT COUNT
+        $cur_time = Carbon::parse(now())->format('H');
+        $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
+
+        $counActive = count(DB::connection('hospital')
+            ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        FROM hospital.dbo.henctr entr
+        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+
+        $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+
+        if ($findHourDate) {
+
+            if ($findHourDate->count < $counActive) {
+                $findHourDate->count = $counActive;
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            } else {
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            }
+        } else {
+            ErdashActivePatient::create([
+                'count' => $counActive,
+                'hour' => $cur_time,
+            ]);
+        }
+        //-- UDPATE ACTIVE PATIENT COUNT
+
         $this->i = 0;
         //$this->j = 0;
         $this->erAdmittedCount = 0;
@@ -189,7 +223,7 @@ class Index extends Component
         if ($this->date_filter == 'this_week' || $this->date_filter == 'last_week' || $this->date_filter == 'yesterday' || $this->date_filter == 'last_month' || $this->date_filter == 'this_month' || $this->date_filter == 'today' || $this->dateFilter == 'define') {
             $lineChartModel = (new LineChartModel())
                 ->setAnimated(true)
-                //->setTitle('Patient Count')
+                //->setTitle('PATIENT ARRIVED HOURLY CENSUS')
                 ->withDataLabels();
             foreach ($patients as $day => $values) {
                 $this->days[] = $day;
@@ -198,6 +232,23 @@ class Index extends Component
                 $this->i++;
             }
         } // End lineChartmodel for filter this_week, last_week, yesterday, last_month, this_month and today
+
+        $cur_date = Carbon::parse(now())->format('Y-m-d');
+        $cur_time = Carbon::parse(now())->format('H');
+        $getActivepatients = ErdashActivePatient::select(DB::raw('DATE(created_at) as created_at'), 'hour', 'count', 'updated_at')->whereBetween(DB::raw('DATE(created_at)'), [$cur_date, $cur_date])->get();
+        $activepatients = (new LineChartModel())
+            //->setTitle('ACTIVE PATIENT CENSUS')
+            ->multiLine()
+            ->setAnimated(true)
+            //->addSeriesPoint('Trainees', Carbon::now()->subDays(7)->format('d.m.Y'), count(Trainee::whereDate('created_at', Carbon::now()->subDays(7)->format('Y-m-d'))->get()))
+            ->withDataLabels();
+        foreach ($getActivepatients as $patient) {
+            $getdate = $patient->created_at->format('F-d-Y');
+            if ($this->sdate <= $getdate) {
+                $activepatients->addSeriesPoint($getdate, $patient->hour, $patient->count);
+            }
+        }
+        /// end for line charts for active patient
 
         #bf0000
         #eb0707
@@ -701,7 +752,8 @@ class Index extends Component
             'beds' => $beds,
             'patientBeds' => $patientBeds,
             'getHpersons' => $getHpersons,
-            'rooms' => $rooms
+            'rooms' => $rooms,
+            'activepatients' => $activepatients
         ]);
     }
 
@@ -710,7 +762,6 @@ class Index extends Component
     {
         $cur_time = Carbon::parse(now())->format('H');
         $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
-
 
         $counActive = count(DB::connection('hospital')
             ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
@@ -723,7 +774,9 @@ class Index extends Component
             AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
         $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+
         if ($findHourDate) {
+
             if ($findHourDate->count < $counActive) {
                 $findHourDate->count = $counActive;
                 $findHourDate->updated_at = $cur_date;
@@ -735,8 +788,52 @@ class Index extends Component
         } else {
             ErdashActivePatient::create([
                 'count' => $counActive,
-                'hour' => $cur_time
+                'hour' => $cur_time,
             ]);
         }
+
+        $this->reset(
+            'ward2FICU',
+            'ward3FMIC',
+            'ward3FMN',
+            'ward3FMP',
+            'ward3FNIC',
+            'wardCBNS',
+            'wardCBPA',
+            'wardCBPN',
+            'wardSDICU',
+            'wardSICU',
+            'ward3FCCU',
+            'wardFH2',
+            'wardFH3',
+            'ward3FMPColor',
+            'ward3FMICColor',
+            'ward3FMNColor',
+            'wardCBNSColor',
+            'wardCBPAColor',
+            'wardCBPNColor',
+            'wardSICUColor',
+            'ward2FICUColor',
+            'ward3FCCUColor',
+            'wardSDICUColor',
+            'wardFH2Color',
+            'wardFH3Color',
+            'ward2FICUAvailable',
+            'ward3FMICAvailable',
+            'ward3FMNAvailable',
+            'ward3FMPAvailable',
+            'ward3FNICAvailable',
+            'wardCBNSAvailable',
+            'wardCBPAAvailable',
+            'wardCBPNAvailable',
+            'wardSDICUAvailable',
+            'wardSICUAvailable',
+            'ward3FCCUAvailable',
+            'wardFH2Available',
+            'wardFH3Available',
+            'erAdmittedCount',
+            'erSlotAvailable',
+            'erAdmittedCountColor',
+        );
     }
 }

@@ -98,6 +98,40 @@ class BedIndex extends Component
 
     public function render()
     {
+        //-- UDPATE ACTIVE PATIENT COUNT
+        $cur_time = Carbon::parse(now())->format('H');
+        $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
+
+        $counActive = count(DB::connection('hospital')
+            ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        FROM hospital.dbo.henctr entr
+        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+
+        $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+
+        if ($findHourDate) {
+
+            if ($findHourDate->count < $counActive) {
+                $findHourDate->count = $counActive;
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            } else {
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            }
+        } else {
+            ErdashActivePatient::create([
+                'count' => $counActive,
+                'hour' => $cur_time,
+            ]);
+        }
+        //-- UDPATE ACTIVE PATIENT COUNT
+
         $this->created_by_emp_id = sprintf('%06d', Auth::user()->employee->emp_id);
 
         $current_date = date('Y-m-d');
@@ -213,8 +247,6 @@ class BedIndex extends Component
         WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
         AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
         AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
-
-
         //dd($getHpersons);
         // old query, patient assigned is removed in the patient list but response is slow
         foreach ($patientBeds as $patientBed) {
@@ -290,7 +322,7 @@ class BedIndex extends Component
                 ->orderBy('dbo.hperson.patlast', 'asc')->get();
         }
 
-        ///dd($this->getPatients);
+        //dd($this->getPatients);
         // old query end
 
         // trial
@@ -437,11 +469,46 @@ class BedIndex extends Component
                         'enccode' => $enccode,
                         'emp_id' => $this->created_by_emp_id,
                     ]);
+
                     $this->reset('selected_patient_enccode', 'selected_patient_bed');
                     $this->dispatchBrowserEvent('patientAssigned');
                 }
             }
         }
+
+        //-- UDPATE ACTIVE PATIENT COUNT
+        $cur_time = Carbon::parse(now())->format('H');
+        $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
+
+        $counActive = count(DB::connection('hospital')
+            ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        FROM hospital.dbo.henctr entr
+        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+
+        $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+
+        if ($findHourDate) {
+
+            if ($findHourDate->count < $counActive) {
+                $findHourDate->count = $counActive;
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            } else {
+                $findHourDate->updated_at = $cur_date;
+                $findHourDate->save();
+            }
+        } else {
+            ErdashActivePatient::create([
+                'count' => $counActive,
+                'hour' => $cur_time,
+            ]);
+        }
+        //-- UDPATE ACTIVE PATIENT COUNT
 
         $this->reset('getPatients', 'getEnccode');
         $this->status = false;
