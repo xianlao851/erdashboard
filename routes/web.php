@@ -38,7 +38,7 @@ Route::middleware([
 
 Route::get('/charts', Index::class)->name('charts');
 Route::get('/active', IndexTwo::class)->name('active');
-Route::get('/second_monitor', SecondMonitor::class)->name('second_monitor');
+Route::get('/dashboard_monitoring', SecondMonitor::class)->name('dashboard_monitoring');
 
 Route::middleware([
     'auth:sanctum', 'role:admin',

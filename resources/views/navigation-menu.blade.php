@@ -21,11 +21,11 @@
                             {{ __('Census') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('active') }}" :active="request()->routeIs('active')" class="text-white">
+                        {{-- <x-nav-link href="{{ route('active') }}" :active="request()->routeIs('active')" class="text-white">
                             {{ __('Active') }}
-                        </x-nav-link>
-                        <x-nav-link href="{{ route('second_monitor') }}" :active="request()->routeIs('second_monitor')" class="text-white">
-                            {{ __('Second Monitor') }}
+                        </x-nav-link> --}}
+                        <x-nav-link href="{{ route('dashboard_monitoring') }}" :active="request()->routeIs('dashboard_monitoring')" class="text-white">
+                            {{ __('Dashboard Monitoring') }}
                         </x-nav-link>
                         {{-- <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">
                             {{ __('Room') }}

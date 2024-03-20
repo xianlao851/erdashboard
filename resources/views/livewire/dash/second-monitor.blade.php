@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="text-lg font-semibold leading-tight text-gray-800">
-        {{ __('ERDASHBOARD') }}
+        {{ __('ERMERGENCY DASHBOARD') }}
     </h2>
 </x-slot>
 <div class="flex flex-col w-full">
@@ -123,7 +123,7 @@
                                                                         {{ $getHperson->patlast }},
                                                                     </span>
                                                                     <span class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                        {{ $getHperson->patfirst }}.
+                                                                        {{ $getHperson->patfirst[0] }}.
                                                                     </span>
                                                                     <div></div>
                                                                 </div>
@@ -233,8 +233,7 @@
                                                 $bed->bed_id == '30' or
                                                 $bed->bed_id == '44' or
                                                 $bed->bed_id == '45')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-16 p-0 mt-0 rounded-md bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
@@ -245,9 +244,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md cursor-pointer bg-gradient-to-t from-rose-400 to-rose-700">
                                                                     <div style="transform: rotate(-90deg);"
                                                                         class="flex flex-col mt-12">
@@ -259,7 +256,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -290,8 +287,7 @@
                                                 $bed->bed_id == '35' or
                                                 $bed->bed_id == '36' or
                                                 $bed->bed_id == '37')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                 <span
                                                     class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -300,9 +296,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                     <span class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                         {{ $bed->bed_name }}</span>
@@ -312,7 +306,7 @@
                                                                     </span>
                                                                     <span
                                                                         class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                        {{ $getHperson->patfirst }}.
+                                                                        {{ $getHperson->patfirst[0] }}.
                                                                     </span>
                                                                     <div></div>
                                                                 </div>
@@ -341,8 +335,7 @@
                                     <div class="grid grid-rows-3 gap-2 mt-2">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '22' or $bed->bed_id == '23' or $bed->bed_id == '24')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer border-emera bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -352,9 +345,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -365,7 +356,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -393,8 +384,7 @@
                                         <div class="flex flex-col gap-2 p-2">
                                             @forelse ($beds as $bed)
                                                 @if ($bed->bed_id == '4' or $bed->bed_id == '5')
-                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                        id="{{ $bed->bed_id }}"
+                                                    <div
                                                         class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -403,9 +393,7 @@
                                                             @if ($patientBed->bed_id == $bed->bed_id)
                                                                 @forelse ($getHpersons as $getHperson)
                                                                     @if ($patientBed->enccode == $getHperson->enccode)
-                                                                        <div drag-item draggable="true"
-                                                                            id="{{ $patientBed->enccode }}"
-                                                                            ondragstart="drag(event)"
+                                                                        <div
                                                                             class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                             <span
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -416,7 +404,7 @@
                                                                             </span>
                                                                             <span
                                                                                 class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                                {{ $getHperson->patfirst }}.
+                                                                                {{ $getHperson->patfirst[0] }}.
                                                                             </span>
                                                                             <div></div>
                                                                         </div>
@@ -478,8 +466,7 @@
                                     <div class="grid grid-rows-3 gap-2">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '7' or $bed->bed_id == '8' or $bed->bed_id == '9')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -488,9 +475,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -501,7 +486,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -538,8 +523,7 @@
                                                 $bed->bed_id == '41' or
                                                 $bed->bed_id == '42' or
                                                 $bed->bed_id == '43')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
@@ -550,9 +534,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
                                                                     <div style="transform: rotate(-90deg);"
                                                                         class="flex flex-col mt-12">
@@ -564,7 +546,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -584,8 +566,7 @@
                                 <div class="grid grid-cols-6 gap-6 p-2 mt-0 bg-white rounded-b-md">
                                     @forelse ($beds as $bed)
                                         @if ($bed->bed_id == '1' or $bed->bed_id == '2' or $bed->bed_id == '3')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
@@ -596,9 +577,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
                                                                     <div style="transform: rotate(-90deg);"
                                                                         class="flex flex-col mt-12">
@@ -610,7 +589,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -641,8 +620,7 @@
                                     <div class="">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '21')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -651,9 +629,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -664,7 +640,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -686,8 +662,7 @@
                                     <div class="">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '19')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -696,9 +671,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -709,7 +682,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -733,8 +706,7 @@
                                         <div class="">
                                             @forelse ($beds as $bed)
                                                 @if ($bed->bed_id == '18')
-                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                        id="{{ $bed->bed_id }}"
+                                                    <div
                                                         class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                         <div style="transform: rotate(-90deg);"
                                                             class="flex flex-col mt-12">
@@ -747,9 +719,7 @@
                                                             @if ($patientBed->bed_id == $bed->bed_id)
                                                                 @forelse ($getHpersons as $getHperson)
                                                                     @if ($patientBed->enccode == $getHperson->enccode)
-                                                                        <div drag-item draggable="true"
-                                                                            id="{{ $patientBed->enccode }}"
-                                                                            ondragstart="drag(event)"
+                                                                        <div
                                                                             class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
                                                                             <div style="transform: rotate(-90deg);"
                                                                                 class="flex flex-col mt-12">
@@ -762,7 +732,7 @@
                                                                                 </span>
                                                                                 <span
                                                                                     class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                                    {{ $getHperson->patfirst }}.
+                                                                                    {{ $getHperson->patfirst[0] }}.
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -794,8 +764,7 @@
                                         <div class="mt-4">
                                             @forelse ($beds as $bed)
                                                 @if ($bed->bed_id == '20')
-                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                        id="{{ $bed->bed_id }}"
+                                                    <div
                                                         class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -804,9 +773,7 @@
                                                             @if ($patientBed->bed_id == $bed->bed_id)
                                                                 @forelse ($getHpersons as $getHperson)
                                                                     @if ($patientBed->enccode == $getHperson->enccode)
-                                                                        <div drag-item draggable="true"
-                                                                            id="{{ $patientBed->enccode }}"
-                                                                            ondragstart="drag(event)"
+                                                                        <div
                                                                             class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                             <span
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -817,7 +784,7 @@
                                                                             </span>
                                                                             <span
                                                                                 class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                                {{ $getHperson->patfirst }}.
+                                                                                {{ $getHperson->patfirst[0] }}.
                                                                             </span>
                                                                             <div></div>
                                                                         </div>
@@ -841,8 +808,7 @@
                                     <div class="grid grid-rows-3 gap-2 ">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '15')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -851,9 +817,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -864,7 +828,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -883,8 +847,7 @@
 
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '16')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -893,9 +856,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -906,7 +867,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -925,8 +886,7 @@
 
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '17')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
+                                                <div
                                                     class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
@@ -935,9 +895,7 @@
                                                         @if ($patientBed->bed_id == $bed->bed_id)
                                                             @forelse ($getHpersons as $getHperson)
                                                                 @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
+                                                                    <div
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
                                                                         <span
                                                                             class="text-[12px] text-black p-0 ml-1 mt-0">
@@ -948,7 +906,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                         <div></div>
                                                                     </div>
@@ -979,8 +937,7 @@
                                 <div class="flex flex-row space-x-4">
                                     @forelse ($beds as $bed)
                                         @if ($bed->bed_id == '11')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
@@ -991,9 +948,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
                                                                     <div style="transform: rotate(-90deg);"
                                                                         class="flex flex-col mt-12">
@@ -1005,7 +960,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -1023,8 +978,7 @@
                                     @endforelse
                                     @forelse ($beds as $bed)
                                         @if ($bed->bed_id == '10')
-                                            <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                id="{{ $bed->bed_id }}"
+                                            <div
                                                 class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
@@ -1035,9 +989,7 @@
                                                     @if ($patientBed->bed_id == $bed->bed_id)
                                                         @forelse ($getHpersons as $getHperson)
                                                             @if ($patientBed->enccode == $getHperson->enccode)
-                                                                <div drag-item draggable="true"
-                                                                    id="{{ $patientBed->enccode }}"
-                                                                    ondragstart="drag(event)"
+                                                                <div
                                                                     class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
                                                                     <div style="transform: rotate(-90deg);"
                                                                         class="flex flex-col mt-12">
@@ -1049,7 +1001,7 @@
                                                                         </span>
                                                                         <span
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </span>
                                                                     </div>
                                                                 </div>

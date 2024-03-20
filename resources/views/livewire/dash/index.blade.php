@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="text-lg font-semibold leading-tight text-gray-800">
-        {{ __('ERDASHBOARD') }}
+        {{ __('ERMERGENCY DASHBOARD') }}
     </h2>
 </x-slot>
 <div class="flex flex-col w-full">
@@ -137,68 +137,84 @@
                 </div> --}}
         </div> <!-- div for ocuppied beds --->
 
-        {{-- <div class="relative mt-3">
-                <div class="absolute left-7 top-6">
-                    <h2>PATIENT COUNT</h2>
+        <div class="relative mt-3">
+
+            <div class="absolute top-0 left-3">
+                <div class="join">
+                    <select class="select select-bordered join-item focus:border-blue-700 focus:ring-blue-700"
+                        wire:model.lazy="date_filter">
+                        <option class="hover:bg-green-700" value="today"
+                            {{ $dateFilter == 'today' ? 'selected' : '' }}>
+                            Today</option>
+                        <option class="hover:bg-green-700" value="this_year"
+                            {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
+                        </option>
+                        <option class="hover:bg-green-700" value="this_year"
+                            {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This
+                            Year
+                        </option>
+                        <option class="hover:bg-green-700" value="yesterday"
+                            {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>
+                            Yesterday
+                        </option>
+                        <option class="hover:bg-green-700" value="this_week"
+                            {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This
+                            Week
+                        </option>
+                        <option class="hover:bg-green-700" value="last_week"
+                            {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last
+                            Week
+                        </option>
+                        <option class="hover:bg-green-700" value="this_month"
+                            {{ $dateFilter == 'this_month' ? 'selected' : '' }}>
+                            This
+                            Month</option>
+                        <option class="hover:bg-green-700" value="last_month"
+                            {{ $dateFilter == 'last_month' ? 'selected' : '' }}>
+                            Last
+                            Month</option>
+                        <option class="hover:bg-green-700" value="last_year"
+                            {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last
+                            Year
+                        </option>
+                    </select>
+                    <label type="submit" class="text-white bg-blue-600 btn join-item">Filter</label>
                 </div>
-                <div class="absolute left-4">
-                    <div class="join">
-                        <select class="select select-bordered join-item focus:border-blue-700 focus:ring-blue-700"
-                            wire:model.lazy="date_filter">
-                            <option class="hover:bg-green-700" value="today"
-                                {{ $dateFilter == 'today' ? 'selected' : '' }}>
-                                Today</option>
-                            <option class="hover:bg-green-700" value="this_year"
-                                {{ $dateFilter == 'define' ? 'selected' : '' }}>Define
-                            </option>
-                            <option class="hover:bg-green-700" value="this_year"
-                                {{ $dateFilter == 'this_year' ? 'selected' : '' }}>This
-                                Year
-                            </option>
-                            <option class="hover:bg-green-700" value="yesterday"
-                                {{ $dateFilter == 'yesterday' ? 'selected' : '' }}>
-                                Yesterday
-                            </option>
-                            <option class="hover:bg-green-700" value="this_week"
-                                {{ $dateFilter == 'this_week' ? 'selected' : '' }}>This
-                                Week
-                            </option>
-                            <option class="hover:bg-green-700" value="last_week"
-                                {{ $dateFilter == 'last_week' ? 'selected' : '' }}>Last
-                                Week
-                            </option>
-                            <option class="hover:bg-green-700" value="this_month"
-                                {{ $dateFilter == 'this_month' ? 'selected' : '' }}>
-                                This
-                                Month</option>
-                            <option class="hover:bg-green-700" value="last_month"
-                                {{ $dateFilter == 'last_month' ? 'selected' : '' }}>
-                                Last
-                                Month</option>
-                            <option class="hover:bg-green-700" value="last_year"
-                                {{ $dateFilter == 'last_year' ? 'selected' : '' }}>Last
-                                Year
-                            </option>
-                        </select>
-                        <label type="submit" class="text-white bg-blue-600 btn join-item">Filter</label>
-                    </div>
-                </div>
-            </div> --}}
-        <div class="grid grid-cols-2 gap-4 p-3 mt-4">
-            <div class="p-2 bg-white rounded-lg h-96">
-                <div class="flex justify-center p-2 mx-auto font-semibold text-md ">PATIENT ARRIVED HOURLY CENSUS
-                </div>
-                <div class="h-5/6"><livewire:livewire-line-chart key="{{ $lineChartModel->reactiveKey() }}"
-                        :line-chart-model="$lineChartModel" /></div>
             </div>
-            <div class="w-full p-2 bg-white rounded-lg h-96">
-                <div class="flex justify-center p-2 mx-auto font-semibold text-md ">ACTIVE PATIENT CENSUS
+
+            <div class="absolute top-0 flex flex-row space-x-4 right-4">
+                <div class="p-1 bg-white rounded-md">
+                    <label for="sdate">START DATE</label>
+                    <input type="date" id="sdate" class="rounded-md" wire:model.lazy='sdateActive'>
                 </div>
-                <div class="h-5/6"><livewire:livewire-line-chart key="{{ $activepatients->reactiveKey() }}"
-                        :line-chart-model="$activepatients" /></div>
+                <div class="p-1 bg-white rounded-md">
+                    <label for="edate">END DATE</label>
+                    <input type="date" id="edate" class="rounded-md" wire:model.lazy='edateActive'>
+                </div>
 
             </div>
         </div>
+
+        <div class="mt-16">
+
+            <div class="grid grid-cols-2 gap-4 p-3 mt-4">
+                <div class="p-2 bg-white rounded-lg h-96">
+                    <div class="flex justify-center p-2 mx-auto font-semibold text-md ">PATIENT ARRIVED HOURLY CENSUS
+                    </div>
+                    <div class="h-5/6"><livewire:livewire-line-chart key="{{ $lineChartModel->reactiveKey() }}"
+                            :line-chart-model="$lineChartModel" /></div>
+                </div>
+
+                <div class="w-full p-2 bg-white rounded-lg h-96">
+                    <div class="flex justify-center p-2 mx-auto font-semibold text-md ">ACTIVE PATIENT CENSUS
+                    </div>
+                    <div class="h-5/6"><livewire:livewire-line-chart key="{{ $activepatients->reactiveKey() }}"
+                            :line-chart-model="$activepatients" /></div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
 

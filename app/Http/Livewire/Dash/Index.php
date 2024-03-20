@@ -102,13 +102,16 @@ class Index extends Component
         'SICU',
     ];
 
-    public $start_date, $end_date, $sdate, $edate;
+    public $start_date, $end_date, $sdate, $edate, $sdateActive, $edateActive;
 
     public function mount()
     {
         //$this->get_date = Carbon::createFromFormat('Y', DB::raw('CONVERT(date, erdate)'));
 
         $this->date_filter = 'today';
+        $current_date = date('Y-m-d');
+        $this->sdateActive = $current_date;
+        $this->edateActive = $current_date;
     }
     public function render()
     {
@@ -134,10 +137,9 @@ class Index extends Component
             ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
         FROM hospital.dbo.henctr entr
         RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
-        RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
-        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
         WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
-        AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
         AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
         $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
@@ -158,7 +160,7 @@ class Index extends Component
                 'hour' => $cur_time,
             ]);
         }
-        //-- UDPATE ACTIVE PATIENT COUNT
+        //-- UDPATE ACTIVE PATIENT COUNT END
 
         $this->i = 0;
         //$this->j = 0;
@@ -247,29 +249,23 @@ class Index extends Component
             }
         } // End lineChartmodel for filter this_week, last_week, yesterday, last_month, this_month and today
 
-        $cur_date = Carbon::parse(now())->format('Y-m-d');
-        $cur_time = Carbon::parse(now())->format('H');
-        $getActivepatients = ErdashActivePatient::select(DB::raw('DATE(created_at) as created_at'), 'hour', 'count', 'updated_at')->whereBetween(DB::raw('DATE(created_at)'), [$cur_date, $cur_date])->get();
-        $activepatients = (new LineChartModel())
-            //->setTitle('ACTIVE PATIENT CENSUS')
-            ->multiLine()
-            ->setAnimated(true)
-            //->addSeriesPoint('Trainees', Carbon::now()->subDays(7)->format('d.m.Y'), count(Trainee::whereDate('created_at', Carbon::now()->subDays(7)->format('Y-m-d'))->get()))
-            ->withDataLabels();
-        foreach ($getActivepatients as $patient) {
-            $getdate = $patient->created_at->format('F-d-Y');
-            if ($this->sdate <= $getdate) {
-                $activepatients->addSeriesPoint($getdate, $patient->hour, $patient->count);
+        // for line charts for active patient
+        if ($this->sdateActive && $this->edateActive) {
+            $getActivepatients = ErdashActivePatient::select(DB::raw('DATE(created_at) as created_at'), 'hour', 'count', 'updated_at')->whereBetween(DB::raw('DATE(created_at)'), [$this->sdateActive, $this->edateActive])->get();
+            //$getActivepatients = ErdashActivePatient::select(DB::raw('DATE(created_at) as created_at'), 'hour', 'count', 'updated_at')->whereMonth(DB::raw('DATE(created_at)'), Carbon::now()->month)->get();
+            $activepatients = (new LineChartModel())
+                ->multiLine()
+                ->setAnimated(true)
+                //->addSeriesPoint('Trainees', Carbon::now()->subDays(7)->format('d.m.Y'), count(Trainee::whereDate('created_at', Carbon::now()->subDays(7)->format('Y-m-d'))->get()))
+                ->withDataLabels();
+            foreach ($getActivepatients as $patient) {
+                $getdate = $patient->created_at->format('F-d-Y');
+                if ($this->sdate <= $getdate) {
+                    $activepatients->addSeriesPoint($getdate, $patient->hour, $patient->count);
+                }
             }
         }
-        /// end for line charts for active patient
-
-        #bf0000
-        #eb0707
-        #d10202
-        #6b0303
-        #990202
-
+        // end for line charts for active patient
 
         // $this->erlogs = PatientBed::select('enccode', 'patient_id')->get();
         // foreach ($this->erlogs as $logcount) {
@@ -649,7 +645,7 @@ class Index extends Component
                 RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
                 WHERE er.erstat= 'A' AND (er.tscode IS NOT NULL)
                 AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')"));
-        //$getdat;
+
         foreach ($getpatientBeds as $patientBed) {
             foreach ($getErlogs as $getErlog) {
                 if ($patientBed->enccode == $getErlog->enccode) {
@@ -658,7 +654,7 @@ class Index extends Component
                 }
             }
         }
-        //dd($getdat);
+
         if ($this->erAdmittedCount) {
             $erslot = 38;
             $this->erSlotAvailable = $erslot - $this->erAdmittedCount;
@@ -691,12 +687,13 @@ class Index extends Component
         FROM erdashboard.erdash_patient_beds patientBed"));
 
         $getHpersons = collect(DB::connection('hospital')
-            ->select("SELECT er.enccode, er.hpercode, er.erstat, per.patfirst, per.patlast, per.patmiddle, per.patsex, er.erdate, er.erdtedis
-            FROM hospital.dbo.herlog er
-            RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
-            RIGHT JOIN hospital.dbo.hencdiag diag ON er.enccode = diag.enccode
-            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
-            AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)"));
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, er.erdate, per.patfirst, per.patlast, per.patmiddle, per.patsex, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        FROM hospital.dbo.henctr entr
+        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
+        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
         ///--- trial codes
 
