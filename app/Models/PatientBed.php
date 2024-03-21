@@ -56,7 +56,7 @@ class PatientBed extends Model
 
     public function confirmPatientErlogStatus()
     {
-        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'erstat', 'erdtedis', 'hpercode')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
+        return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->select('enccode', 'erstat', 'erdtedis', 'hpercode', 'erdate')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
         //return $this->belongsTo(HospitalHerlog::class, 'enccode', 'enccode')->whereNull('erdtedis')->where('erstat', 'A')->latest('erdtedis');
     }
 

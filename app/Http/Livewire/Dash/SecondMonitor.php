@@ -26,7 +26,7 @@ class SecondMonitor extends Component
 
     public $start_date, $end_date, $sdate, $edate;
 
-    public $getHpersons, $patientBeds, $beds;
+    public $getHpersons, $patientBeds, $beds, $getCurrentDateTime;
 
     public function mount()
     {
@@ -35,6 +35,9 @@ class SecondMonitor extends Component
     public function render()
     {
 
+        //-- SET DATES
+        $CurrentDateTime = date('Y-m-d H:i:s');
+        $this->getCurrentDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $CurrentDateTime);
         $current_date = date('Y-m-d');
 
         $getCurrentDate = new DateTime($current_date);
@@ -46,6 +49,7 @@ class SecondMonitor extends Component
 
         $this->sdate = $this->start_date  . ' 00:00:00.000';
         $this->edate = $this->end_date  . ' 23:59:59.000';
+        //-- SET DATES END
 
         //-- UDPATE ACTIVE PATIENT COUNT
         $cur_time = Carbon::parse(now())->format('H');

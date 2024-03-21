@@ -79,12 +79,30 @@
                             @endforelse --}}
 
                             @forelse ($getPatients as $patient)
+                                @php
+                                    $getDiff = $getCurrentDateTime->diffInHours($patient->erdate);
+                                @endphp
                                 <li drag-item draggable="true"
-                                    class="cursor-pointer h-6 p-1 text-[11px] antialiased bg-gray-300 rounded-lg text-black shadow-xl hover:bg-gray-400"
+                                    class="cursor-pointer h-6 p-1 text-[11px] antialiased bg-gray-300
+                                    rounded-lg text-black shadow-xl hover:bg-gray-400"
                                     id="{{ $patient->enccode }}" wire:key='$patient-{{ $patient->enccode }}'
                                     ondragstart="drag(event)">
+
                                     <div class="flex w-full p-0">
-                                        <div class="mt-0 ml-1 truncate">{{ $patient->patlast }},
+                                        <div class="w-1/12">
+                                            @if ($getDiff >= 4)
+                                                <span class="relative flex w-4 h-4 mt-0 ml-0">
+                                                    <span
+                                                        class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                    <span
+                                                        class="relative inline-flex w-4 h-4 rounded-full bg-amber-600">
+                                                    </span>
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div
+                                            class="w-11/12 mt-0 @if ($getDiff >= 4) ml-2 @else ml-0 @endif truncate">
+                                            {{ $patient->patlast }},
                                             {{ $patient->patfirst }}
                                         </div>
                                     </div>
@@ -179,9 +197,9 @@
             <!--Second conatainer for beds and patient admitted-->
             <div class="w-10/12 space-y-2 bg-white rounded-lg">
 
-                <div class="flex justify-between px-4 mt-2">
+                <div class="flex justify-between px-2 mt-1">
 
-                    <div class="flex flex-row mt-8">
+                    <div class="flex flex-row mt-2">
                         <div
                             class="items-center h-6 p-0 ml-0 text-center rounded-md w-80 sm:flex sm:flex-1 sm:items-center sm:justify-between sm:px-0">
                             <h1 class="ml-2">
@@ -190,9 +208,9 @@
                         </div>
                     </div>
 
-                    <div class="mt-0 rounded-full w-22">
-                        <label class="bg-gray-300 btn btn-circle btn-lg"><i ondrop="drop(event)"
-                                ondragover="allowDrop(event)" id="delete" class="las la-trash la-3x "></i></label>
+                    <div class="w-16 mt-0 rounded-full">
+                        <label class=""><i ondrop="drop(event)" ondragover="allowDrop(event)" id="delete"
+                                class="las la-trash la-2x "></i></label>
                     </div>
                     <div></div>
                     <div></div>
@@ -203,8 +221,6 @@
                                         class="las la-trash la-3x "></i></label>
                             </div>
                         </div> --}}
-
-
                 </div>
 
                 <div class="px-3">
@@ -226,7 +242,7 @@
                                                     $bed->bed_id == '45')
                                                 <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                     id="{{ $bed->bed_id }}"
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
                                                     <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
@@ -239,20 +255,40 @@
                                                                     <div drag-item draggable="true"
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
-                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md cursor-pointer bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
                                                                         <div style="transform: rotate(-90deg);"
                                                                             class="flex flex-col mt-12">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 @else
@@ -295,19 +331,39 @@
                                                                     <div drag-item draggable="true"
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
-                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                        <span
-                                                                            class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                            {{ $bed->bed_name }}</span>
-                                                                        <span
-                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
+                                                                        <div class="flex flex-row h-1/3">
+                                                                            <div
+                                                                                class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                {{ $bed->bed_name }}
+                                                                            </div>
+                                                                            <div class="w-1/2 ">
+                                                                                @if ($getDiff >= 4)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                        <div
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                             {{ $getHperson->patlast }},
-                                                                        </span>
-                                                                        <span
-                                                                            class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                        </div>
+                                                                        <div
+                                                                            class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                             {{ $getHperson->patfirst }}.
-                                                                        </span>
-                                                                        <div></div>
+                                                                        </div>
+
                                                                     </div>
                                                                 @else
                                                                 @endif
@@ -333,7 +389,7 @@
                                         </h6>
                                         <div class="grid grid-rows-3 gap-2 mt-2">
                                             @forelse ($beds as $bed)
-                                                @if ($bed->bed_id == '22' or $bed->bed_id == '23' or $bed->bed_id == '24')
+                                                @if ($bed->bed_id == '24')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
                                                         class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer border-emera bg-gradient-to-r from-green-300 to-emerald-500 h-14">
@@ -348,18 +404,168 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
+                                                                            <div></div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '23')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer border-emera bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
+                                                                            <div></div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '22')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer border-emera bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -377,7 +583,8 @@
                                         </div>
                                     </div><!-- medicine 1 to 3 bed end -->
                                     <div class="p-2 bg-white border-2 border-t-0 border-gray-600 w-28">
-                                        <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">SUP
+                                        <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
+                                            SUP
                                             OFFICE
                                         </h4>
                                     </div>
@@ -400,18 +607,39 @@
                                                                             <div drag-item draggable="true"
                                                                                 id="{{ $patientBed->enccode }}"
                                                                                 ondragstart="drag(event)"
-                                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                                <span
-                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                    {{ $bed->bed_name }}</span>
-                                                                                <span
-                                                                                    class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                                @php
+                                                                                    $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                        $getHperson->erdate,
+                                                                                    );
+                                                                                @endphp
+                                                                                <div class="flex flex-row h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                        {{ $bed->bed_name }}
+                                                                                    </div>
+                                                                                    <div class="w-1/2 ">
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                     {{ $getHperson->patlast }},
-                                                                                </span>
-                                                                                <span
-                                                                                    class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                                </div>
+
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                     {{ $getHperson->patfirst }}.
-                                                                                </span>
+                                                                                </div>
                                                                                 <div></div>
                                                                             </div>
                                                                         @else
@@ -485,18 +713,38 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -549,19 +797,38 @@
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
                                                                         <div style="transform: rotate(-90deg);"
                                                                             class="flex flex-col mt-12">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-1 ml-10">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 @else
@@ -597,19 +864,38 @@
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
                                                                         <div style="transform: rotate(-90deg);"
                                                                             class="flex flex-col mt-12">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 @else
@@ -653,18 +939,38 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -698,18 +1004,40 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -750,19 +1078,39 @@
                                                                                 id="{{ $patientBed->enccode }}"
                                                                                 ondragstart="drag(event)"
                                                                                 class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                                @php
+                                                                                    $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                        $getHperson->erdate,
+                                                                                    );
+                                                                                @endphp
                                                                                 <div style="transform: rotate(-90deg);"
                                                                                     class="flex flex-col mt-12">
-                                                                                    <span
-                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                        {{ $bed->bed_name }}</span>
-                                                                                    <span
-                                                                                        class="text-[12px] text-black ml-1 p-0 ">
+                                                                                    <div
+                                                                                        class="flex flex-row w-32 h-1/3">
+                                                                                        <div
+                                                                                            class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                            {{ $bed->bed_name }}</div>
+                                                                                        <div>
+                                                                                            @if ($getDiff >= 4)
+                                                                                                <span
+                                                                                                    class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                                    <span
+                                                                                                        class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                    <span
+                                                                                                        class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                    </span>
+                                                                                                </span>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                         {{ $getHperson->patlast }},
-                                                                                    </span>
-                                                                                    <span
-                                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                         {{ $getHperson->patfirst }}.
-                                                                                    </span>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         @else
@@ -807,18 +1155,38 @@
                                                                             <div drag-item draggable="true"
                                                                                 id="{{ $patientBed->enccode }}"
                                                                                 ondragstart="drag(event)"
-                                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                                <span
-                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                    {{ $bed->bed_name }}</span>
-                                                                                <span
-                                                                                    class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                                class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                                @php
+                                                                                    $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                        $getHperson->erdate,
+                                                                                    );
+                                                                                @endphp
+                                                                                <div class="flex flex-row h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                        {{ $bed->bed_name }}
+                                                                                    </div>
+                                                                                    <div class="w-1/2 ">
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                     {{ $getHperson->patlast }},
-                                                                                </span>
-                                                                                <span
-                                                                                    class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                     {{ $getHperson->patfirst }}.
-                                                                                </span>
+                                                                                </div>
                                                                                 <div></div>
                                                                             </div>
                                                                         @else
@@ -840,7 +1208,7 @@
                                     <div class="flex flex-col mt-2 ml-2"> <!-- pedia bed 1 bed 2 bed 3-->
                                         <div class="grid grid-rows-3 gap-2 ">
                                             @forelse ($beds as $bed)
-                                                @if ($bed->bed_id == '15')
+                                                @if ($bed->bed_id == '17')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
                                                         class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
@@ -854,18 +1222,38 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -896,18 +1284,38 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -924,7 +1332,7 @@
                                             @endforelse
 
                                             @forelse ($beds as $bed)
-                                                @if ($bed->bed_id == '17')
+                                                @if ($bed->bed_id == '15')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
                                                         class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
@@ -938,18 +1346,38 @@
                                                                         <div drag-item draggable="true"
                                                                             id="{{ $patientBed->enccode }}"
                                                                             ondragstart="drag(event)"
-                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                             <div></div>
                                                                         </div>
                                                                     @else
@@ -997,19 +1425,38 @@
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
                                                                         <div style="transform: rotate(-90deg);"
                                                                             class="flex flex-col mt-12">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 @else
@@ -1043,19 +1490,38 @@
                                                                         id="{{ $patientBed->enccode }}"
                                                                         ondragstart="drag(event)"
                                                                         class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
                                                                         <div style="transform: rotate(-90deg);"
                                                                             class="flex flex-col mt-12">
-                                                                            <span
-                                                                                class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                {{ $bed->bed_name }}</span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 ">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
                                                                                 {{ $getHperson->patlast }},
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24">
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
                                                                                 {{ $getHperson->patfirst }}.
-                                                                            </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 @else
@@ -1094,7 +1560,6 @@
                         </div>
                     </div>
                 </div>
-
             </div> <!------>
 
         </div> <!--Second conatainer end-->

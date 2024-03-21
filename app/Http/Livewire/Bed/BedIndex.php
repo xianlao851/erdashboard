@@ -61,7 +61,7 @@ class BedIndex extends Component
 
     public $diffCount, $getTake, $setStart = 1, $setEnd, $getDiv, $sdate, $edate;
 
-    public $resultGetTakeDivByTwo, $current_date, $created_by_emp_id, $selected_person;
+    public $resultGetTakeDivByTwo, $current_date, $created_by_emp_id, $selected_person, $getCurrentDateTime;
     public $getRemainingPage;
     public $checkenccode = [], $getEnccode = [];
     public $getPatients = null;
@@ -103,6 +103,8 @@ class BedIndex extends Component
         //-- SET USER DATA END
 
         //-- SET DATES
+        $CurrentDateTime = date('Y-m-d H:i:s');
+        $this->getCurrentDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $CurrentDateTime);
         $current_date = date('Y-m-d');
 
         $getCurrentDate = new DateTime($current_date);
