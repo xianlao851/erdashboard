@@ -663,7 +663,7 @@ class Index extends Component
             if ($this->erAdmittedCount < floor($erslot * .5)) {
                 $this->erAdmittedCountColor = '#04bd55';
             }
-            if ($this->erAdmittedCount > floor($erslot * .5)) {
+            if ($this->erAdmittedCount >= floor($erslot * .5)) {
                 $this->erAdmittedCountColor = '#bd4602';
             }
             if ($this->erAdmittedCount >= floor($erslot * .8)) {
