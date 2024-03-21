@@ -438,11 +438,13 @@ class SecondMonitor extends Component
             FROM erdashboard.erdash_patient_beds patientBed"));
 
         $getErlogs = collect(DB::connection('hospital')
-            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex
-                FROM hospital.dbo.herlog er
-                RIGHT JOIN hospital.dbo.hperson per ON er.hpercode = per.hpercode
-                WHERE er.erstat= 'A' AND (er.tscode IS NOT NULL)
-                AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')"));
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdate, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+            FROM hospital.dbo.henctr entr
+            RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+            RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
+            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+            AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
+            AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
         //$getdat;
         foreach ($getpatientBeds as $patientBed) {
             foreach ($getErlogs as $getErlog) {
