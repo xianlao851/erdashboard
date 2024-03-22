@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Livewire\RoomBed\View;
 use App\Http\Livewire\Bed\BedIndex;
 use App\Http\Livewire\Dash\Index;
-use App\Http\Livewire\Dash\IndexTwo;
 use App\Http\Livewire\Room\RoomIndex;
 use App\Http\Livewire\User\UserList;
 use App\Http\Livewire\Dash\SecondMonitor;
@@ -37,7 +36,7 @@ Route::middleware([
 });
 
 Route::get('/charts', Index::class)->name('charts');
-Route::get('/active', IndexTwo::class)->name('active');
+
 Route::get('/dashboard_monitoring', SecondMonitor::class)->name('dashboard_monitoring');
 
 Route::middleware([

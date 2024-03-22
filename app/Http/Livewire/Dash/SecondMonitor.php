@@ -13,6 +13,10 @@ use Asantibanez\LivewireCharts\Models\LineChartModel;
 
 class SecondMonitor extends Component
 {
+    protected $listeners = [
+        'saveCount'
+    ];
+
     public $ward2FICU = 0, $ward3FMIC = 0, $ward3FMN = 0, $ward3FMP = 0, $ward3FNIC = 0, $wardCBNS = 0, $wardCBPA = 0, $wardCBPN = 0, $wardSDICU = 0, $wardSICU = 0, $ward3FCCU = 0, $wardFH2 = 0, $wardFH3 = 0;
 
     public $ward2FICUAvailable, $ward3FMICAvailable, $ward3FMNAvailable, $ward3FMPAvailable, $ward3FNICAvailable, $wardCBNSAvailable, $wardCBPAAvailable, $wardCBPNAvailable, $wardSDICUAvailable, $wardSICUAvailable, $ward3FCCUAvailable, $wardFH2Available, $wardFH3Available;
@@ -52,36 +56,36 @@ class SecondMonitor extends Component
         //-- SET DATES END
 
         //-- UDPATE ACTIVE PATIENT COUNT
-        $cur_time = Carbon::parse(now())->format('H');
-        $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
+        // $cur_time = Carbon::parse(now())->format('H');
+        // $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
 
-        $counActive = count(DB::connection('hospital')
-            ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
-        FROM hospital.dbo.henctr entr
-        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
-        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
-        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
-        AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
-        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+        // $counActive = count(DB::connection('hospital')
+        //     ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+        // FROM hospital.dbo.henctr entr
+        // RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        // RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
+        // WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        // AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
+        // AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
-        $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
+        // $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
 
-        if ($findHourDate) {
+        // if ($findHourDate) {
 
-            if ($findHourDate->count < $counActive) {
-                $findHourDate->count = $counActive;
-                $findHourDate->updated_at = $cur_date;
-                $findHourDate->save();
-            } else {
-                $findHourDate->updated_at = $cur_date;
-                $findHourDate->save();
-            }
-        } else {
-            ErdashActivePatient::create([
-                'count' => $counActive,
-                'hour' => $cur_time,
-            ]);
-        }
+        //     if ($findHourDate->count < $counActive) {
+        //         $findHourDate->count = $counActive;
+        //         $findHourDate->updated_at = $cur_date;
+        //         $findHourDate->save();
+        //     } else {
+        //         $findHourDate->updated_at = $cur_date;
+        //         $findHourDate->save();
+        //     }
+        // } else {
+        //     ErdashActivePatient::create([
+        //         'count' => $counActive,
+        //         'hour' => $cur_time,
+        //     ]);
+        // }
         //-- UDPATE ACTIVE PATIENT COUNT END
 
         $this->i = 0;
@@ -552,18 +556,18 @@ class SecondMonitor extends Component
                 $findHourDate->count = $counActive;
                 $findHourDate->updated_at = $cur_date;
                 $findHourDate->save();
-                return redirect()->route('second_monitor');
+                return redirect()->route('dashboard_monitoring');
             } else {
                 $findHourDate->updated_at = $cur_date;
                 $findHourDate->save();
-                return redirect()->route('second_monitor');
+                return redirect()->route('dashboard_monitoring');
             }
         } else {
             ErdashActivePatient::create([
                 'count' => $counActive,
                 'hour' => $cur_time,
             ]);
-            return redirect()->route('second_monitor');
+            return redirect()->route('dashboard_monitoring');
         }
 
         // $this->reset(

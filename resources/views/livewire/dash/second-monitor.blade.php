@@ -4,11 +4,11 @@
     </h2>
 </x-slot>
 <div class="flex flex-col w-full">
-    {{-- <div class="w-full" wire:loading>
+    <div class="w-full" wire:loading>
         <div class="absolute flex items-center justify-center mt-0 ml-0 bg-black z-[9999] w-full h-full opacity-75">
             <span class="text-green-400 loading loading-spinner loading-lg"></span>
         </div>
-    </div> --}}
+    </div>
 
     <div class="one">
         <div class="w-full p-2 mx-auto">
@@ -2391,46 +2391,86 @@
             //get the mins of the current time
             var mins = new Date().getMinutes();
             var seconds = new Date().getSeconds();
+            //-- update count section
             if (mins == "00" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "05" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "10" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "15" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "20" && seconds == "00") {
-                location.reload();
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "25" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "30" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "35" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "40" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "45" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "50" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "55" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
             if (mins == "58" && seconds == "00") {
-                location.reload();
+                Livewire.emit('saveCount');
             }
+
+            //--
+
+            //-- reload section
+            // if (mins == "02" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "07" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "12" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "17" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "22" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "27" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "32" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "37" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "42" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "47" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "52" && seconds == "00") {
+            //     location.reload();
+            // }
+            // if (mins == "57" && seconds == "00") {
+            //     location.reload();
+            // }
             console.log('Tick ' + mins);
         }
 

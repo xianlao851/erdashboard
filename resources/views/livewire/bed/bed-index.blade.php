@@ -343,6 +343,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -420,12 +430,13 @@
                                                                                         <span
                                                                                             class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                             <span
-                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                class="absolute inline-flex w-full h-full bg-orange-300 rounded-full opacity-75 animate-ping"></span>
                                                                                             <span
-                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                class="relative inline-flex w-6 h-6 bg-orange-300 rounded-full">
                                                                                             </span>
                                                                                         </span>
                                                                                     @endif
+
                                                                                 </div>
                                                                             </div>
 
