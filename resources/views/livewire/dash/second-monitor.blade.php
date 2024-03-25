@@ -123,7 +123,7 @@
                                                                         {{ $getHperson->patlast }},
                                                                     </span>
                                                                     <span class="text-[12px] text-black ml-1 p-0 truncate">
-                                                                        {{ $getHperson->patfirst[0] }}.
+                                                                        {{ $getHperson->patfirst[0][0] }}.
                                                                     </span>
                                                                     <div></div>
                                                                 </div>
@@ -261,9 +261,19 @@
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                 {{ $bed->bed_name }}</div>
                                                                             <div>
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
-                                                                                        class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                         <span
                                                                                             class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                         <span
@@ -280,7 +290,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -336,6 +346,16 @@
                                                                             {{ $bed->bed_name }}
                                                                         </div>
                                                                         <div class="w-1/2 ">
+                                                                            @if ($getDiff == 3)
+                                                                                <span
+                                                                                    class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                    <span
+                                                                                        class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                    <span
+                                                                                        class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                    </span>
+                                                                                </span>
+                                                                            @endif
                                                                             @if ($getDiff >= 4)
                                                                                 <span
                                                                                     class="relative flex w-6 h-6 mt-0 ml-8">
@@ -354,7 +374,7 @@
                                                                     </div>
                                                                     <div
                                                                         class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                        {{ $getHperson->patfirst }}.
+                                                                        {{ $getHperson->patfirst[0] }}.
                                                                     </div>
 
                                                                 </div>
@@ -409,6 +429,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -419,6 +449,7 @@
                                                                                         </span>
                                                                                     </span>
                                                                                 @endif
+
                                                                             </div>
                                                                         </div>
 
@@ -429,7 +460,7 @@
 
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -473,6 +504,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -493,7 +534,7 @@
 
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -537,6 +578,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -557,7 +608,7 @@
 
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -611,6 +662,16 @@
                                                                                     {{ $bed->bed_name }}
                                                                                 </div>
                                                                                 <div class="w-1/2 ">
+                                                                                    @if ($getDiff == 3)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
                                                                                     @if ($getDiff >= 4)
                                                                                         <span
                                                                                             class="relative flex w-6 h-6 mt-0 ml-8">
@@ -630,7 +691,7 @@
 
                                                                             <div
                                                                                 class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                                {{ $getHperson->patfirst }}.
+                                                                                {{ $getHperson->patfirst[0] }}.
                                                                             </div>
                                                                             <div></div>
                                                                         </div>
@@ -717,6 +778,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -735,7 +806,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -800,9 +871,19 @@
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                 {{ $bed->bed_name }}</div>
                                                                             <div>
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
-                                                                                        class="relative flex w-6 h-6 mt-1 ml-10">
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                         <span
                                                                                             class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                         <span
@@ -818,7 +899,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -866,9 +947,19 @@
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                 {{ $bed->bed_name }}</div>
                                                                             <div>
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
-                                                                                        class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                         <span
                                                                                             class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                         <span
@@ -884,7 +975,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -940,6 +1031,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -958,7 +1059,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -1005,6 +1106,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -1025,7 +1136,7 @@
 
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -1079,9 +1190,19 @@
                                                                                         class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                         {{ $bed->bed_name }}</div>
                                                                                     <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
                                                                                         @if ($getDiff >= 4)
                                                                                             <span
-                                                                                                class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                                 <span
                                                                                                     class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                                 <span
@@ -1097,7 +1218,7 @@
                                                                                 </div>
                                                                                 <div
                                                                                     class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                                    {{ $getHperson->patfirst }}.
+                                                                                    {{ $getHperson->patfirst[0] }}.
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1154,6 +1275,16 @@
                                                                                     {{ $bed->bed_name }}
                                                                                 </div>
                                                                                 <div class="w-1/2 ">
+                                                                                    @if ($getDiff == 3)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
                                                                                     @if ($getDiff >= 4)
                                                                                         <span
                                                                                             class="relative flex w-6 h-6 mt-0 ml-8">
@@ -1172,7 +1303,7 @@
                                                                             </div>
                                                                             <div
                                                                                 class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                                {{ $getHperson->patfirst }}.
+                                                                                {{ $getHperson->patfirst[0] }}.
                                                                             </div>
                                                                             <div></div>
                                                                         </div>
@@ -1221,6 +1352,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -1239,7 +1380,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -1283,6 +1424,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -1301,7 +1452,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -1345,6 +1496,16 @@
                                                                                 {{ $bed->bed_name }}
                                                                             </div>
                                                                             <div class="w-1/2 ">
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
                                                                                         class="relative flex w-6 h-6 mt-0 ml-8">
@@ -1363,7 +1524,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                         <div></div>
                                                                     </div>
@@ -1422,9 +1583,19 @@
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                 {{ $bed->bed_name }}</div>
                                                                             <div>
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
-                                                                                        class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                         <span
                                                                                             class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                         <span
@@ -1440,7 +1611,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1486,9 +1657,19 @@
                                                                                 class="text-[12px] text-black p-0 ml-1 mt-0">
                                                                                 {{ $bed->bed_name }}</div>
                                                                             <div>
+                                                                                @if ($getDiff == 3)
+                                                                                    <span
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                        <span
+                                                                                            class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                        <span
+                                                                                            class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                        </span>
+                                                                                    </span>
+                                                                                @endif
                                                                                 @if ($getDiff >= 4)
                                                                                     <span
-                                                                                        class="relative flex w-6 h-6 mt-1 ml-12">
+                                                                                        class="relative flex w-6 h-6 mt-0 ml-8">
                                                                                         <span
                                                                                             class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
                                                                                         <span
@@ -1504,7 +1685,7 @@
                                                                         </div>
                                                                         <div
                                                                             class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                            {{ $getHperson->patfirst }}.
+                                                                            {{ $getHperson->patfirst[0] }}.
                                                                         </div>
                                                                     </div>
                                                                 </div>
