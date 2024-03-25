@@ -535,18 +535,18 @@ class SecondMonitor extends Component
 
     public function saveCount()
     {
+        //-- UDPATE ACTIVE PATIENT COUNT
         $cur_time = Carbon::parse(now())->format('H');
         $cur_date = Carbon::parse(now())->format('Y-m-d H:i:s');
 
         $counActive = count(DB::connection('hospital')
             ->select("SELECT er.enccode, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
-            FROM hospital.dbo.henctr entr
-            RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
-            RIGHT JOIN hospital.dbo.hencdiag diag ON diag.enccode = er.enccode
-            RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = diag.hpercode
-            WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
-            AND (er.tscode IS NOT NULL) AND (diag.primediag='Y') AND (diag.diagtext IS NOT NULL) AND (er.erdtedis IS NULL)
-            AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
+        FROM hospital.dbo.henctr entr
+        RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
+        RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode
+        WHERE (er.erstat= 'A') AND(er.erdate BETWEEN '$this->sdate' AND '$this->edate')
+        AND (er.tscode IS NOT NULL) AND (er.erdtedis IS NULL)
+        AND (entr.encstat = 'A') AND (entr.toecode = 'ER' OR entr.toecode = 'ERADM')"));
 
         $findHourDate = ErdashActivePatient::select('id', 'created_at', 'hour', 'count')->whereDate('created_at', Carbon::today())->where('hour', $cur_time)->first();
 
@@ -569,6 +569,7 @@ class SecondMonitor extends Component
             ]);
             return redirect()->route('dashboard_monitoring');
         }
+        //-- UDPATE ACTIVE PATIENT COUNT END
 
         // $this->reset(
         //     'ward2FICU',
