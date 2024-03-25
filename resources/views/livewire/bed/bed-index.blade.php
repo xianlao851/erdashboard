@@ -237,7 +237,7 @@
                         <div class="flex flex-row gap-10 ">
                             <div class="flex flex-row gap-2 p-2 bg-white">
                                 <div class="">
-                                    <h6 class="w-full p-1 mt-2 text-sm text-center text-white bg-green-900 rounded-md">
+                                    <h6 class="w-full p-1 mt-2 text-sm text-center text-black bg-blue-300 rounded-md">
                                         OVERFLOW
                                     </h6>
                                     <div class="grid grid-rows-6 gap-2 mt-1">
@@ -251,7 +251,7 @@
                                                     $bed->bed_id == '45')
                                                 <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                     id="{{ $bed->bed_id }}"
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-28">
                                                     <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
@@ -413,7 +413,7 @@
                             <div class="flex flex-col">
                                 <div class="flex space-x-0">
                                     <div class="p-1 bg-white rounded-md ">
-                                        <h6 class="p-1 mt-0 text-sm text-center text-white bg-green-900 rounded-md">
+                                        <h6 class="p-1 mt-0 text-sm text-center text-black rounded-md bg-amber-600">
                                             MEDICINE
                                         </h6>
                                         <div class="grid grid-rows-3 gap-2 mt-2">
@@ -642,8 +642,8 @@
                                             @endforelse
                                         </div>
                                     </div><!-- medicine 1 to 3 bed end -->
-                                    <div class="p-2 bg-white border-2 border-t-0 border-gray-600 w-28">
-                                        <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
+                                    <div class="p-1 bg-white border-2 border-t-0 border-gray-600 w-28">
+                                        <h4 class="p-0 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
                                             SUP
                                             OFFICE
                                         </h4>
@@ -727,7 +727,7 @@
                                             </div>
                                             <div class="p-2">
                                                 <h6
-                                                    class="p-1 mt-1 text-sm text-center text-white bg-green-900 rounded-md">
+                                                    class="p-1 mt-1 text-sm text-center text-black rounded-md bg-sky-400">
                                                     RESU</h6>
                                             </div>
 
@@ -736,15 +736,15 @@
                                     <div class="bg-white border-2 border-t-0 border-l-0 border-gray-600 w-28">
 
                                     </div>
-                                    <div class="p-2 bg-white border-2 border-t-0 border-l-0 border-gray-600 w-28">
-                                        <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
+                                    <div class="p-1 bg-white border-2 border-t-0 border-l-0 border-gray-600 w-28">
+                                        <h4 class="p-0 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
                                             TRIAGE
                                         </h4>
                                     </div><!-- end --><!-- end -->
                                 </div> <!--overflow rigth side 1 2 3 -->
                                 <!--1 -->
                                 <div class="flex flex-row p-0 mt-8 space-x-0 rounded-md">
-                                    <div class="w-2/4 p-2 bg-white border-2 border-gray-600 rounded-l-md">
+                                    <div class="w-1/4 p-2 bg-white border-2 border-gray-600 rounded-l-md">
                                         <div class="p-2">
                                             <h4 class="p-1 text-base bg-blue-300 rounded-md"> Nurse Station</h4>
                                         </div>
@@ -755,18 +755,99 @@
                                             <h4 class="p-1 text-base bg-green-300 rounded-md">Internal medicine</h4>
                                         </div>
                                     </div>
-                                    <div class="bg-white border-2 border-l-0 border-gray-600 w-28">
+                                    <div class="w-16 bg-white border-2 border-l-0 border-gray-600">
 
                                     </div>
-                                    <div class="p-2 bg-white border-2 border-l-0 border-gray-600 w-28 rounded-r-md">
-                                        <h4 class="p-1 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
+                                    <div class="w-20 p-1 bg-white border-2 border-l-0 border-gray-600">
+                                        <h4 class="p-0 mt-20 text-sm text-center text-white bg-green-900 rounded-md">
                                             BLOTTER
                                         </h4>
                                     </div>
-                                    <div class="w-12">
+                                    <div class="w-16 p-2">
 
                                     </div>
-                                    <div class="p-2 bg-white border-2 border-gray-600 rounded-md">
+                                    <div
+                                        class="flex flex-col p-2 bg-white border-2 border-l-2 border-r-0 border-gray-600">
+                                        <div class="mt-0">
+                                            <p class="w-full p-1 text-sm text-center text-black bg-red-400 rounded-md">
+                                                TRAUMA OVERFLOW
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col gap-2 mt-1">
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '46' or $bed->bed_id == '47' or $bed->bed_id == '48')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff == 3)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
+                                                                            <div></div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bg-white border-2 border-gray-600 rounded-r-md">
                                         <div class="grid grid-rows-3 gap-2">
                                             @forelse ($beds as $bed)
                                                 @if ($bed->bed_id == '7' or $bed->bed_id == '8' or $bed->bed_id == '9')
@@ -841,7 +922,7 @@
                                             @endforelse
                                         </div>
                                         <div class="mt-4">
-                                            <p class="p-1 text-sm text-center text-white bg-green-900 rounded-md">
+                                            <p class="p-1 text-sm text-center text-black bg-red-400 rounded-md">
                                                 TRAUMA
                                             </p>
                                         </div>
@@ -936,7 +1017,161 @@
                                     </div> <!--medicine -->
                                     <div class="grid grid-cols-6 gap-6 p-2 mt-0 bg-white rounded-b-md">
                                         @forelse ($beds as $bed)
-                                            @if ($bed->bed_id == '1' or $bed->bed_id == '2' or $bed->bed_id == '3')
+                                            @if ($bed->bed_id == '1' or $bed->bed_id == '2' or $bed->bed_id == '3' or $bed->bed_id == '54')
+                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                    id="{{ $bed->bed_id }}"
+                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    <div style="transform: rotate(-90deg);"
+                                                        class="flex flex-col mt-12">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                    </div>
+                                                    @forelse ($patientBeds as $patientBed)
+                                                        @if ($patientBed->bed_id == $bed->bed_id)
+                                                            @forelse ($getHpersons as $getHperson)
+                                                                @if ($patientBed->enccode == $getHperson->enccode)
+                                                                    <div drag-item draggable="true"
+                                                                        id="{{ $patientBed->enccode }}"
+                                                                        ondragstart="drag(event)"
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
+                                                                        <div style="transform: rotate(-90deg);"
+                                                                            class="flex flex-col mt-12">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                    {{ $bed->bed_name }}</div>
+                                                                                <div>
+                                                                                    @if ($getDiff == 3)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
+                                                        @endif
+                                                        <!----->
+                                                    @empty
+                                                    @endforelse
+                                                </div>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                        <!--electric room-->
+                                        @forelse ($beds as $bed)
+                                            @if ($bed->bed_id == '56')
+                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                    id="{{ $bed->bed_id }}"
+                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    <div style="transform: rotate(-90deg);"
+                                                        class="flex flex-col mt-12">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-0 mt-0 w-32">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                    </div>
+                                                    @forelse ($patientBeds as $patientBed)
+                                                        @if ($patientBed->bed_id == $bed->bed_id)
+                                                            @forelse ($getHpersons as $getHperson)
+                                                                @if ($patientBed->enccode == $getHperson->enccode)
+                                                                    <div drag-item draggable="true"
+                                                                        id="{{ $patientBed->enccode }}"
+                                                                        ondragstart="drag(event)"
+                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                        @php
+                                                                            $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                $getHperson->erdate,
+                                                                            );
+                                                                        @endphp
+                                                                        <div style="transform: rotate(-90deg);"
+                                                                            class="flex flex-col mt-12">
+                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                                                <div class="flex flex-row space-x-1">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-0">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                @endif
+                                                            @empty
+                                                            @endforelse
+                                                        @endif
+                                                        <!----->
+                                                    @empty
+                                                    @endforelse
+                                                </div>
+                                            @endif
+                                        @empty
+                                        @endforelse
+
+                                        @forelse ($beds as $bed)
+                                            @if ($bed->bed_id == '55')
                                                 <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                     id="{{ $bed->bed_id }}"
                                                     class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
@@ -1011,9 +1246,9 @@
                                         @empty
                                         @endforelse
                                     </div>
-                                    <div class="p-2 ml-8 w-44">
+                                    <div class="p-0 ml-8 w-44">
                                         <h4
-                                            class="w-full p-1 mt-2 text-sm text-center text-white bg-green-900 rounded-md">
+                                            class="w-full p-1 mt-2 text-sm text-center text-black rounded-md bg-fuchsia-300">
                                             FAMILY
                                             MEDICINE</h4>
                                     </div>
@@ -1565,7 +1800,7 @@
                                         </div>
                                         <div class="p-2">
                                             <h4
-                                                class="p-1 mt-6 text-sm text-center text-white bg-green-900 rounded-md">
+                                                class="p-1 mt-6 text-sm text-center text-black bg-yellow-300 rounded-md">
                                                 PEDIA
                                             </h4>
                                         </div>
@@ -1573,177 +1808,510 @@
 
                                 </div> <!--- for pedia -->
 
-                                <div class="flex flex-row p-6 mt-12 bg-white border-2 border-gray-600 rounded-md">
+                                <div
+                                    class="flex flex-row p-1 mt-12 space-x-4 bg-white border-2 border-gray-600 rounded-md">
                                     <!--- for ob start -->
-                                    <div class="flex flex-row space-x-4">
-                                        @forelse ($beds as $bed)
-                                            @if ($bed->bed_id == '11')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
-                                                    <div style="transform: rotate(-90deg);"
-                                                        class="flex flex-col mt-12">
-                                                        <span
-                                                            class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
-                                                        <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
-                                                    </div>
-                                                    @forelse ($patientBeds as $patientBed)
-                                                        @if ($patientBed->bed_id == $bed->bed_id)
-                                                            @forelse ($getHpersons as $getHperson)
-                                                                @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
-                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
-                                                                        @php
-                                                                            $getDiff = $getCurrentDateTime->diffInHours(
-                                                                                $getHperson->erdate,
-                                                                            );
-                                                                        @endphp
-                                                                        <div style="transform: rotate(-90deg);"
-                                                                            class="flex flex-col mt-12">
-                                                                            <div class="flex flex-row w-32 h-1/3">
+                                    <div class="flex flex-col">
+                                        <div class="p-0">
+                                            <h4 class="p-1 text-sm text-center text-black bg-pink-400 rounded-md">
+                                                OB-GYNE
+                                            </h4>
+                                        </div>
+                                        <div class="flex flex-row mt-1 space-x-4">
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '11')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        <div style="transform: rotate(-90deg);"
+                                                            class="flex flex-col mt-12">
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                        </div>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div style="transform: rotate(-90deg);"
+                                                                                class="flex flex-col mt-12">
+                                                                                <div class="flex flex-row w-32 h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div
-                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                    {{ $bed->bed_name }}</div>
-                                                                                <div>
-                                                                                    @if ($getDiff == 3)
-                                                                                        <span
-                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
-                                                                                            <span
-                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
-                                                                                            <span
-                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
-                                                                                            </span>
-                                                                                        </span>
-                                                                                    @endif
-                                                                                    @if ($getDiff >= 4)
-                                                                                        <span
-                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
-                                                                                            <span
-                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
-                                                                                            <span
-                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
-                                                                                            </span>
-                                                                                        </span>
-                                                                                    @endif
+                                                                                    class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                    {{ $getHperson->patlast }},
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                    {{ $getHperson->patfirst }}.
                                                                                 </div>
                                                                             </div>
-                                                                            <div
-                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
-                                                                                {{ $getHperson->patlast }},
-                                                                            </div>
-                                                                            <div
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                                {{ $getHperson->patfirst }}.
-                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                @else
-                                                                @endif
-                                                            @empty
-                                                            @endforelse
-                                                        @endif
-                                                        <!----->
-                                                    @empty
-                                                    @endforelse
-                                                </div>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                        @forelse ($beds as $bed)
-                                            @if ($bed->bed_id == '10')
-                                                <div ondrop="drop(event)" ondragover="allowDrop(event)"
-                                                    id="{{ $bed->bed_id }}"
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
-                                                    <div style="transform: rotate(-90deg);"
-                                                        class="flex flex-col mt-12">
-                                                        <span
-                                                            class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
-                                                        <span class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
                                                     </div>
-                                                    @forelse ($patientBeds as $patientBed)
-                                                        @if ($patientBed->bed_id == $bed->bed_id)
-                                                            @forelse ($getHpersons as $getHperson)
-                                                                @if ($patientBed->enccode == $getHperson->enccode)
-                                                                    <div drag-item draggable="true"
-                                                                        id="{{ $patientBed->enccode }}"
-                                                                        ondragstart="drag(event)"
-                                                                        class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
-                                                                        @php
-                                                                            $getDiff = $getCurrentDateTime->diffInHours(
-                                                                                $getHperson->erdate,
-                                                                            );
-                                                                        @endphp
-                                                                        <div style="transform: rotate(-90deg);"
-                                                                            class="flex flex-col mt-12">
-                                                                            <div class="flex flex-row w-32 h-1/3">
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '10')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        <div style="transform: rotate(-90deg);"
+                                                            class="flex flex-col mt-12">
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                        </div>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div style="transform: rotate(-90deg);"
+                                                                                class="flex flex-col mt-12">
+                                                                                <div class="flex flex-row w-32 h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div
-                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0">
-                                                                                    {{ $bed->bed_name }}</div>
-                                                                                <div>
-                                                                                    @if ($getDiff == 3)
-                                                                                        <span
-                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
-                                                                                            <span
-                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
-                                                                                            <span
-                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
-                                                                                            </span>
-                                                                                        </span>
-                                                                                    @endif
-                                                                                    @if ($getDiff >= 4)
-                                                                                        <span
-                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
-                                                                                            <span
-                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
-                                                                                            <span
-                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
-                                                                                            </span>
-                                                                                        </span>
-                                                                                    @endif
+                                                                                    class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                    {{ $getHperson->patlast }},
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                    {{ $getHperson->patfirst }}.
                                                                                 </div>
                                                                             </div>
-                                                                            <div
-                                                                                class="text-[12px] text-black ml-1 p-0 h-1/3">
-                                                                                {{ $getHperson->patlast }},
-                                                                            </div>
-                                                                            <div
-                                                                                class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
-                                                                                {{ $getHperson->patfirst }}.
-                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                @else
-                                                                @endif
-                                                            @empty
-                                                            @endforelse
-                                                        @endif
-                                                        <!----->
-                                                    @empty
-                                                    @endforelse
-                                                </div>
-                                            @endif
-                                        @empty
-                                        @endforelse
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </div>
                                     </div>
-                                    <div class="p-2">
-                                        <h4 class="p-1 text-sm text-center text-white bg-green-900 rounded-md">OB/GYNE
-                                        </h4>
+                                    <!-- ob overflow-->
+                                    <div class="flex flex-col">
+                                        <div class="p-0">
+                                            <h4 class="p-1 text-sm text-center text-black bg-pink-400 rounded-md">
+                                                OB-GYNE OVERFLOW
+                                            </h4>
+                                        </div>
+                                        <div class="flex flex-row mt-1 space-x-4">
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '49')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        <div style="transform: rotate(-90deg);"
+                                                            class="flex flex-col mt-12">
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                        </div>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div style="transform: rotate(-90deg);"
+                                                                                class="flex flex-col mt-12">
+                                                                                <div class="flex flex-row w-32 h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                    {{ $getHperson->patlast }},
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                    {{ $getHperson->patfirst }}.
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '50')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        <div style="transform: rotate(-90deg);"
+                                                            class="flex flex-col mt-12">
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                        </div>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div style="transform: rotate(-90deg);"
+                                                                                class="flex flex-col mt-12">
+                                                                                <div class="flex flex-row w-32 h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                    {{ $getHperson->patlast }},
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                    {{ $getHperson->patfirst }}.
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!--third -->
 
                             <div class="flex flex-row h-full p-2 space-x-4 mt-44">
                                 <div class="p-6 bg-white border-2 border-gray-600 rounded-md h-1/2">
-                                    <div class="w-16 p-2 bg-white border-2 border-gray-300 rounded-md h-28">
+                                    <div class="flex flex-col"> <!-- room 118-->
+                                        <div class="p-0">
+                                            <h4 class="p-1 text-sm text-center text-white bg-teal-500 rounded-md">
+                                                ROOM 118
+                                            </h4>
+                                        </div>
+                                        <div class="mt-1">
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '51')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        <div style="transform: rotate(-90deg);"
+                                                            class="flex flex-col mt-12">
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
+                                                            <span
+                                                                class="text-[12px] text-black p-0 ml-0">AVAILABLE</span>
+                                                        </div>
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-t from-rose-400 to-rose-700">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div style="transform: rotate(-90deg);"
+                                                                                class="flex flex-col mt-12">
+                                                                                <div class="flex flex-row w-32 h-1/3">
+                                                                                    <div
+                                                                                        class="text-[12px] text-black p-0 ml-1 mt-0">
+                                                                                        {{ $bed->bed_name }}</div>
+                                                                                    <div>
+                                                                                        @if ($getDiff == 3)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                        @if ($getDiff >= 4)
+                                                                                            <span
+                                                                                                class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                                <span
+                                                                                                    class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                                <span
+                                                                                                    class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 h-1/3">
+                                                                                    {{ $getHperson->patlast }},
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-[12px] text-black ml-1 p-0 truncate w-24 h-1/3">
+                                                                                    {{ $getHperson->patfirst }}.
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </div>
+
                                     </div>
                                 </div>
 
-                                <div class="p-4 bg-white border-2 border-gray-600 rounded-md">
-                                    <div class="w-32 p-1 bg-white border-2 border-gray-300 rounded-md h-14 mt-44">
-                                    </div>
-                                    <div class="w-32 p-1 mt-10 bg-white border-2 border-gray-300 rounded-md h-14">
+                                <!--labor room-->
+                                <div class="flex flex-col p-2 bg-white border-2 border-gray-600 rounded-md ">
+                                    <div class="space-y-2 mt-44">
+                                        <div class="p-0">
+                                            <h4 class="p-1 text-sm text-center text-black bg-indigo-400 rounded-md">
+                                                LABOR ROOM
+                                            </h4>
+                                        </div>
+                                        <div class="grid grid-rows-2 gap-2">
+                                            @forelse ($beds as $bed)
+                                                @if ($bed->bed_id == '52' or $bed->bed_id == '53')
+                                                    <div ondrop="drop(event)" ondragover="allowDrop(event)"
+                                                        id="{{ $bed->bed_id }}"
+                                                        class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer border-emera bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                        <span
+                                                            class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
+                                                        <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
+
+                                                        @forelse ($patientBeds as $patientBed)
+                                                            @if ($patientBed->bed_id == $bed->bed_id)
+                                                                @forelse ($getHpersons as $getHperson)
+                                                                    @if ($patientBed->enccode == $getHperson->enccode)
+                                                                        <div drag-item draggable="true"
+                                                                            id="{{ $patientBed->enccode }}"
+                                                                            ondragstart="drag(event)"
+                                                                            class="absolute top-0 bottom-0 left-0 right-0 flex flex-col p-1 ml-0 space-y-0 rounded-md bg-gradient-to-r from-rose-400 to-rose-700 ">
+                                                                            @php
+                                                                                $getDiff = $getCurrentDateTime->diffInHours(
+                                                                                    $getHperson->erdate,
+                                                                                );
+                                                                            @endphp
+                                                                            <div class="flex flex-row h-1/3">
+                                                                                <div
+                                                                                    class="text-[12px] text-black p-0 ml-1 mt-0 w-1/2">
+                                                                                    {{ $bed->bed_name }}
+                                                                                </div>
+                                                                                <div class="w-1/2 ">
+                                                                                    @if ($getDiff == 3)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 bg-yellow-300 rounded-full">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                    @if ($getDiff >= 4)
+                                                                                        <span
+                                                                                            class="relative flex w-6 h-6 mt-0 ml-8">
+                                                                                            <span
+                                                                                                class="absolute inline-flex w-full h-full rounded-full opacity-75 bg-amber-600 animate-ping"></span>
+                                                                                            <span
+                                                                                                class="relative inline-flex w-6 h-6 rounded-full bg-amber-600">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    @endif
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patlast }},
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="text-[12px] text-black ml-1 p-0 truncate h-1/3">
+                                                                                {{ $getHperson->patfirst }}.
+                                                                            </div>
+                                                                            <div></div>
+                                                                        </div>
+                                                                    @else
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            @endif
+                                                            <!----->
+                                                        @empty
+                                                        @endforelse
+                                                    </div>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!--fourth -->

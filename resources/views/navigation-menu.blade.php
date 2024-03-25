@@ -27,6 +27,11 @@
                         <x-nav-link href="{{ route('dashboard_monitoring') }}" :active="request()->routeIs('dashboard_monitoring')" class="text-white">
                             {{ __('Dashboard Monitoring') }}
                         </x-nav-link>
+                        @role('super_admin')
+                            <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">
+                                {{ __('Room') }}
+                            </x-nav-link>
+                        @endrole
                         {{-- <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">
                             {{ __('Room') }}
                         </x-nav-link> --}}

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('erdash_beds', function (Blueprint $table) {
             $table->id('bed_id');
             $table->foreignId('room_id');
-            $table->string('bed_name', 10)->nullable();
+            $table->string('bed_name', 60)->nullable();
             $table->timestamps();
         });
     }

@@ -32,6 +32,9 @@
                                         <td>
                                             <label class="text-white btn-secondary btn btn-xs"
                                                 wire:click='getRoom({{ $room->room_id }})'>Add bed</label>
+
+                                            <label class="text-white btn-primary btn btn-xs"
+                                                wire:click='getBed({{ $room->room_id }})'>View beds</label>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -61,12 +64,13 @@
                         </div>
                     </div>
                     <div class="modal-action">
-                        <label class="btn btn-sm btn-success" wire:click='save' for="saveRoom">Save</label>
+                        <label class="btn btn-sm btn-success" wire:click='saveRoom' for="add_room">Save</label>
                         <label for="add_room" class="btn btn-sm">Close!</label>
                     </div>
                 </div>
             </div> <!-- add room-->
 
+            <!--Add bed -->
             <input type="checkbox" id="add_bed" class="modal-toggle" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -88,16 +92,59 @@
                     </div>
                     <div class="modal-action">
                         <label class="btn btn-sm btn-success" wire:click='saveBed' for="add_bed">Save</label>
-                        <label for="add_bed" class="btn btn-sm">Close!</label>
+                        <label for="add_bed" class="modal-backdrop">Close!</label>
                     </div>
                 </div>
             </div>
-        </div> <!-- add bed-->
+        </div> <!--Add bed end-->
 
+        <!--view beds -->
+        <input type="checkbox" id="view_beds" class="modal-toggle" />
+        <div class="modal" role="dialog">
+            <div class="modal-box">
+                <h4 class="uppercase">ROOM :
+                    @if ($getRoomName)
+                        {{ $getRoomName->room_name }}
+                    @endif
+                </h4>
+                <div class="mt-4">
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>BED ID:</th>
+                                    <th>BED NAME</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($beds)
+                                    @forelse ($beds as $bed)
+                                        <tr>
+                                            <td>{{ $bed->bed_id }}</td>
+                                            <td>{{ $bed->bed_name }}</td>
+                                        </tr>
+                                    @empty
+                                    @endforelse
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-action">
+                    <label for="view_beds" class="btn btn-sm">Close!</label>
+                </div>
+            </div>
+        </div>
+        <!--view beds end-->
         <script>
             window.addEventListener('show_add_bed', function() {
                 document.getElementById("add_bed").checked = true;
             });
+
+            window.addEventListener('show_view_beds', function() {
+                document.getElementById("view_beds").checked = true;
+            });
         </script>
+
     </div>
 </div>

@@ -243,7 +243,7 @@ class BedIndex extends Component
         WHERE (patientBed.created_at BETWEEN '$this->sdate' AND '$this->edate')"));
 
         $getHpersons = collect(DB::connection('hospital')
-            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdate, er.erdtedis, per.patfirst, per.patlast, per.patmiddle, per.patsex, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
+            ->select("SELECT er.enccode, er.hpercode, er.erstat, er.erdate, er.erdtedis, er.dispcode, per.patfirst, per.patlast, per.patmiddle, per.patsex, ROW_NUMBER() OVER (ORDER BY er.erdate ASC) as row_num
         FROM hospital.dbo.henctr entr
         RIGHT JOIN hospital.dbo.herlog er ON er.enccode = entr.enccode
         RIGHT JOIN hospital.dbo.hperson per ON per.hpercode = er.hpercode

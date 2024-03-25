@@ -10,8 +10,8 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 class RoomIndex extends Component
 {
     use LivewireAlert;
-    public $room_name, $room_id, $getRoomName, $bed_name;
-    protected $listeners = ['show_add_bed'];
+    public $room_name, $room_id, $getRoomName, $bed_name, $beds;
+    protected $listeners = ['show_add_bed', 'show_view_beds'];
     public function render()
     {
 
@@ -32,6 +32,13 @@ class RoomIndex extends Component
         $this->getRoomName = Room::select('room_name', 'room_id')->where('room_id', $this->room_id)->first();
         $this->room_id = $this->getRoomName->room_id;
         $this->dispatchBrowserEvent('show_add_bed');
+    }
+    public function getBed($getId)
+    {
+        $this->room_id = $getId;
+        $this->getRoomName = Room::select('room_name', 'room_id')->where('room_id', $this->room_id)->first();
+        $this->beds = Bed::where('room_id', $getId)->get();
+        $this->dispatchBrowserEvent('show_view_beds');
     }
     public function saveBed()
     {

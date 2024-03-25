@@ -36,11 +36,10 @@ Route::middleware([
 });
 
 Route::get('/charts', Index::class)->name('charts');
-
 Route::get('/dashboard_monitoring', SecondMonitor::class)->name('dashboard_monitoring');
 
 Route::middleware([
-    'auth:sanctum', 'role:admin',
+    'auth:sanctum', 'role:admin', 'role:super_admin',
     config('jetstream.auth_session'),
     'verified',
 ])->name('admin.')->prefix('admin')->group(function () {
