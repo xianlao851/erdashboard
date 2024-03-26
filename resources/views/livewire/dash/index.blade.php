@@ -84,7 +84,7 @@
                     <div class="content-center bg-white rounded-lg">
                         <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Field Hospital 3 (CAMES)
                         </div>
-                        <div id="wardFH3"></div>
+                        <div id="wardISOCP"></div>
                     </div>
                 </div>
             </div>
@@ -931,8 +931,8 @@
         chartwardFH2.render(); //---wardFH2, 11 Eastern Ward Gr Floor
 
         //---wardFH2, 12 Field Hospital 3 (CAMES)
-        var wardFH3 = {
-            series: [@json($wardFH3), @json($wardFH3Available)],
+        var wardISOCP = {
+            series: [@json($wardISOCP), @json($wardISOCPAvailable)],
             chart: {
                 //height: 480,
                 height: 230,
@@ -979,7 +979,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: [@json($wardFH3Color), "#0571f5"],
+            colors: [@json($wardISOCPColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -990,8 +990,8 @@
             }]
         };
 
-        var chartwardFH3 = new ApexCharts(document.querySelector("#wardFH3"), wardFH3);
-        chartwardFH3.render(); //---wardFH3, 12 Field Hospital 3 (CAMES)
+        var chartwardISOCP = new ApexCharts(document.querySelector("#wardISOCP"), wardISOCP);
+        chartwardISOCP.render(); //---wardISOCP, 12 Field Hospital 3 (CAMES)
 
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],

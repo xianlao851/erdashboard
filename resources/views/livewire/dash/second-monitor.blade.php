@@ -94,7 +94,7 @@
                         <div class="content-center bg-white rounded-lg" wire:ignore>
                             <div class="flex justify-center p-2 mx-auto text-sm font-semibold ">Field Hospital 3 (CAMES)
                             </div>
-                            <div id="wardFH3"></div>
+                            <div id="wardISOCP"></div>
                         </div>
                     </div>
                 </div>
@@ -234,7 +234,7 @@
                                                 $bed->bed_id == '44' or
                                                 $bed->bed_id == '45')
                                             <div
-                                                class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-28">
+                                                class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer h-28">
                                                 <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
@@ -731,14 +731,14 @@
 
                                 </div>
                                 <div class="p-2 bg-white border-2 border-l-2 border-r-0 border-gray-600">
-                                    <h4 class="p-1 mt-0 text-sm text-center text-black bg-red-400 rounded-md">
+                                    <h4 class="p-1 mt-0 text-sm text-center text-black bg-blue-300 rounded-md">
                                         TRAUMA OVERFLOW
                                     </h4>
                                     <div class="grid grid-rows-3 gap-2 mt-1">
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '46' or $bed->bed_id == '47' or $bed->bed_id == '48')
                                                 <div
-                                                    class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                    class="relative flex flex-col w-32 p-1 mt-0 bg-blue-300 rounded-md cursor-pointer h-14">
                                                     <span
                                                         class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
                                                     <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
@@ -1882,7 +1882,7 @@
                                 <!-- ob overflow-->
                                 <div class="flex flex-col">
                                     <div class="p-0">
-                                        <h4 class="p-1 text-sm text-center text-black bg-pink-400 rounded-md">
+                                        <h4 class="p-1 text-sm text-center text-black bg-blue-300 rounded-md">
                                             OB-GYNE OVERFLOW
                                         </h4>
                                     </div>
@@ -1890,7 +1890,7 @@
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '49')
                                                 <div
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer h-28">
                                                     <div style="transform: rotate(-90deg);"
                                                         class="flex flex-col mt-12">
                                                         <span
@@ -1962,7 +1962,7 @@
                                         @forelse ($beds as $bed)
                                             @if ($bed->bed_id == '50')
                                                 <div
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                    class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer h-28">
                                                     <div style="transform: rotate(-90deg);"
                                                         class="flex flex-col mt-12">
                                                         <span
@@ -2925,8 +2925,8 @@
         chartwardFH2.render(); //---wardFH2, 11 Eastern Ward Gr Floor
 
         //---wardFH2, 12 Field Hospital 3 (CAMES)
-        var wardFH3 = {
-            series: [@json($wardFH3), @json($wardFH3Available)],
+        var wardISOCP = {
+            series: [@json($wardISOCP), @json($wardISOCPAvailable)],
             chart: {
                 //height: 480,
                 height: 230,
@@ -2973,7 +2973,7 @@
                     w
                 }) => w.config.series[seriesIndex]
             },
-            colors: [@json($wardFH3Color), "#0571f5"],
+            colors: [@json($wardISOCPColor), "#0571f5"],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -2984,8 +2984,8 @@
             }]
         };
 
-        var chartwardFH3 = new ApexCharts(document.querySelector("#wardFH3"), wardFH3);
-        chartwardFH3.render(); //---wardFH3, 12 Field Hospital 3 (CAMES)
+        var chartwardISOCP = new ApexCharts(document.querySelector("#wardISOCP"), wardISOCP);
+        chartwardISOCP.render(); //---wardISOCP, 12 Field Hospital 3 (CAMES)
 
         var erAdmittedCount = {
             series: [@json($erAdmittedCount), @json($erSlotAvailable)],
@@ -3057,7 +3057,7 @@
             var mins = new Date().getMinutes();
             var seconds = new Date().getSeconds();
             //-- update count section
-            if (mins == "00" && seconds == "00") {
+            if (mins == "01" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
             if (mins == "05" && seconds == "00") {
@@ -3093,9 +3093,9 @@
             if (mins == "55" && seconds == "00") {
                 Livewire.emit('saveCount');
             }
-            if (mins == "58" && seconds == "00") {
-                Livewire.emit('saveCount');
-            }
+            // if (mins == "58" && seconds == "00") {
+            //     Livewire.emit('saveCount');
+            // }
 
             //--
 

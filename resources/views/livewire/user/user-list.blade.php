@@ -111,7 +111,7 @@
 
                 <!------>
                 <div class="modal-action">
-                    <label for="" wire:click='saveUser' class="btn btn-sm">Save</label>
+                    <label for="" wire:click='saveUser' class="btn btn-secondary btn-sm">Save</label>
                     <label for="register" class="btn btn-sm">Close!</label>
                 </div>
             </div>

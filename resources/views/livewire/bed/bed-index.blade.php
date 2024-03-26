@@ -251,7 +251,7 @@
                                                     $bed->bed_id == '45')
                                                 <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                     id="{{ $bed->bed_id }}"
-                                                    class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-28">
+                                                    class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer h-28">
                                                     <div style="transform: rotate(-90deg);" class="flex flex-col mt-12">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-0 mt-0">{{ $bed->bed_name }}</span>
@@ -769,7 +769,8 @@
                                     <div
                                         class="flex flex-col p-2 bg-white border-2 border-l-2 border-r-0 border-gray-600">
                                         <div class="mt-0">
-                                            <p class="w-full p-1 text-sm text-center text-black bg-red-400 rounded-md">
+                                            <p
+                                                class="w-full p-1 text-sm text-center text-black bg-blue-300 rounded-md">
                                                 TRAUMA OVERFLOW
                                             </p>
                                         </div>
@@ -778,7 +779,7 @@
                                                 @if ($bed->bed_id == '46' or $bed->bed_id == '47' or $bed->bed_id == '48')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
-                                                        class="relative flex flex-col w-32 p-1 mt-0 rounded-md cursor-pointer bg-gradient-to-r from-green-300 to-emerald-500 h-14">
+                                                        class="relative flex flex-col w-32 p-1 mt-0 bg-blue-300 rounded-md cursor-pointer h-14">
                                                         <span
                                                             class="text-[12px] text-black p-0 ml-2 mt-2">{{ $bed->bed_name }}</span>
                                                         <span class="text-[12px] text-black p-0 ml-2">AVAILABLE</span>
@@ -1975,7 +1976,7 @@
                                     <!-- ob overflow-->
                                     <div class="flex flex-col">
                                         <div class="p-0">
-                                            <h4 class="p-1 text-sm text-center text-black bg-pink-400 rounded-md">
+                                            <h4 class="p-1 text-sm text-center text-black bg-blue-300 rounded-md">
                                                 OB-GYNE OVERFLOW
                                             </h4>
                                         </div>
@@ -1984,7 +1985,7 @@
                                                 @if ($bed->bed_id == '49')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
-                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer bg-gradient-to-t h-28">
                                                         <div style="transform: rotate(-90deg);"
                                                             class="flex flex-col mt-12">
                                                             <span
@@ -2060,7 +2061,7 @@
                                                 @if ($bed->bed_id == '50')
                                                     <div ondrop="drop(event)" ondragover="allowDrop(event)"
                                                         id="{{ $bed->bed_id }}"
-                                                        class="relative flex flex-col w-16 p-0 mt-0 rounded-md cursor-pointer bg-gradient-to-t from-green-300 to-emerald-500 h-28">
+                                                        class="relative flex flex-col w-16 p-0 mt-0 bg-blue-300 rounded-md cursor-pointer h-28">
                                                         <div style="transform: rotate(-90deg);"
                                                             class="flex flex-col mt-12">
                                                             <span

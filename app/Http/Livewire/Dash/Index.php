@@ -24,11 +24,11 @@ class Index extends Component
         'saveCount'
     ];
     public $erlogs;
-    public $ward2FICU = 0, $ward3FMIC = 0, $ward3FMN = 0, $ward3FMP = 0, $ward3FNIC = 0, $wardCBNS = 0, $wardCBPA = 0, $wardCBPN = 0, $wardSDICU = 0, $wardSICU = 0, $ward3FCCU = 0, $wardFH2 = 0, $wardFH3 = 0;
+    public $ward2FICU = 0, $ward3FMIC = 0, $ward3FMN = 0, $ward3FMP = 0, $ward3FNIC = 0, $wardCBNS = 0, $wardCBPA = 0, $wardCBPN = 0, $wardSDICU = 0, $wardSICU = 0, $ward3FCCU = 0, $wardFH2 = 0, $wardISOCP = 0;
 
-    public $ward2FICUAvailable, $ward3FMICAvailable, $ward3FMNAvailable, $ward3FMPAvailable, $ward3FNICAvailable, $wardCBNSAvailable, $wardCBPAAvailable, $wardCBPNAvailable, $wardSDICUAvailable, $wardSICUAvailable, $ward3FCCUAvailable, $wardFH2Available, $wardFH3Available;
+    public $ward2FICUAvailable, $ward3FMICAvailable, $ward3FMNAvailable, $ward3FMPAvailable, $ward3FNICAvailable, $wardCBNSAvailable, $wardCBPAAvailable, $wardCBPNAvailable, $wardSDICUAvailable, $wardSICUAvailable, $ward3FCCUAvailable, $wardFH2Available, $wardISOCPAvailable;
 
-    public $ward3FMPColor, $ward3FMICColor, $ward3FMNColor, $wardCBNSColor, $wardCBPAColor, $wardCBPNColor, $wardSICUColor, $ward2FICUColor, $ward3FCCUColor, $wardSDICUColor, $wardFH2Color, $wardFH3Color;
+    public $ward3FMPColor, $ward3FMICColor, $ward3FMNColor, $wardCBNSColor, $wardCBPAColor, $wardCBPNColor, $wardSICUColor, $ward2FICUColor, $ward3FCCUColor, $wardSDICUColor, $wardFH2Color, $wardISOCPColor;
 
     public $erAdmittedCount = 0;
     public $erSlotAvailable;
@@ -298,11 +298,11 @@ class Index extends Component
         // #b30202 red
         //---- 1 OPD 3rd Floor (MICU A)
         $this->ward3FMP = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
             FROM hospital.dbo.henctr enctr
             RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
             RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-            WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMP') "));
+            WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMP') "));
 
         if ($this->ward3FMP > 0) {
             $ward3FMPSlot = 8;
@@ -326,11 +326,11 @@ class Index extends Component
         }
         //---- 2 OPD 3rd Floor (MICU B)
         $this->ward3FMIC = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMIC')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMIC')"));
 
         if ($this->ward3FMIC > 0) {
             $ward3FMICSlot = 22;
@@ -354,11 +354,11 @@ class Index extends Component
         }
         //---- 3 Main 3rd Floor  (NICU A)
         $this->ward3FMN = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMN')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FMN')"));
 
         if ($this->ward3FMN > 0) {
             $ward3FMNSlot = 15;
@@ -382,11 +382,11 @@ class Index extends Component
         }
         //---- 4 Main 3rd Floor (NICU B)
         $this->wardCBNS = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBNS')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBNS')"));
 
         if ($this->wardCBNS > 0) {
             $wardCBNSSlot = 15;
@@ -410,11 +410,11 @@ class Index extends Component
         }
         //---- 5 Annex 2nd Floor (Pedia A & PICU A)
         $this->wardCBPA = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPA')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPA')"));
 
         if ($this->wardCBPA > 0) {
             $wardCBPASlot = 6;
@@ -438,11 +438,11 @@ class Index extends Component
         }
         //---- 6 Annex 2nd Floor (PICU B)
         $this->wardCBPN = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPN')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='CBPN')"));
 
         if ($this->wardCBPN > 0) {
             $wardCBPNSlot = 8;
@@ -466,11 +466,11 @@ class Index extends Component
         }
         //---- 7 SICU A
         $this->wardSICU = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SICU')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SICU')"));
 
         if ($this->wardSICU > 0) {
             $wardSICUSlot = 21;
@@ -495,11 +495,11 @@ class Index extends Component
 
         //---- 8 SICU B
         $this->ward2FICU = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='2FICU')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='2FICU')"));
 
         if ($this->ward2FICU > 0) {
             $ward2FICUSlot = 6;
@@ -523,11 +523,11 @@ class Index extends Component
         }
         //---- 9 CCU
         $this->ward3FCCU = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FCCU')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='3FCCU')"));
 
         if ($this->ward3FCCU > 0) {
             $ward3FCCUSlot = 14;
@@ -551,11 +551,11 @@ class Index extends Component
         }
         //----10 Stepdown
         $this->wardSDICU = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SDICU')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='SDICU')"));
 
         if ($this->wardSDICU > 0) {
             $wardSDICUSlot = 10;
@@ -579,11 +579,11 @@ class Index extends Component
         }
         //----11 Eastern Ward Gr Floor
         $this->wardFH2 = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH2')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH2')"));
 
         if ($this->wardFH2 > 0) {
             $wardFH2Slot = 13;
@@ -606,32 +606,33 @@ class Index extends Component
             $this->wardFH2Color = '#04bd55';
         }
         //----12 Field Hospital 3 (CAMES)
-        $this->wardFH3 = count(DB::connection('hospital')
-            ->select("SELECT patrm.enccode
+        $this->wardISOCP = count(DB::connection('hospital')
+            ->select("SELECT patrm.enccode, ROW_NUMBER() OVER (ORDER BY hdlg.admdate ASC) as row_num
         FROM hospital.dbo.henctr enctr
         RIGHT JOIN hospital.dbo.hadmlog hdlg ON  hdlg.enccode =enctr.enccode
         RIGHT JOIN hospital.dbo.hpatroom patrm ON  patrm.enccode = hdlg.enccode
-        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='FH3')"));
+        WHERE patrm.patrmstat= 'A' AND (hdlg.admstat ='A') AND (hdlg.disdate IS NULL) AND (hdlg.disdate IS NULL) AND(enctr.encstat= 'A') AND (patrm.wardcode ='ISOCP')"));
 
-        if ($this->wardFH3 > 0) {
-            $wardFH3Slot = 15;
-            $this->wardFH3Available = $wardFH3Slot - $this->wardFH3;
-            if ($this->wardFH3 < floor($wardFH3Slot * .5)) {
-                $this->wardFH3Color = '#04bd55';
+
+        if ($this->wardISOCP > 0) {
+            $wardISOCPSlot = 15;
+            $this->wardISOCPAvailable = $wardISOCPSlot - $this->wardISOCP;
+            if ($this->wardISOCP < floor($wardISOCPSlot * .5)) {
+                $this->wardISOCPColor = '#04bd55';
             }
-            if ($this->wardFH3 > floor($wardFH3Slot * .5)) {
-                $this->wardFH3Color = '#d1c704';
+            if ($this->wardISOCP >= floor($wardISOCPSlot * .5)) {
+                $this->wardISOCPColor = '#d1c704';
             }
-            if ($this->wardFH3 > floor($wardFH3Slot * .8)) {
-                $this->wardFH3Color = '#bd4602';
+            if ($this->wardISOCP >= floor($wardISOCPSlot * .8)) {
+                $this->wardISOCPColor = '#bd4602';
             }
-            if ($this->wardFH3 > $wardFH3Slot) {
+            if ($this->wardISOCP >= $wardISOCPSlot) {
                 $this->wardFH2Color = '#b30202';
             }
         } else {
-            $ward3wardFH3Slot = 15;
-            $this->wardFH3Available = $ward3wardFH3Slot - $this->wardFH3;
-            $this->wardFH3Color = '#04bd55';
+            $ward3wardISOCPSlot = 15;
+            $this->wardISOCPAvailable = $ward3wardISOCPSlot - $this->wardISOCP;
+            $this->wardISOCPColor = '#04bd55';
         }
 
         //---- ER
@@ -807,7 +808,7 @@ class Index extends Component
             'wardSICU',
             'ward3FCCU',
             'wardFH2',
-            'wardFH3',
+            'wardISOCP',
             'ward3FMPColor',
             'ward3FMICColor',
             'ward3FMNColor',
@@ -819,7 +820,7 @@ class Index extends Component
             'ward3FCCUColor',
             'wardSDICUColor',
             'wardFH2Color',
-            'wardFH3Color',
+            'wardISOCPColor',
             'ward2FICUAvailable',
             'ward3FMICAvailable',
             'ward3FMNAvailable',
@@ -832,7 +833,7 @@ class Index extends Component
             'wardSICUAvailable',
             'ward3FCCUAvailable',
             'wardFH2Available',
-            'wardFH3Available',
+            'wardISOCPAvailable',
             'erAdmittedCount',
             'erSlotAvailable',
             'erAdmittedCountColor',
