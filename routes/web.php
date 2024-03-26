@@ -8,6 +8,8 @@ use App\Http\Livewire\Dash\Index;
 use App\Http\Livewire\Room\RoomIndex;
 use App\Http\Livewire\User\UserList;
 use App\Http\Livewire\Dash\SecondMonitor;
+use App\Http\Livewire\Dash\ThirdMonitor;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,11 +41,18 @@ Route::get('/charts', Index::class)->name('charts');
 Route::get('/dashboard_monitoring', SecondMonitor::class)->name('dashboard_monitoring');
 
 Route::middleware([
-    'auth:sanctum', 'role:admin', 'role:super_admin',
+    'auth:sanctum', 'role:admin',
     config('jetstream.auth_session'),
     'verified',
 ])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/user_list', UserList::class)->name('user_list');
+});
+
+Route::middleware([
+    'auth:sanctum', 'role:super_admin',
+    config('jetstream.auth_session'),
+    'verified',
+])->name('super_admin.')->prefix('super_admin')->group(function () {
     Route::get('/room', RoomIndex::class)->name('room');
-    //Route::get('/view/{id}', View::class)->name('view');
+    Route::get('/third_monitor', ThirdMonitor::class)->name('third_monitor');
 });

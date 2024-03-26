@@ -28,8 +28,12 @@
                             {{ __('Dashboard Monitoring') }}
                         </x-nav-link>
                         @role('super_admin')
-                            <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">
+                            <x-nav-link href="{{ route('super_admin.room') }}" :active="request()->routeIs('super_admin.room')" class="text-white">
                                 {{ __('Room') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('super_admin.third_monitor') }}" :active="request()->routeIs('super_admin.third_monitor')"
+                                class="text-white">
+                                {{ __('Third Monitor') }}
                             </x-nav-link>
                         @endrole
                         {{-- <x-nav-link href="{{ route('admin.room') }}" :active="request()->routeIs('admin.room')" class="text-white">

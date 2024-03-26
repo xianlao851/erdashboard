@@ -1193,7 +1193,7 @@
                                 </div>
                             </div><!--3 -->
                         </div> <!--second -->
-
+                        <!---PEDIA--->
                         <div class=""> <!--third start-->
                             <div class="flex flex-row gap-4 p-2 bg-white border-2 border-t-0 border-gray-600">
                                 <div class="mt-2">
